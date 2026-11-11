@@ -53,12 +53,19 @@ Write `climb.md` with the owner:
   count.
 - **Guards**: each with its threshold. A candidate that breaks a guard is reverted however much it
   moves the target.
+- **Protected paths**: the scorer, its fixtures and inputs, and the holdout. Candidates leave
+  them untouched, so a score can only rise because the product got better.
 - **Holdout**: inputs the candidates never see, scored only when a candidate is kept (unseen eval
   cases, pages left out of the benchmark). When the domain has none, say why.
 - **Budget**: rounds, wall clock and paid spend. Paid model runs need the owner's approval.
 - **Autonomy**: one mode from the table in step 3.
 
 Done when every field is filled and the owner has approved the target and budget.
+
+**Light climb**: when the owner wants a quick climb (an hour or so, a cheap local scorer), keep
+only `ledger.md`, with target, scorer, guards and protected paths as its header, and build
+candidates one at a time in place, committing each one kept. The baseline, the noise floor, one
+change per candidate and the protected paths still hold.
 
 ## 2. Baseline and noise floor
 
@@ -67,8 +74,9 @@ Before changing anything:
 1. **Check the scorer.** Feed it one known-good and one known-bad input, and confirm it ranks
    them correctly. Grader and measurement bugs are the most common reason a climb stalls or
    climbs the wrong hill. Fixing the scorer means re-baselining.
-2. **Score the baseline at least three times.** The spread is the noise floor. Measure where the
-   number really comes from (cold against warm, network against CPU) so a candidate cannot win
+2. **Score the baseline at least three times**, more when the spread is wide next to the gains
+   you expect. The **noise floor** is the spread (highest minus lowest) of those replicates;
+   record each guard's spread the same way. Measure where the number really comes from (cold against warm, network against CPU) so a candidate cannot win
    on caching alone.
 3. **Write the baseline row** of `ledger.md`: commit, replicate scores, median, noise floor,
    guard scores, cost.
@@ -94,8 +102,8 @@ records which parts carried the gain and which were passengers.
 Every round then:
 
 1. **Build in parallel**, each candidate in its own worktree and branch, dispatched as below.
-   The task names the base commit, the change or variant, the hypothesis and the scorer
-   command. The child commits and reports the commit id; the parent scores every candidate, so
+   The task names the base commit, the change or variant, the hypothesis, the scorer
+   command and the protected paths. The child commits and reports the commit id; the parent scores every candidate, so
    all scores come from one place.
 
    | Harness | One candidate |
@@ -105,16 +113,24 @@ Every round then:
    | Other subagents | A subagent told to work only in a checkout you made with `git worktree add` |
    | No subagents | Build candidates one after another yourself, each in its own `git worktree add` checkout |
 
-2. **Score each candidate** with the same scorer, place and replicate count as the baseline.
-3. **Decide.** Keep the best candidate when its median beats the best by more than the noise
-   floor and every guard holds, then run the holdout. Record every other candidate with a
-   verdict: `worse`, `no effect` or `guard broken`. Two kept step candidates that touch
-   different things become the next round's first combined candidate.
-4. **Save the rung.** Merge the kept candidate onto the climb branch and tag it
+2. **Check the diffs.** A candidate whose diff touches a protected path gets the verdict
+   `touched scorer` and is never scored.
+3. **Score each candidate alongside the current best**, with the same scorer, place and
+   replicate count as the baseline, interleaving the runs (best, A, B, best, A, B, ...).
+   Machines, caches and networks drift, so compare against the best as scored this round, never
+   against a number stored from an earlier one.
+4. **Decide.** The leader is the candidate whose median beats the best by more than the noise
+   floor with every guard holding. A guard breaks when it misses its threshold by more than its
+   own spread. The best of several noisy candidates is flattered by luck, so **confirm** the
+   leader with a fresh set of replicates against the best before keeping it, then run the
+   holdout. Record every other candidate with a verdict: `worse`, `no effect`, `guard broken`
+   or `not confirmed`. When the runner-up also beat the floor and touches different things,
+   combine it with the kept candidate as the next round's first candidate.
+5. **Save the rung.** Merge the kept candidate onto the climb branch and tag it
    (`<slug>-climb-r<n>`). Every rung is a working fallback.
-5. **Record the round** in the ledger: candidates, hypotheses, replicates, verdicts, cost. The
+6. **Record the round** in the ledger: candidates, hypotheses, replicates, verdicts, cost. The
    parent is the only writer of the ledger.
-6. **Checkpoint** as the autonomy mode says.
+7. **Checkpoint** as the autonomy mode says.
 
 | Mode | Owner's words | Use when |
 | --- | --- | --- |
