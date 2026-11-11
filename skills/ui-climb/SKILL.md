@@ -19,8 +19,8 @@ those guards in `climb.md`. A measured guard settles what the council argues abo
 ## Repository tooling
 
 When the repository has climb tooling, use it and follow its README for commands. Without
-tooling, capture web with Playwright
-and iOS with the T3 device tools (`device_open`, then its `agent-device` command), and score
+tooling, capture web with Playwright and native apps with the harness's simulator tooling (in T3 Code,
+`device_open`, then its `agent-device` command), and score
 with a small script that parses each review's score block.
 
 ## 1. Setup

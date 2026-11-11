@@ -6,12 +6,20 @@ panel has its own rules.
 
 ## The panel
 
+- **Draw reviewers from at least two labs.** Models from one lab share their defaults, so a
+  one-lab panel mostly agrees with itself.
 - **Name the reviewers in `climb.md`** and keep the set fixed for the whole climb. Each model has
   a stable bias (one scored 7 to 8 while two others scored 8.3 to 8.6 on the same builds), so
   swapping a reviewer moves the mean by itself. Paid reviewers need the owner's approval by name.
-- **Run each reviewer** as its own `delegate_task` with `role: "review"`, the model set in
-  `target`, and a task that names `BRIEF.md` and the one file it writes. Check
-  `orchestrator_capabilities` once per thread for the model names.
+- **Run each reviewer** as its own read-only run on its model, with a task that names
+  `BRIEF.md` and the one file it writes:
+
+  | Harness | One reviewer |
+  | --- | --- |
+  | T3 Code | `delegate_task` with `role: "review"` and the model in `target`; check `orchestrator_capabilities` once per thread for model names |
+  | A lab's CLI | Its non-interactive mode, read-only: `codex exec`, `claude -p`, `gemini -p` |
+  | API | A script that sends the brief and images to the model and writes its reply to the review file |
+
 - **Repeat noisy reviewers** two times per round and take their median. Each model still counts
   once toward agreement.
 - **Report one series per reviewer**, plus the median across them. Write "not run" for a reviewer

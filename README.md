@@ -29,4 +29,4 @@ Add `-g` to install globally instead of into the current project, and `-a <agent
 - **the-gang-t3** runs inside T3 Code, which provides the `orchestrator_capabilities` and `delegate_task` tools. The panel models must be configured as providers in T3 Code; seats whose model is unavailable are left empty.
 - **outer-loop-t3** runs inside T3 Code, which provides the thread tools (`t3_thread_launch`, `t3_thread_read`, `t3_thread_send`) and `schedule_task`.
 - **ios-app-cleanup** needs macOS with Xcode, `python3`, `curl`, and an iPhone paired with the Mac with Developer Mode enabled.
-- **ui-climb** builds on **hill-climb**: install both.
+- **ui-climb** builds on **hill-climb**: install both. It scores with a council of models from at least two labs. T3 Code's `delegate_task` is the tested route; lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts also work. Captures use Playwright for web and simulator tooling for native apps.
