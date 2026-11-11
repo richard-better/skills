@@ -23,6 +23,8 @@ Write a generator script (`gen.py` or `gen.mjs`) that emits the `.excalidraw` sc
 
 Follow the diagram-design skill at the path you were given: its `SKILL.md`, `references/style-guide.md`, `references/primitives-core.md`, `references/output-spec.md`, and the closest type reference. Use the skin or profile the project has saved, or the default skin when none is set; the orchestrator owns any question to the user, so its first-run style question is not yours to ask. Treat the work as an import with detail `faithful`, and run its `scripts/self_check.py`.
 
+The PNG holds only the first `<svg>`, as diagram-design's own export does, so the page's `h1` and eyebrow never reach the reviewer. Draw the original's title, and any other text it sets outside the diagram, inside the SVG.
+
 Content fidelity outranks diagram-design's budgets:
 
 - Exceed the node or accent budget when the original's meaning needs it, and say so in the report.
