@@ -7,7 +7,7 @@ Urea,22664-7,mmol/L,urea|karbamid|harnstoff|carbamide|urea nitrogen (molar)
 Urea nitrogen,3094-0,mg/dL,bun|blood urea nitrogen|urea nitrogen
 Creatinine,14682-9,µmol/L,creatinine|kreatinin|kreatinin (enzimatikus)|crea
 Creatinine,2160-0,mg/dL,
-eGFR,98979-8,mL/min/1.73m2,egfr|egfr-epi|egfr (ckd-epi)|egfr ckd-epi|gfr|becsült gfr|egfr ckd-epi 2021
+eGFR,,mL/min/1.73m2,egfr|egfr-epi|egfr (ckd-epi)|egfr ckd-epi|gfr|becsült gfr|egfr ckd-epi 2021|egfr (mdrd)
 Uric acid,14933-6,µmol/L,uric acid|urate|húgysav|harnsäure
 Uric acid,3084-1,mg/dL,
 Sodium,2951-2,mmol/L,sodium|na|nátrium|natrium
@@ -87,8 +87,10 @@ Testosterone,14913-8,nmol/L,testosterone|total testosterone|tesztoszteron|testos
 Testosterone,2986-8,ng/dL,
 SHBG,13967-5,nmol/L,shbg|sex hormone binding globulin|szexhormon-kötő globulin
 Estradiol,2243-4,pg/mL|ng/L,estradiol|oestradiol|e2|ösztradiol|östradiol
-Vitamin D 25-OH,68438-1,nmol/L,vitamin d|25-oh vitamin d|25-oh-d|25-hydroxyvitamin d|25(oh)d|d-vitamin|25-oh-d-vitamin|vitamin d3 (25-oh)|d3-vitamin
+Vitamin D 25-OH,68438-1,nmol/L,vitamin d|25-oh vitamin d|25-oh-d|25-hydroxyvitamin d|25(oh)d|d-vitamin|25-oh-d-vitamin|total 25-oh vitamin d
 Vitamin D 25-OH,62292-8,ng/mL|µg/L,
+Vitamin D3 25-OH,14635-7,nmol/L,vitamin d3 (25-oh)|25-oh vitamin d3|25-hydroxyvitamin d3|d3-vitamin|vitamin d3
+Vitamin D3 25-OH,1989-3,ng/mL|µg/L,
 Insulin,20448-7,mIU/L|µIU/mL,insulin|inzulin
 Insulin,14796-7,pmol/L,
 C-peptide,1986-9,ng/mL|µg/L,c-peptide|c-peptid

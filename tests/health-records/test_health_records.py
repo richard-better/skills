@@ -165,7 +165,7 @@ def test_merge_rejects_bad_rows_and_writes_nothing(records, tmp_path):
     ])
     p = run("records.py", "merge", records, rows, check=False)
     assert p.returncode == 1
-    for needle in ("decimal comma", "unknown analyte", "YYYY-MM-DD", "does not exist", "flag '+'"):
+    for needle in ("decimal comma", "unknown analyte", "YYYY-MM-DD", "not a document", "flag '+'"):
         assert needle in p.stdout
     assert not (records / "markers.csv").exists()
 
@@ -182,18 +182,102 @@ def test_merge_learns_aliases(records, tmp_path):
     assert markers(records)[0]["loinc"] == "10835-7"
 
 
-def test_merge_drops_cross_source_duplicates_and_reports_conflicts(records, tmp_path):
+def test_merge_keeps_every_document_row_and_trends_count_repeats_once(records, tmp_path):
     run("records.py", "merge", records, stage(tmp_path / "a.csv", [
         {"original_name": "CRP", "value": "86", "unit": "mg/L", "date": "2025-05-02"},
         {"original_name": "WBC", "value": "13.2", "unit": "G/l", "date": "2025-05-02"},
+        {"original_name": "CRP", "value": "40", "unit": "mg/L", "date": "2025-05-03"},
+        {"original_name": "CRP", "value": "40", "unit": "mg/L", "date": "2025-05-03"},
     ]))
     p = run("records.py", "merge", records, stage(tmp_path / "b.csv", [
         {"original_name": "CRP", "value": "86", "unit": "mg/l", "date": "2025-05-02", "source": LETTER},
         {"original_name": "WBC", "value": "13.8", "unit": "x10^9/L", "date": "2025-05-02", "source": LETTER},
     ]))
-    assert "Duplicates dropped" in p.stdout and "different values" in p.stdout
-    assert [(m["name"], m["source"]) for m in markers(records)] == [
-        ("CRP", LAB), ("WBC", LAB), ("WBC", LETTER)]
+    assert "more than one document" in p.stdout and "different values" in p.stdout
+    assert len(markers(records)) == 6
+    table = run("records.py", "table", records, "--name", "crp").stdout
+    assert table.count("86") == 1 and table.count("40") == 2  # two draws in one report both stay
+
+    # correcting the lab report must not lose the letter's copy of the value
+    run("records.py", "merge", records, stage(tmp_path / "c.csv", [
+        {"original_name": "CRP", "value": "88", "unit": "mg/L", "date": "2025-05-02"},
+    ]))
+    assert {(m["value"], m["source"]) for m in markers(records) if m["name"] == "CRP"} == {
+        ("88", LAB), ("86", LETTER)}
+
+
+def test_clear_empties_a_document(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "CRP", "value": "2", "unit": "mg/L"}]))
+    run("records.py", "merge", records, stage(tmp_path / "empty.csv", []), "--clear", f"./{LAB}")
+    assert markers(records) == []
+
+
+def test_equivalent_source_paths_replace_and_outside_paths_fail(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "CRP", "value": "2", "unit": "mg/L"}]))
+    run("records.py", "merge", records, stage(tmp_path / "b.csv", [
+        {"original_name": "CRP", "value": "3", "unit": "mg/L", "source": f"./documents/../{LAB}"}]))
+    assert [(m["value"], m["source"]) for m in markers(records)] == [("3", LAB)]
+    (records / "notes.md").write_text("x")
+    p = run("records.py", "merge", records, stage(tmp_path / "c.csv", [
+        {"original_name": "CRP", "value": "3", "source": "notes.md"}]), check=False)
+    assert p.returncode == 1 and "not a document" in p.stdout
+
+
+def test_unit_picks_percent_or_absolute(records, tmp_path):
+    p = run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "Neutrophils", "value": "60", "unit": "%"},
+        {"original_name": "Neutrophyl %", "value": "3.8", "unit": "G/l"},
+        {"original_name": "Ferritin", "value": "18", "unit": "mmol/L"},
+    ]))
+    names = {(m["name"], m["loinc"]) for m in markers(records)}
+    assert ("Neutrophils %", "770-8") in names and ("Neutrophils", "751-8") in names
+    assert "unusual for Ferritin" in p.stdout
+
+
+def test_name_override_corrects_local_alias(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "Gyulladás", "name": "CRP", "value": "2", "unit": "mg/L"}]))
+    p = run("records.py", "merge", records, stage(tmp_path / "b.csv", [
+        {"original_name": "Gyulladás", "name": "hs-CRP", "value": "2", "unit": "mg/L"}]))
+    assert "alias changed" in p.stdout
+    assert (records / "aliases.csv").read_text().splitlines()[1:] == ["Gyulladás,hs-CRP"]
+    run("records.py", "merge", records, stage(tmp_path / "c.csv", [
+        {"original_name": "Gyulladás", "value": "2", "unit": "mg/L", "source": LETTER, "date": "2025-05-02"}]))
+    assert {m["name"] for m in markers(records)} == {"hs-CRP"}
+
+
+def test_strict_bounds_flag_the_boundary(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "CRP", "value": "5", "unit": "mg/L", "ref_range": "<5"},
+        {"original_name": "eGFR", "value": "90", "unit": "mL/min/1.73m2", "ref_range": ">90"},
+        {"original_name": "Ferritin", "value": "20", "unit": "ug/l", "ref_range": "20-250"},
+        {"original_name": "GGT", "value": "55", "unit": "U/l", "ref_range": "<=55"},
+    ]))
+    assert {m["name"]: m["flag"] for m in markers(records)} == {"CRP": "H", "eGFR": "L", "Ferritin": "", "GGT": ""}
+
+
+def test_method_dependent_analytes_get_no_guessed_loinc(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "eGFR (CKD-EPI)", "value": "95", "unit": "ml/perc/1.73 m2"},
+        {"original_name": "D3-vitamin", "value": "62", "unit": "nmol/l"},
+        {"original_name": "25-OH vitamin D", "value": "70", "unit": "nmol/l", "source": LETTER, "date": "2025-05-02"},
+    ]))
+    got = {m["name"]: m["loinc"] for m in markers(records)}
+    assert got == {"eGFR": "", "Vitamin D3 25-OH": "14635-7", "Vitamin D 25-OH": "68438-1"}
+    assert "no LOINC" not in run("records.py", "check", records).stdout
+
+
+def test_mixed_units_and_ranges_stay_attached_to_each_value(records, tmp_path):
+    run("records.py", "merge", records, stage(tmp_path / "a.csv", [
+        {"original_name": "Kreatinin", "value": "1.0", "unit": "mg/dL", "ref_range": "0.7-1.2", "date": "2024-01-01"},
+        {"original_name": "Kreatinin", "value": "88", "unit": "µmol/l", "ref_range": "59-104"},
+    ]))
+    run("records.py", "index", records)
+    assert "| Creatinine | 88 | µmol/l | 59-104 | 2025-03-14 | 1.0 mg/dL (2024-01-01) |" in (records / "index.md").read_text()
+    table = run("records.py", "table", records).stdout
+    assert "1.0 mg/dL (2024-01-01, ref 0.7-1.2); 88 µmol/l (2025-03-14, ref 59-104)" in table
 
 
 def test_report_flag_disagreeing_with_range_is_kept_and_noted(records, tmp_path):
