@@ -65,7 +65,9 @@ Write `climb.md` with the owner:
 - **Protected paths**: the scorer, its fixtures and inputs, and the holdout. Candidates leave
   them untouched, so a score can only rise because the product got better.
 - **Holdout**: inputs the candidates never see, scored only when a candidate is kept (unseen eval
-  cases, pages left out of the benchmark). When the domain has none, say why.
+  cases, pages left out of the benchmark). When the domain allows, set aside a **final split**
+  too, scored once at close for the closing claim: scored again and again, it becomes one more
+  input to tune on. When the domain has no holdout, say why.
 - **Stop rule**: the target plus a minimum number of rounds ("2x faster and at least five
   rounds"), so a lucky early win cannot end the climb.
 - **Budget**: rounds, wall clock and paid spend. Paid model runs need the owner's approval.
@@ -118,7 +120,7 @@ Every round then:
 
 1. **Build in parallel**, each candidate in its own worktree and branch, dispatched as below.
    The task names the base commit, the change or variant, the hypothesis, the scorer
-   command and the protected paths it leaves untouched. The child commits and reports the
+   command, the protected paths it leaves untouched and the [honest wins](#honest-wins) rule. The child commits and reports the
    commit id; the parent scores every candidate, so all scores come from one place.
 
    | Harness | One candidate |
@@ -137,7 +139,9 @@ Every round then:
    own spread. The best of several noisy candidates is flattered by luck, so **confirm** the
    leader with a fresh set of replicates against the best before keeping it, then run the
    holdout. Record every other candidate with a verdict: `worse`, `no effect`, `guard broken`
-   or `not confirmed`. When the runner-up also beat the floor and touches different things,
+   or `not confirmed`. A candidate that holds the score within the noise floor while making
+   the code simpler, or fixing something a rung broke, is kept as a **repair** (`kept, repair`)
+   rather than reverted for lacking a gain. When the runner-up also beat the floor and touches different things,
    combine it with the kept candidate as the next round's first candidate.
 4. **Save the rung.** Merge the kept candidate onto the climb branch and tag it
    (`<slug>-climb-r<n>`). Every rung is a working fallback.
@@ -158,6 +162,11 @@ in one line. Record every owner decision in `decisions.md` at once.
 A round is done when every candidate has a ledger row with a verdict, and a kept candidate is
 tagged as a rung.
 
+**Milestone** every three rungs: run the full test suite and the holdout, and look at the real
+thing yourself (open the app, read the output, view the page). When something broke, find the
+rung with `git bisect run <failing command>` and build a repair. When the number and the real
+thing disagree, the scorer is wrong: fix it and re-baseline.
+
 ## 4. Stop
 
 - **Stop rule met**: confirm with one extra round of replicates, then close. The stop rule
@@ -169,7 +178,8 @@ tagged as a rung.
 
 ## 5. Close
 
-1. Land the best rung on the main branch the way the repository lands work.
+1. Run the milestone checks and the final split once, then land the best rung on the main
+   branch the way the repository lands work.
 2. Write the closing report into the climb folder: the score series per round, the change that
    moved the number most, the gap to the target, and the total cost.
 3. Distill three to eight **claims** into `learnings.md`, each citing ledger rows as evidence,
@@ -180,6 +190,14 @@ tagged as a rung.
 
 Done when the main branch has the best rung, the report and `learnings.md` are committed, and
 the evidence the report cites is committed or linked from it.
+
+## Honest wins
+
+A real win makes the product better on inputs the scorer has never seen. These raise the number
+without one, and count as failed candidates even when the score moves: special-casing the scored
+inputs, hard-coding or caching expected outputs, making the benchmark do less work, skipping or
+weakening tests, swallowing errors, and reading the holdout. When the only way forward is one of
+these, the scorer is wrong: say so.
 
 ## Rules
 

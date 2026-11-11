@@ -23,7 +23,7 @@ One folder per climb, committed with the work.
 - Scorer: `<command>`, run on <local|staging|production>, <n> replicates, median
 - Guards: <metric> must stay <= <value>; ...
 - Protected: <scorer, fixtures, holdout paths candidates leave untouched>
-- Holdout: <inputs, or "none: why">
+- Holdout: <inputs, or "none: why">; final split: <inputs scored once at close, or "none">
 - Budget: <rounds>, <wall clock>, <paid spend>; paid models approved: <names>
 - Autonomy: <mode>
 - Branch: <climb branch>, rungs tagged `<slug>-climb-r<n>`
