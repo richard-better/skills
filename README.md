@@ -38,6 +38,13 @@ Climb a screen's design, scored by a blind council of models<br>Say <em>"UI clim
 </tr>
 </table>
 
+### For health
+
+| Skill | What it does | Say |
+|-------|--------------|-----|
+| [health-records](./skills/health-records/) | Turns health PDFs (lab reports, letters, imaging, scans, any language) into one faithful Markdown file each, a `markers.csv` of lab results with LOINC codes for trends, and an index | "add these lab results" |
+| [differential-panel](./skills/differential-panel/) | Runs a MAI-DxO-style panel over a records folder: three roles on two models from different labs look for what the records have not flagged, with a track record across runs | "run the panel" |
+
 ### Utilities
 
 <table>
@@ -61,10 +68,12 @@ Bulk-uninstall apps from a paired iPhone, picked from a checklist page with App 
 | council-debate | 🔒 Required | 🌐 Three | [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council) from t3dotgg/tstack | Any |
 | hill-climb | ⭐ Recommended | One | - | Any |
 | ui-climb | ⭐ Recommended | 🌐 Two or more | `hill-climb` | Playwright for web, simulator tooling for native |
+| health-records | Not used | One, reading images for scanned PDFs | - | [`uv`](https://docs.astral.sh/uv/) |
+| differential-panel | ⭐ Recommended | 🌐 Two | `health-records` | [`uv`](https://docs.astral.sh/uv/) |
 | ios-app-cleanup | Not used | One | - | macOS with Xcode, `python3`, `curl`, and an iPhone paired with Developer Mode on |
 
 - 🔒 **Required**: the skill calls T3 Code's tools (`delegate_task`, `t3_thread_launch`, `t3_thread_read`, `t3_thread_send`, `schedule_task`) and does not run without them.
-- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts.
+- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `differential-panel` can run its seats with the labs' CLIs. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts.
 - 🌐 **Providers**: models from different labs share fewer defaults, so the skill needs access to models from that many providers. `council` reports a missing provider instead of substituting another model.
 
 </details>
@@ -81,10 +90,13 @@ npx skills add richard-better/agent-skills --skill council-debate
 
 Add `-g` to install globally instead of into the current project, and `-a <agent>` to target a specific agent (e.g. `claude-code`, `codex`).
 
-Install a skill's dependencies too: `ui-climb` with `hill-climb`, and `council-debate` with `council`:
+Install a skill's dependencies too: `ui-climb` with `hill-climb`, `differential-panel` with
+`health-records`, and `council-debate` with `council`:
 
 ```bash
 npx skills add richard-better/agent-skills --skill hill-climb
 npx skills add richard-better/agent-skills --skill ui-climb
+npx skills add richard-better/agent-skills --skill health-records
+npx skills add richard-better/agent-skills --skill differential-panel
 npx skills add t3dotgg/tstack --skill council
 ```
