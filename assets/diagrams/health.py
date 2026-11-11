@@ -48,7 +48,7 @@ class Scene:
     def text(self, x, y, s, size=20, color=INK, font=HAND, align="left", container=None, **kw):
         lines = s.split("\n")
         per = 0.6 if font == MONO else 0.55
-        w = max(len(l) for l in lines) * size * per
+        w = max(len(line) for line in lines) * size * per
         h = len(lines) * size * 1.25
         if align == "center" and container is None:
             x -= w / 2
@@ -65,7 +65,7 @@ class Scene:
         if label:
             lines = label.split("\n")
             per = 0.6 if font == MONO else 0.55
-            tw = max(len(l) for l in lines) * size * per
+            tw = max(len(line) for line in lines) * size * per
             th = len(lines) * size * 1.25
             t = self.text(x + (w - tw) / 2, y + (h - th) / 2, label, size, color, font,
                           "center", container=b["id"])
@@ -200,7 +200,7 @@ def panel():
     s.text(cx[1] + 80, 100, "Model B", 18, GREEN, align="center")
     s.text(cx[0] + 180, 128, "from different labs, same task", 15, GREY, align="center")
     bands = []
-    for r, (role, job) in enumerate(zip(roles, jobs)):
+    for r, (role, job) in enumerate(zip(roles, jobs, strict=True)):
         y = 165 + r * 140
         s.text(cx[0] - 30, y - 6, role, 18, INK, align="right")
         s.els[-1]["x"] -= s.els[-1]["width"]
