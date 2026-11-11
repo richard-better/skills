@@ -31,7 +31,8 @@ The panel reads a folder in the `health-records` skill's layout. Run that skill 
 
 ## Output
 
-One file, `<records>/panels/YYYY-MM-DD-differential-panel.md`, sections in this order:
+One file, `<records>/panels/YYYY-MM-DD-differential-panel.md`, with `-2`, `-3` added for a second
+run that day. Sections in this order:
 
 0. **Track record**: only when an earlier panel exists. For each of its New and Re-ranked items,
    `confirmed`, `killed` or `still open`, with the result and date that settled it. Close with a
@@ -49,11 +50,12 @@ One file, `<records>/panels/YYYY-MM-DD-differential-panel.md`, sections in this 
 
 ### 0. Track record
 
-If `panels/` holds an earlier report, read the latest. For each New and Re-ranked item, look
-for evidence dated after that report: documents in `index.md`, rows in `markers.csv`, and
-`context.md`. Score each item `confirmed`, `killed` or `still open` and write the Track record
-section first. Items still open join this run's Already flagged list, so they are not reported
-as new a second time.
+If `panels/` holds an earlier report, read the latest. Its items are its New and Re-ranked
+items plus the items its own Track record left `still open`, so a hypothesis stays tracked until
+a result settles it. For each item, look for evidence dated after that report: documents in
+`index.md`, rows in `markers.csv`, and `context.md`. Score each item `confirmed`, `killed` or
+`still open` and write the Track record section first. Items still open join this run's Already
+flagged list, so they are not reported as new a second time.
 
 ### 1. Case brief
 
