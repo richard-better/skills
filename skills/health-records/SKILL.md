@@ -113,27 +113,36 @@ frontmatter is complete.
 
 For every document with lab results, including results quoted in discharge letters, write one
 row per result to `<scratch>/rows.csv` with the columns `original_name, value, unit, ref_range,
-flag, date, source`. Add `name` only for a test the analyte table does not know.
+flag, date, source`. Add `name` for a test the analyte table does not know, or where the table's
+name is wrong for this report: a method-specific test, or a D3-only vitamin D. A `name` that
+differs from `aliases.csv` corrects the alias for later runs.
 
 - Convert decimal commas to dots in `value` and `ref_range`; the merge refuses commas because
   only you know the document's locale.
-- Map printed flags to the flag codes: `+`, `↑`, `H` to `H`; `-`, `↓`, `L` to `L`; `*` alone
-  to `A`. Leave the flag empty when the report prints none; the merge computes it from the range.
+- Map the report's flag column to the flag codes: `+`, `↑`, `H` to `H`; `-`, `↓`, `L` to `L`; `*`
+  to `A`. A qualitative result (`positive`, `negatív`, `++`) is the `value`, never a flag; flag it
+  `A` only when the report marks it abnormal. Leave the flag empty when the report prints none;
+  the merge computes it from a numeric range.
+- Use the sample's collection date. A report with several draws gets one row per draw.
 - Blood is the default specimen. Prefix any other: `Urine protein`.
 
 ```bash
 uv run <skill>/scripts/records.py merge <records> <scratch>/rows.csv
 ```
 
-A document's rows replace all its earlier rows, so re-merging a corrected document is safe. When
+A document's rows replace all its earlier rows, so re-merging a corrected document is safe; add
+`--clear <source>` for a corrected document that now has no results at all. When
 the merge rejects rows, it writes nothing; fix them and rerun until it exits 0. For an unknown
 test, choose the canonical English name a clinician would search for, keeping a units-specific
 name like `Neutrophils %` apart from `Neutrophils`. The merge records it in `aliases.csv`. To find
 its LOINC, search by analyte name only: `https://clinicaltables.nlm.nih.gov/api/loinc_items/v3/search?terms=<analyte>&df=LOINC_NUM,LONG_COMMON_NAME`;
-pick the code whose property matches the unit (Moles/volume for mmol/L, Mass/volume for mg/dL).
+pick the code whose property matches the unit (Moles/volume for mmol/L, Mass/volume for mg/dL)
+and whose method matches the report, and pass it in a `loinc` column. The analyte table leaves
+LOINC empty where the code depends on the method, such as eGFR.
 
-Read the merge's notes: a flag the report and the range disagree on, or one analyte with two
-values on one day, usually means a misread. Check those against the page.
+Read the merge's notes: a flag the report and the range disagree on, a unit unusual for the
+name, or one analyte with two values on one day usually means a misread or a wrong name. Check
+those against the page. A result two documents both report stays in each; trends count it once.
 
 ### 5. Index and check
 
