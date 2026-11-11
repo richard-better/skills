@@ -13,7 +13,7 @@ reverted goes in the **ledger**, so no idea is tried twice and the losses save b
 The method follows [rebase-energy/hillclimb](https://github.com/rebase-energy/hillclimb): the
 scorer defines what better means, candidates are immutable, a score is the median of repeated
 **replicates** so variance is measured and never climbed, and a **holdout** catches overfitting.
-Here the climber is you, driving T3 Code agents.
+Here the climber is you: you frame, score and decide, and subagents build the candidates.
 
 ## What makes a climb
 
@@ -93,10 +93,18 @@ records which parts carried the gain and which were passengers.
 
 Every round then:
 
-1. **Build in parallel.** One `delegate_task` per candidate with `isolation: "worktree"`, so
-   each has its own checkout and branch. The task names the base commit, the change or variant,
-   the hypothesis and the scorer command. The child commits and reports the commit id; the
-   parent scores every candidate, so all scores come from one place.
+1. **Build in parallel**, each candidate in its own worktree and branch, dispatched as below.
+   The task names the base commit, the change or variant, the hypothesis and the scorer
+   command. The child commits and reports the commit id; the parent scores every candidate, so
+   all scores come from one place.
+
+   | Harness | One candidate |
+   | --- | --- |
+   | T3 Code | `delegate_task` with `isolation: "worktree"` |
+   | Claude Code | `Agent` with `isolation: "worktree"` |
+   | Other subagents | A subagent told to work only in a checkout you made with `git worktree add` |
+   | No subagents | Build candidates one after another yourself, each in its own `git worktree add` checkout |
+
 2. **Score each candidate** with the same scorer, place and replicate count as the baseline.
 3. **Decide.** Keep the best candidate when its median beats the best by more than the noise
    floor and every guard holds, then run the holdout. Record every other candidate with a
@@ -137,8 +145,8 @@ tagged as a rung.
 3. Distill three to eight **claims** into `learnings.md`, each citing ledger rows as evidence,
    including `no effect` and `worse` results. Promote any claim that applies beyond this climb
    to the repository's docs or AGENTS.md.
-4. Tell other threads climbing in the same repository about tooling they depend on, with
-   `t3_thread_send`.
+4. Tell other agents climbing in the same repository about tooling they depend on (in T3 Code,
+   with `t3_thread_send`).
 
 Done when the main branch has the best rung, the report and `learnings.md` are committed, and
 the evidence the report cites is committed or linked from it.
