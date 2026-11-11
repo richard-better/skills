@@ -24,7 +24,8 @@ best in T3 Code.
 |-------|--------------|-----|
 | [ios-app-cleanup](./skills/ios-app-cleanup/) | Bulk-uninstalls apps from a paired iPhone with `xcrun devicectl`, picking them from a generated checklist page with App Store icons | `/ios-app-cleanup` (manual only) |
 
-## What each skill needs
+<details>
+<summary><strong>What each skill needs</strong></summary>
 
 | Skill | T3 Code | Model providers | Other skills | System |
 |-------|---------|-----------------|--------------|--------|
@@ -37,6 +38,8 @@ best in T3 Code.
 - 🔒 **Required**: the skill calls T3 Code's tools (`delegate_task`, `t3_thread_launch`, `t3_thread_read`, `t3_thread_send`, `schedule_task`) and does not run without them.
 - ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts.
 - 🌐 **Providers**: models from different labs share fewer defaults, so the skill needs access to models from that many providers. `council` reports a missing provider instead of substituting another model.
+
+</details>
 
 ## Install
 
