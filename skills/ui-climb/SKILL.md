@@ -43,16 +43,19 @@ scorer command, and the climb folder gains `judge-context.md` (what the council 
 5. **Collect references from the owner**, one app or site per folder with a README describing
    each shot, in the same appearance as the climb. References are a bar for craft, never a look
    to copy. Climbs toward a feeling with no references have made products worse. Add **house
-   shots**: the product's own neighbouring screens, so fixes match its existing components. When the goal is to match a reference exactly (a site the owner points
-   at), say so in `judge-context.md` and score per state against it.
+   shots**: the product's own neighbouring screens, so fixes match its existing components.
+   When the goal is to match a reference exactly (a site the owner points at), say so in
+   `judge-context.md` and score per state against it.
 6. **Write the rubric with the owner** before round 1, from
    [references/rubric.md](references/rubric.md): the general rows, the owner's cases, and a veto
    row when the climb is about a feeling.
-7. **Baseline** the product and every reference with the full council. Reference drift across
-   rounds is the noise floor.
+7. **Baseline** the product and every reference with the full council, three fresh sessions per
+   reviewer, and freeze the scores as in
+   [references/council.md](references/council.md#frozen-references). Their spread is the noise
+   floor.
 
 Done when `judge-context.md` states the screen's purpose, the owner has approved the rubric and
-the references, and the ledger holds baseline scores for the product and every reference.
+the references, and the ledger holds frozen baseline scores for the product and every reference.
 
 ## 2. A round
 

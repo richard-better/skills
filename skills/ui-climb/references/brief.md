@@ -5,16 +5,24 @@ the images it lists, so it carries everything they need and nothing that anchors
 
 ## Blind labels
 
-Give every subject, the product and each reference, a neutral label (A, B, C, ...) drawn in a
-new random order each round, and write the key to `rounds/<n>/labels.json`:
+Give every scored subject a neutral label (A, B, C, ...) drawn in a new random order each
+round, and write the key to `rounds/<n>/labels.json`:
 
 ```json
 { "A": "reference-1", "B": "product", "C": "reference-2" }
 ```
 
-Use `product` for the climb's own screens and the reference folder names for the rest. Copy
-each shot into `rounds/<n>/shots/` as `<label>-<state>-<appearance>.png`, and describe shots
-without naming an app or brand. Reviewers learn which label is the product only in the fixes
+Which subjects are scored depends on the round, as in [council.md](council.md#frozen-references):
+
+- **Baseline**: the product and every reference. Use `product` for the climb's own screens and
+  the reference folder names for the rest.
+- **Later rounds**: the product only. References still appear, under "Reference shots", as the
+  bar for craft, with no label and no score.
+- **Checkpoints and close**: the product plus `control`, the unchanged baseline shots of the
+  product, so reviewers cannot tell which build is new.
+
+Copy each scored shot into `rounds/<n>/shots/` as `<label>-<state>-<appearance>.png`, and
+describe shots without naming an app or brand. Reviewers learn which label is the product only in the fixes
 section, after they have scored.
 
 ## Template
@@ -41,6 +49,12 @@ Score each subject on its own shots, in this order. Score only what the shots sh
 
 - **A**: `shots/A-<state>-<appearance>.png`, ... <one line per shot: what state it shows>
 - **B**: ...
+
+## Reference shots
+
+<Later rounds only.> The bar for craft, never a look to copy. Do not score them.
+
+- `refs/<n>-<state>-<appearance>.png`, ... <one line per shot, with no app or brand name>
 
 ## Rubric
 

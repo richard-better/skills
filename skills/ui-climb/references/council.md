@@ -24,12 +24,32 @@ panel has its own rules.
   once toward agreement.
 - **Report one series per reviewer**, plus the median across them. Write "not run" for a reviewer
   that was skipped. Never average across a panel that changed.
-- **Score the references** with the same panel every round.
 - **Gate expensive reviewers** in unattended rounds: run the cheapest until its score moves, then
   the full panel. The full panel runs at every owner checkpoint. Late disagreement from the full
   panel is a finding, not a nuisance.
 - A straggler that has not answered after ten minutes is scored without, and the round notes
   say so.
+
+## Frozen references
+
+Scored live every round, reference scores drift with the product's even though their shots never
+change: in one climb, a reviewer's score for an unchanged reference tracked the product's at a
+0.94 correlation. So references are scored once and frozen, and a control catches the scale
+moving.
+
+1. **Baseline**: each reviewer scores the product and every reference three times, in fresh
+   sessions (`review-1`, `review-2`, `review-3`). `score.py` keeps each reviewer's median as its
+   frozen score and the spread across its repeats; the median of those spreads is the noise
+   floor.
+2. **Later rounds**: reviewers see the reference shots as the bar for craft, but neither score
+   them nor see the frozen numbers. Compare with `score.py <round> --frozen <baseline-round>`,
+   which sets each reviewer beside its own frozen scores, since frozen scores do not transfer
+   between models.
+3. **Control**: at every owner checkpoint and at close, the unchanged baseline shots of the
+   product join the round as `control`, blind like the rest. When the control's median has
+   moved past the noise floor, the scale moved: report the gain net of the control's move, and
+   say so instead of claiming a win.
+4. **New reviewer**: scores its own baseline before its rounds count.
 
 The dispatch that worked:
 
