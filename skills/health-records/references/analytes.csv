@@ -1,0 +1,101 @@
+name,loinc,units,aliases
+Glucose,14749-6,mmol/L,glucose|blood glucose|plasma glucose|serum glucose|glukóz|glükóz|vércukor|glucose (fasting)|glukose|blutzucker
+Glucose,2345-7,mg/dL,
+HbA1c,4548-4,%,hba1c|hemoglobin a1c|hemoglobin a1c (ngsp)|haemoglobin a1c|glycated hemoglobin|hba1c (dcct)|hba1c ngsp|hba1c (ngsp)|glikált hemoglobin
+HbA1c IFCC,59261-8,mmol/mol,hemoglobin a1c (ifcc)|hba1c (ifcc)|hba1c ifcc|haemoglobin a1c ifcc
+Urea,22664-7,mmol/L,urea|karbamid|harnstoff|carbamide|urea nitrogen (molar)
+Urea nitrogen,3094-0,mg/dL,bun|blood urea nitrogen|urea nitrogen
+Creatinine,14682-9,µmol/L,creatinine|kreatinin|kreatinin (enzimatikus)|crea
+Creatinine,2160-0,mg/dL,
+eGFR,98979-8,mL/min/1.73m2,egfr|egfr-epi|egfr (ckd-epi)|egfr ckd-epi|gfr|becsült gfr|egfr ckd-epi 2021
+Uric acid,14933-6,µmol/L,uric acid|urate|húgysav|harnsäure
+Uric acid,3084-1,mg/dL,
+Sodium,2951-2,mmol/L,sodium|na|nátrium|natrium
+Potassium,2823-3,mmol/L,potassium|k|kálium|kalium
+Chloride,2075-0,mmol/L,chloride|cl|klorid|chlorid
+Calcium,2000-8,mmol/L,calcium|ca|kálcium|kalcium|total calcium
+Calcium,17861-6,mg/dL,
+Magnesium,2601-3,mmol/L,magnesium|mg|magnézium
+Magnesium,19123-9,mg/dL,
+Phosphate,14879-1,mmol/L,phosphate|phosphorus|inorganic phosphate|foszfát|szervetlen foszfát|anorganisches phosphat
+Phosphate,2777-1,mg/dL,
+Bilirubin total,14631-6,µmol/L,total bilirubin|bilirubin total|bilirubin|totál bilirubin|összbilirubin|bilirubin gesamt|gesamtbilirubin
+Bilirubin total,1975-2,mg/dL,
+Bilirubin direct,14629-0,µmol/L,direct bilirubin|bilirubin direct|conjugated bilirubin|direkt bilirubin|bilirubin direkt
+Bilirubin direct,1968-7,mg/dL,
+ALT,1742-6,U/L|IU/L,alt|alat|gpt|alt (gpt)|alanine aminotransferase|sgpt|alat (gpt)
+AST,1920-8,U/L|IU/L,ast|asat|got|ast (got)|aspartate aminotransferase|sgot|asat (got)
+GGT,2324-2,U/L|IU/L,ggt|gamma-gt|gamma gt|gamma-glutamyl transferase|γ-gt|gamma-glutamiltranszferáz
+ALP,6768-6,U/L|IU/L,alp|alkaline phosphatase|alkalikus foszfatáz|alkalische phosphatase|ap
+LDH,2532-0,U/L|IU/L,ldh|lactate dehydrogenase|laktát-dehidrogenáz|laktatdehydrogenase
+Amylase,1798-8,U/L|IU/L,amylase|amiláz|alfa-amiláz|alpha-amylase
+Lipase,3040-3,U/L|IU/L,lipase|lipáz
+Cholinesterase,2098-2,kU/L|U/L,cholinesterase|kolineszteráz|cholinesterase (che)|che|pseudocholinesterase
+Iron,14798-3,µmol/L,iron|serum iron|vas|szérum vas|eisen
+Iron,2498-4,µg/dL,
+Transferrin,3034-6,g/L|mg/dL,transferrin|transzferrin
+Transferrin saturation,2502-3,%,transferrin saturation|tsat|iron saturation|transzferrin szaturáció|transferrinsättigung
+Ferritin,2276-4,µg/L|ng/mL,ferritin
+Folate,2284-8,ng/mL|µg/L,folate|folic acid|folsav|folsäure|serum folate
+Folate,14732-2,nmol/L,
+Vitamin B12,2132-9,pg/mL|ng/L,vitamin b12|b12 vitamin|b12|cobalamin|cyanocobalamin|b12-vitamin
+Vitamin B12,14685-2,pmol/L,
+CRP,1988-5,mg/L,crp|c-reactive protein|c reactive protein|c-reaktív protein
+hs-CRP,30522-7,mg/L,hs-crp|hscrp|high-sensitivity crp|crp (high sensitivity)|ultraszenzitív crp
+Total protein,2885-2,g/L|g/dL,total protein|protein total|összfehérje|gesamteiweiß|gesamtprotein
+Albumin,1751-7,g/L|g/dL,albumin
+Cholesterol total,14647-2,mmol/L,cholesterol|total cholesterol|cholesterol total|koleszterin|összkoleszterin|cholesterin|gesamtcholesterin
+Cholesterol total,2093-3,mg/dL,
+Triglycerides,14927-8,mmol/L,triglycerides|triglyceride|triglicerid|triglyzeride
+Triglycerides,2571-8,mg/dL,
+HDL cholesterol,14646-4,mmol/L,hdl|hdl cholesterol|hdl-c|hdl koleszterin|hdl-koleszterin|hdl-cholesterin
+HDL cholesterol,2085-9,mg/dL,
+LDL cholesterol,22748-8,mmol/L,ldl|ldl cholesterol|ldl-c|ldl koleszterin|ldl-koleszterin|ldl-cholesterin|ldl (calculated)|ldl koleszterin (számolt)
+LDL cholesterol,2089-1,mg/dL,
+Non-HDL cholesterol,43396-1,mg/dL,non-hdl cholesterol|non-hdl|non-hdl koleszterin
+Lipoprotein(a),10835-7,mg/dL,lipoprotein(a)|lp(a)|lipoprotein a
+Apolipoprotein B,1884-6,g/L|mg/dL,apolipoprotein b|apo b|apob|apolipoprotein b-100
+WBC,6690-2,10^9/L|G/L|10^3/µL,wbc|white blood cells|leukocytes|white cell count|fehérvérsejt|fehérvérsejtszám|leukocyta|leukozyten
+RBC,789-8,10^12/L|T/L|10^6/µL,rbc|red blood cells|erythrocytes|vörösvérsejt|vörösvérsejtszám|erythrocyta|erythrozyten
+Hemoglobin,718-7,g/L|g/dL,hemoglobin|haemoglobin|hgb|hb|hämoglobin
+Hematocrit,4544-3,%|L/L,hematocrit|haematocrit|hct|hematokrit|hämatokrit
+MCV,787-2,fL,mcv|mean corpuscular volume
+MCH,785-6,pg,mch|mean corpuscular hemoglobin
+MCHC,786-4,g/L|g/dL,mchc|mean corpuscular hemoglobin concentration
+RDW,788-0,%,rdw|rdw-cv|red cell distribution width
+Platelets,777-3,10^9/L|G/L|10^3/µL,platelets|plt|platelet count|thrombocytes|thrombocyta|vérlemezke|thrombozyten
+MPV,32623-1,fL,mpv|mean platelet volume
+Neutrophils %,770-8,%,neutrophils %|neutrophil %|neutrophyl %|neutrofil %|neutrophile %|neutrophils percent
+Neutrophils,751-8,10^9/L|G/L|10^3/µL,neutrophils|neutrophils absolute|neutrophil count|neutrophyl absz. szám|neutrofil abszolút|neutrophile absolut
+Lymphocytes %,736-9,%,lymphocytes %|lymphocyte %|lymphocyta %|limfocita %|lymphozyten %
+Lymphocytes,731-0,10^9/L|G/L|10^3/µL,lymphocytes|lymphocytes absolute|lymphocyte count|lymphocyta absz. szám|limfocita abszolút|lymphozyten absolut
+Monocytes %,5905-5,%,monocytes %|monocyte %|monocyta %|monozyten %
+Monocytes,742-7,10^9/L|G/L|10^3/µL,monocytes|monocytes absolute|monocyte count|monocyta absz. szám|monozyten absolut
+Eosinophils %,713-8,%,eosinophils %|eosinophil %|eosinophyl %|eozinofil %|eosinophile %
+Eosinophils,711-2,10^9/L|G/L|10^3/µL,eosinophils|eosinophils absolute|eosinophil count|eosinophyl absz. szám|eozinofil abszolút|eosinophile absolut
+Basophils %,706-2,%,basophils %|basophil %|basophyl %|bazofil %|basophile %
+Basophils,704-7,10^9/L|G/L|10^3/µL,basophils|basophils absolute|basophil count|basophyl absz. szám|bazofil abszolút|basophile absolut
+ESR,4537-7,mm/h,esr|sed rate|erythrocyte sedimentation rate|we|süllyedés|vvs|bsg|blutsenkung
+INR,6301-6,,inr|pt-inr|protrombin inr
+Fibrinogen,3255-7,g/L|mg/dL,fibrinogen|fibrinogén
+TSH,3016-3,mIU/L|µIU/mL,tsh|thyrotropin|thyroid stimulating hormone|s-tsh|tsh (3. generáció)
+Free T4,14920-3,pmol/L,free t4|ft4|ft4 (free thyroxine)|szabad t4|freies t4|free thyroxine
+Free T4,3024-7,ng/dL,
+Free T3,14928-6,pmol/L,free t3|ft3|szabad t3|freies t3|free triiodothyronine
+Free T3,3051-0,pg/mL,
+Testosterone,14913-8,nmol/L,testosterone|total testosterone|tesztoszteron|testosteron|testosterone total
+Testosterone,2986-8,ng/dL,
+SHBG,13967-5,nmol/L,shbg|sex hormone binding globulin|szexhormon-kötő globulin
+Estradiol,2243-4,pg/mL|ng/L,estradiol|oestradiol|e2|ösztradiol|östradiol
+Vitamin D 25-OH,68438-1,nmol/L,vitamin d|25-oh vitamin d|25-oh-d|25-hydroxyvitamin d|25(oh)d|d-vitamin|25-oh-d-vitamin|vitamin d3 (25-oh)|d3-vitamin
+Vitamin D 25-OH,62292-8,ng/mL|µg/L,
+Insulin,20448-7,mIU/L|µIU/mL,insulin|inzulin
+Insulin,14796-7,pmol/L,
+C-peptide,1986-9,ng/mL|µg/L,c-peptide|c-peptid
+Cortisol,14675-3,nmol/L,cortisol|kortizol|kortisol
+Cortisol,2143-6,µg/dL,
+PSA,2857-1,ng/mL|µg/L,psa|prostate specific antigen|total psa|össz-psa
+Homocysteine,13965-9,µmol/L,homocysteine|homocisztein|homocystein
+PTH,2731-8,pg/mL|ng/L,pth|parathyroid hormone|intact pth|parathormon
+PTH,14866-8,pmol/L,
+IGF-1,2484-4,ng/mL|µg/L,igf-1|igf-i|insulin-like growth factor 1|somatomedin c
