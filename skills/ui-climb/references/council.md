@@ -40,16 +40,18 @@ The dispatch that worked:
 
 ## The brief
 
-Generate one `BRIEF.md` per round from the rubric, the shots and `judge-context.md`. Reviewers
-read only the brief.
+Generate one `BRIEF.md` per round from the rubric, the shots and `judge-context.md`, using the
+template and labels in [brief.md](brief.md). Reviewers read only the brief.
 
 - **Blind**: the brief holds no target, stop rule, past score or round number. A stated target
-  anchors scores to it. Keep those in `climb.md` and `ledger.md`.
+  anchors scores to it. Subjects carry neutral labels in a shuffled order, so a reviewer scores
+  the product without knowing which one it is and references without a brand's halo.
 - **`judge-context.md`** holds the screen's purpose and the owner decisions reviewers must
   respect, phrased as "judge within these, never ask to undo them". Reviewers reopen settled
   values and reward copy the owner removed unless told.
-- **Output contract**: a score per rubric row in a fixed block the scoring script parses, then
-  fixes ranked MUST or SHOULD, each with a location on screen. Score by script, never by hand.
+- **Output contract**: a `scores` block per subject, then fixes ranked MUST or SHOULD, each
+  with a location on screen. Score with `scripts/score.py <round-dir> --prev <last-round-dir>`,
+  never by hand; it prints the tables for the ledger and the owner page.
 
 ## Which fixes to build
 

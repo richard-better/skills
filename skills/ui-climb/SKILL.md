@@ -19,9 +19,9 @@ those guards in `climb.md`. A measured guard settles what the council argues abo
 ## Repository tooling
 
 When the repository has climb tooling, use it and follow its README for commands. Without
-tooling, capture web with Playwright and native apps with the harness's simulator tooling (in T3 Code,
-`device_open`, then its `agent-device` command), and score
-with a small script that parses each review's score block.
+tooling, capture web with Playwright and native apps with the harness's simulator tooling (in T3
+Code, `device_open`, then its `agent-device` command), and score with
+[scripts/score.py](scripts/score.py).
 
 ## 1. Setup
 
@@ -54,7 +54,8 @@ the references, and the ledger holds baseline scores for the product and every r
 ## 2. A round
 
 1. Capture every shot. Wait for content, never for a fixed time.
-2. Generate the blind brief, run the council, score by script.
+2. Generate the blind brief from [references/brief.md](references/brief.md), run the council,
+   and score with `scripts/score.py`.
 3. Fix pure UI bugs the council flags (clipping, overlap, misalignment) after checking each
    against the shot. A blank or broken shot is a capture problem until proven otherwise.
 4. Show the owner the proposals page (step 3) and build only what is accepted, unless the
