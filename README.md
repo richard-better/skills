@@ -7,7 +7,6 @@ A personal collection of reusable agent skills, installable with [`skills`](http
 | Skill | Description |
 |-------|-------------|
 | [council-debate](./skills/council-debate/) | Add-on to tstack's `council`: after the council answers, members read and rebut each other's answers in debate rounds |
-| [the-gang-t3](./skills/the-gang-t3/) | Ask a panel of models from different labs the same question in parallel through [T3 Code](https://github.com/pingdotgg/t3code)'s `delegate_task`, then synthesize and cross-pollinate their answers |
 | [ios-app-cleanup](./skills/ios-app-cleanup/) | Bulk-uninstall apps from a paired iPhone with `xcrun devicectl`, picking them from a generated checklist page with App Store icons |
 | [outer-loop-t3](./skills/outer-loop-t3/) | Say "outer loop" and a [T3 Code](https://github.com/pingdotgg/t3code) thread becomes the one conversation that launches, unblocks and supervises your other threads |
 | [hill-climb](./skills/hill-climb/) | Push a measured number (size, speed, score, pass rate) toward a target in rounds of competing candidates, keeping only changes that beat the noise floor, with a ledger of everything tried |
@@ -20,7 +19,7 @@ A personal collection of reusable agent skills, installable with [`skills`](http
 npx skills add richard-better/agent-skills
 
 # Or install one directly
-npx skills add richard-better/agent-skills --skill the-gang-t3
+npx skills add richard-better/agent-skills --skill council-debate
 ```
 
 Add `-g` to install globally instead of into the current project, and `-a <agent>` to target a specific agent (e.g. `claude-code`, `codex`).
@@ -28,7 +27,6 @@ Add `-g` to install globally instead of into the current project, and `-a <agent
 ## Requirements
 
 - **council-debate** needs the [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council) skill from t3dotgg/tstack, and runs inside T3 Code for `delegate_task`.
-- **the-gang-t3** runs inside T3 Code, which provides the `orchestrator_capabilities` and `delegate_task` tools. The panel models must be configured as providers in T3 Code; seats whose model is unavailable are left empty.
 - **outer-loop-t3** runs inside T3 Code, which provides the thread tools (`t3_thread_launch`, `t3_thread_read`, `t3_thread_send`) and `schedule_task`.
 - **ios-app-cleanup** needs macOS with Xcode, `python3`, `curl`, and an iPhone paired with the Mac with Developer Mode enabled.
 - **ui-climb** builds on **hill-climb**: install both. It scores with a council of models from at least two labs. T3 Code's `delegate_task` is the tested route; lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts also work. Captures use Playwright for web and simulator tooling for native apps.
