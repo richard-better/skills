@@ -9,6 +9,7 @@ A personal collection of reusable agent skills, installable with [`skills`](http
 | [the-gang-t3](./skills/the-gang-t3/) | Ask a panel of models from different labs the same question in parallel through [T3 Code](https://github.com/pingdotgg/t3code)'s `delegate_task`, then synthesize and cross-pollinate their answers |
 | [ios-app-cleanup](./skills/ios-app-cleanup/) | Bulk-uninstall apps from a paired iPhone with `xcrun devicectl`, picking them from a generated checklist page with App Store icons |
 | [outer-loop-t3](./skills/outer-loop-t3/) | Say "outer loop" and a [T3 Code](https://github.com/pingdotgg/t3code) thread becomes the one conversation that launches, unblocks and supervises your other threads |
+| [hill-climb](./skills/hill-climb/) | Push a measured number (size, speed, score, pass rate) toward a target in rounds of competing candidates, keeping only changes that beat the noise floor, with a ledger of everything tried |
 
 ## Install
 
