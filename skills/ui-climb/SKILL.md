@@ -34,13 +34,16 @@ scorer command, and the climb folder gains `judge-context.md` (what the council 
 3. **Build fixtures of real screens**: the real views fed with sample data in the real format,
    modelled on the owner's actual data. Weak sample content reads as weak design. Pin the clock.
    When comparing against one product, make the content like for like and tell reviewers to
-   judge presentation, not wording.
-4. **Crop each capture to the subject**, and capture every state the screen has (empty, loading,
-   long content, error), in each appearance the climb covers.
+   judge presentation, not wording. A state reached by interaction (an open menu, a scrolled
+   thread) comes from an input recorded once (a click path, a gesture replay) and replayed on the
+   product and the references, so their frames match.
+4. **Crop each capture to the subject**, at most 1280 px wide: every reviewer pays for every
+   pixel in every round. Capture every state the screen has (empty, loading, long content,
+   error), in each appearance the climb covers.
 5. **Collect references from the owner**, one app or site per folder with a README describing
    each shot, in the same appearance as the climb. References are a bar for craft, never a look
-   to copy. Climbs toward a feeling with no references have made products worse. Add **house shots**: the product's own neighbouring screens, so fixes match its
-   existing components. When the goal is to match a reference exactly (a site the owner points
+   to copy. Climbs toward a feeling with no references have made products worse. Add **house
+   shots**: the product's own neighbouring screens, so fixes match its existing components. When the goal is to match a reference exactly (a site the owner points
    at), say so in `judge-context.md` and score per state against it.
 6. **Write the rubric with the owner** before round 1, from
    [references/rubric.md](references/rubric.md): the general rows, the owner's cases, and a veto
