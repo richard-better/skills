@@ -76,8 +76,8 @@ Before changing anything:
    climbs the wrong hill. Fixing the scorer means re-baselining.
 2. **Score the baseline at least three times**, more when the spread is wide next to the gains
    you expect. The **noise floor** is the spread (highest minus lowest) of those replicates;
-   record each guard's spread the same way. Measure where the number really comes from (cold against warm, network against CPU) so a candidate cannot win
-   on caching alone.
+   record each guard's spread the same way. Measure where the number really comes from (cold
+   against warm, network against CPU) so a candidate cannot win on caching alone.
 3. **Write the baseline row** of `ledger.md`: commit, replicate scores, median, noise floor,
    guard scores, cost.
 
@@ -103,8 +103,8 @@ Every round then:
 
 1. **Build in parallel**, each candidate in its own worktree and branch, dispatched as below.
    The task names the base commit, the change or variant, the hypothesis, the scorer
-   command and the protected paths. The child commits and reports the commit id; the parent scores every candidate, so
-   all scores come from one place.
+   command and the protected paths it leaves untouched. The child commits and reports the
+   commit id; the parent scores every candidate, so all scores come from one place.
 
    | Harness | One candidate |
    | --- | --- |
@@ -113,24 +113,22 @@ Every round then:
    | Other subagents | A subagent told to work only in a checkout you made with `git worktree add` |
    | No subagents | Build candidates one after another yourself, each in its own `git worktree add` checkout |
 
-2. **Check the diffs.** A candidate whose diff touches a protected path gets the verdict
-   `touched scorer` and is never scored.
-3. **Score each candidate alongside the current best**, with the same scorer, place and
+2. **Score each candidate alongside the current best**, with the same scorer, place and
    replicate count as the baseline, interleaving the runs (best, A, B, best, A, B, ...).
    Machines, caches and networks drift, so compare against the best as scored this round, never
    against a number stored from an earlier one.
-4. **Decide.** The leader is the candidate whose median beats the best by more than the noise
+3. **Decide.** The leader is the candidate whose median beats the best by more than the noise
    floor with every guard holding. A guard breaks when it misses its threshold by more than its
    own spread. The best of several noisy candidates is flattered by luck, so **confirm** the
    leader with a fresh set of replicates against the best before keeping it, then run the
    holdout. Record every other candidate with a verdict: `worse`, `no effect`, `guard broken`
    or `not confirmed`. When the runner-up also beat the floor and touches different things,
    combine it with the kept candidate as the next round's first candidate.
-5. **Save the rung.** Merge the kept candidate onto the climb branch and tag it
+4. **Save the rung.** Merge the kept candidate onto the climb branch and tag it
    (`<slug>-climb-r<n>`). Every rung is a working fallback.
-6. **Record the round** in the ledger: candidates, hypotheses, replicates, verdicts, cost. The
+5. **Record the round** in the ledger: candidates, hypotheses, replicates, verdicts, cost. The
    parent is the only writer of the ledger.
-7. **Checkpoint** as the autonomy mode says.
+6. **Checkpoint** as the autonomy mode says.
 
 | Mode | Owner's words | Use when |
 | --- | --- | --- |
@@ -171,6 +169,7 @@ the evidence the report cites is committed or linked from it.
 
 - The owner decides what ships. A higher score that the owner rejects is recorded in
   `decisions.md` and stays rejected.
+- Compute medians, spreads and comparisons with a command, never by hand.
 - A change to the scorer, its inputs, where it runs or the replicate count starts a new
   baseline. Scores from before and after are not compared.
 - Keep the climb folder in git. Evidence that only exists in a scratch folder gets deleted.
