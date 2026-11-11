@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagram Rebuild"
+  short_description: "Rebuild image-only diagrams as editable source"
+  default_prompt: "Use $diagram-rebuild to rebuild this diagram image as editable source."
