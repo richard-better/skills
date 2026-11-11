@@ -34,6 +34,12 @@ Two things, both before the first change:
 | Agent quality | Eval pass rate on fixed cases, with repeats per case |
 | Cost | Recorded spend per eval run |
 
+Prefer a **count of the work** behind a time over a clock: round trips, bytes, queries,
+renders, allocations, tokens. A count is steady, takes seconds and shows small wins a timer
+hides. Weight it the way the real time would (`round_trips * 300 + kilobytes * 6` at 300 ms
+latency and 1.3 Mbit/s), and keep the timed run as a guard or the holdout so the two cannot
+drift apart.
+
 A climb usually has one target and some **guards**: numbers that must not get worse. "Cut CI
 time and output size, but keep CPU under 10 ms per request" makes CPU time a guard and the other
 two targets.
@@ -48,6 +54,9 @@ Create the climb folder in the repository's plans folder, or `.climbs/<date>-<sl
 has none, with the files in [references/climb-files.md](references/climb-files.md).
 Write `climb.md` with the owner:
 
+- **Stands for**: one sentence, confirmed by the owner, on what the number stands in for ("pages
+  that feel instant on hotel wifi"). A scorer nobody can game that measures the wrong thing is
+  worse than a leaky one that measures the right thing.
 - **Target**: the number, its direction, and the value to reach. What is out of scope.
 - **Scorer**: the exact command, where it runs (local, staging, production), and the replicate
   count.
@@ -57,6 +66,8 @@ Write `climb.md` with the owner:
   them untouched, so a score can only rise because the product got better.
 - **Holdout**: inputs the candidates never see, scored only when a candidate is kept (unseen eval
   cases, pages left out of the benchmark). When the domain has none, say why.
+- **Stop rule**: the target plus a minimum number of rounds ("2x faster and at least five
+  rounds"), so a lucky early win cannot end the climb.
 - **Budget**: rounds, wall clock and paid spend. Paid model runs need the owner's approval.
 - **Autonomy**: one mode from the table in step 3.
 
@@ -78,10 +89,14 @@ Before changing anything:
    you expect. The **noise floor** is the spread (highest minus lowest) of those replicates;
    record each guard's spread the same way. Measure where the number really comes from (cold
    against warm, network against CPU) so a candidate cannot win on caching alone.
-3. **Write the baseline row** of `ledger.md`: commit, replicate scores, median, noise floor,
+3. **Find the floor**: the best the current design can reach, worked out from a profile or the
+   counts ("connect needs at least 4 round trips, so 1.2 s at 300 ms"). A target below the floor
+   goes back to the owner with a reachable target or the design change that lowers the floor.
+4. **Write the baseline row** of `ledger.md`: commit, replicate scores, median, noise floor,
    guard scores, cost.
 
-Done when the ledger holds a baseline whose noise floor comes from at least three repeats.
+Done when the ledger holds a baseline whose noise floor comes from at least three repeats, and
+the target sits above the floor.
 
 ## 3. Rounds
 
@@ -145,7 +160,8 @@ tagged as a rung.
 
 ## 4. Stop
 
-- **Target reached**: confirm with one extra round of replicates, then close.
+- **Stop rule met**: confirm with one extra round of replicates, then close. The stop rule
+  stays as written; relaxing it to meet it is not meeting it.
 - **Plateau**: two rounds with nothing kept. Run one contest round of bigger, structurally
   different approaches from the latest rung ("what is the meta for this?"). Keep what beats the
   rung, otherwise close at the rung.

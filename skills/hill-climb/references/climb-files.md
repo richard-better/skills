@@ -17,7 +17,9 @@ One folder per climb, committed with the work.
 # <Slug> climb
 
 - Goal: <what improves, for whom>. Out of scope: <...>
-- Target: <metric> <higher|lower> is better, reach <value> <unit>
+- Stands for: <what the number stands in for, in the owner's words>
+- Target: <metric> <higher|lower> is better, reach <value> <unit>; floor <value>
+- Stop rule: <target> and at least <n> rounds
 - Scorer: `<command>`, run on <local|staging|production>, <n> replicates, median
 - Guards: <metric> must stay <= <value>; ...
 - Protected: <scorer, fixtures, holdout paths candidates leave untouched>
