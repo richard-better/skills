@@ -21,7 +21,8 @@ One static page per checkpoint, readable on a phone.
 
 Draw each callout by finding the change on the actual shot, never from the plan. A change with no
 visible spot did not land: say so. On web, resolve callout targets from selectors to bounding
-boxes so arrows land exactly.
+boxes so arrows land exactly. Look at the finished page image before sending it, and fix any
+arrow that misses its spot.
 
 ## Answers
 

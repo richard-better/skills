@@ -94,4 +94,5 @@ template and labels in [brief.md](brief.md). Reviewers read only the brief.
 ## Calibration
 
 When the owner's ranking and the council's disagree, have the owner rank three or four builds,
-then tune the rubric until the council reproduces that order.
+then tune the rubric until the council reproduces that order. Keep every rung's shots in the climb folder: once
+they are gone, there are no old builds left to rank.

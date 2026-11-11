@@ -30,7 +30,9 @@ scorer command, and the climb folder gains `judge-context.md` (what the council 
 
 1. **Scope one screen**, or two at most, and **state its purpose** in `judge-context.md` ("an
    audit log: nobody comes here to find work"). Without it reviewers optimise the wrong thing.
-2. **Work in a dedicated worktree** with its own named simulator on iOS ("<app>-climb").
+2. **Work in a dedicated worktree** with its own named simulator on iOS ("<app>-climb"). When
+   the design question is not platform specific, climb on web first: a capture takes seconds,
+   not a native rebuild.
 3. **Build fixtures of real screens**: the real views fed with sample data in the real format,
    modelled on the owner's actual data. Weak sample content reads as weak design. Pin the clock.
    When comparing against one product, make the content like for like and tell reviewers to
@@ -87,9 +89,16 @@ parts. Use it instead of reverting the whole round.
 ## 4. Plateau and bold rounds
 
 Council scores plateau around 8, and a plateau is read against the references, not the absolute
-score. At a plateau, ask the council what a 10 would take, small tweaks or a redo, and run the
-answers as a contest round from a tagged rung, with what must survive named in the brief. Once a
-climb ends, ask what transfers to the sister platform (web and iOS), and check before porting:
+score. The stop rule reads the owner's cases and the veto row as well as the general median, so
+polish cannot hide a regression.
+
+When polish stalls, look for the one-off styles each round added: a **system pass** (one type
+scale, one spacing grid, one radius scale) beats another fix list. Then ask the council what a 10
+would take, small tweaks or a redo, and offer the answers to the owner as a list to choose from.
+Run what they pick as a contest round from a tagged rung, with what must survive named in the
+brief, and ask for improvements to the screen, not a new one: "be bold" without that replaced
+designs wholesale. Building every bold proposal at once has not beaten a plateau. Once a climb
+ends, ask what transfers to the sister platform (web and iOS), and check before porting:
 much of it does not.
 
 ## Owner taste
