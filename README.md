@@ -9,17 +9,12 @@ best in T3 Code.
 
 ## Skills
 
-### Run many agents at once
+### For work
 
 | Skill | What it does | Say |
 |-------|--------------|-----|
 | [outer-loop-t3](./skills/outer-loop-t3/) | Makes one T3 Code thread the conversation that launches, unblocks and supervises your other threads | "outer loop" |
-| [council-debate](./skills/council-debate/) | Adds debate rounds to tstack's `council`: after the council answers, members read and rebut each other's answers | "council, debate this" |
-
-### Climb toward a number
-
-| Skill | What it does | Say |
-|-------|--------------|-----|
+| [council-debate](./skills/council-debate/) | Adds debate rounds to the [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council) skill from t3dotgg/tstack: after the council answers, members read and rebut each other's answers | "council, debate this" |
 | [hill-climb](./skills/hill-climb/) | Pushes a measured number (size, speed, score, pass rate) toward a target in rounds of competing candidates, keeping only changes that beat the noise floor, with a ledger of everything tried | "hill climb this to X" |
 | [ui-climb](./skills/ui-climb/) | Runs a hill-climb on a screen's design, scored by a blind council of models from different labs on screenshots against reference apps, with owner checkpoints on before-and-after pages | "UI climb" |
 
