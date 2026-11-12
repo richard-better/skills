@@ -6,19 +6,15 @@ description: Debate rounds for the council skill - after the council answers, ea
 # Council Debate
 
 Runs `council`, then adds debate rounds. `council` stays the source for
-choosing members, dispatch, read-only work, and unavailable members.
+choosing members, dispatch, the neutral brief, and unavailable members.
 
 ## Round 1
 
-1. Write the brief once, to `council-brief.md` in your scratch directory: the
-   user's request plus all the context a member needs, stated neutrally. Your
-   own view stays in this thread, so every first answer is independent.
-2. Run `council`, each member's task pointing at the brief file. For a
-   decision question, skip council's pre-audit fixes, scores, and fix loop.
-3. Once every member has answered or failed, show each answer in full under
+1. Run `council` with its brief written to `council-brief.md` in your scratch
+   directory; every debate round reuses it.
+2. Once every member has answered or failed, show each answer in full under
    its model name, then synthesize: agreements, disagreements, your
-   recommendation. List each failed member with its error; it sits out the
-   debate.
+   recommendation. A failed member sits out the debate.
 
 ## Debate rounds
 

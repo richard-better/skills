@@ -1,8 +1,8 @@
 # Council debate
 
-Adds debate rounds to the [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council)
-skill. After models from three labs answer independently, each one reads the others' answers and
-rebuts them, so you end up with what is settled and what is really yours to decide.
+Adds debate rounds to the [`council`](../council/) skill. After models from three labs answer
+independently, each one reads the others' answers and rebuts them, so you end up with what is settled and what is really
+yours to decide.
 
 ![Debate turns three independent answers into what is settled and what is yours to decide](../../assets/council-debate/debate.png)
 
@@ -21,5 +21,5 @@ One debate round by default, more while a disagreement remains, three at most.
 
 ## Use it
 
-Install `council` from t3dotgg/tstack too, then say "council, debate this". It needs T3 Code and
+Install [`council`](../council/) too, then say "council, debate this". It needs T3 Code and
 models from three providers; see [what each skill needs](../../README.md#skills).
