@@ -165,3 +165,21 @@ npx skills add richard-better/agent-skills --skill health-records
 npx skills add richard-better/agent-skills --skill health-differential
 npx skills add cathrynlavery/diagram-design
 ```
+
+## Recommended
+
+<table>
+<tr>
+<td valign="top">
+<a href="./RECOMMENDED.md"><img src="./assets/recommended/grilling/icon.svg" alt="grilling icon" width="80"></a>
+<a href="./RECOMMENDED.md"><img src="./assets/recommended/sol-loop/icon.svg" alt="sol-loop icon" width="80"></a>
+<a href="./RECOMMENDED.md"><img src="./assets/recommended/full-send/icon.svg" alt="full-send icon" width="80"></a>
+<a href="./RECOMMENDED.md"><img src="./assets/recommended/show-me/icon.svg" alt="show-me icon" width="80"></a>
+<a href="./RECOMMENDED.md"><img src="./assets/recommended/emil-animate/icon.svg" alt="emil-animate icon" width="80"></a>
+<h3><a href="./RECOMMENDED.md">Skills I recommend</a></h3>
+Fifteen skills by other people that I keep reaching for: planning, review, shipping, writing
+and design, from <code>mattpocock</code>, <code>t3dotgg</code>, <code>emilkowalski</code> and more.
+<a href="./RECOMMENDED.md">See them all</a>.
+</td>
+</tr>
+</table>
