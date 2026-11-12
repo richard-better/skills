@@ -130,31 +130,29 @@ def pipeline():
                  "the generated index is where the panel starts", 24, INK)
 
     pdfs = s.card(0, 250, 180, 130, "PDF folder", "lab reports, letters,\nimaging, scans")
-    ext = s.box(230, 280, 170, 70, "extract.py", font=MONO, size=20)
-    s.line([R(pdfs), L(ext)], start=pdfs, end=ext)
-    s.text(315, 360, "page by page,\nskips known PDFs", 15, GREY, align="center")
+    lst = s.box(230, 280, 170, 70, "extract.py --list", font=MONO, size=16)
+    s.line([R(pdfs), L(lst)], start=pdfs, end=lst)
+    s.text(315, 360, "new PDFs only,\nby content hash", 15, GREY, align="center")
 
-    dia = s.box(450, 255, 150, 120, "verdict", kind="diamond", size=18)
-    s.line([R(ext), L(dia)], start=ext, end=dia)
-    txt = s.box(650, 150, 170, 60, "page-NNN.txt", font=MONO, size=17)
-    png = s.box(650, 420, 170, 60, "page-NNN.png", font=MONO, size=17)
-    s.line([T(dia), (525, 180), L(txt)], start=dia, end=txt)
-    s.line([B(dia), (525, 450), L(png)], start=dia, end=png)
-    s.text(535, 190, "text", 16, INK)
-    s.text(535, 400, "scan", 16, INK)
-    s.text(735, 302, "text+image: both", 15, GREY, align="center")
-
-    agent = s.card(870, 255, 190, 120, "Agent transcribes", "reads the .png\nwith its own vision",
+    agent = s.card(870, 255, 190, 120, "Agent reads PDF", "directly, every page,\nas printed",
                    stroke=PURPLE, fill=PURPLE_FILL)
-    s.line([R(txt), (900, 180), T(agent)], start=txt, end=agent)
-    s.line([R(png), (900, 450), B(agent)], start=png, end=agent)
+    s.line([R(lst), L(agent)], PURPLE, start=lst, end=agent, width=3)
+    s.text(635, 280, "PDF input", 17, PURPLE, align="center")
+
+    # fallback for models that cannot read PDFs
+    ext = s.box(450, 440, 170, 60, "extract.py", font=MONO, size=17, dashed=True)
+    pages = s.box(670, 440, 170, 60, ".txt + .png", font=MONO, size=17, dashed=True)
+    s.line([(330, 420), (330, 470), L(ext)], dashed=True, start=None, end=ext)
+    s.line([R(ext), L(pages)], dashed=True, start=ext, end=pages)
+    s.line([R(pages), (965, 470), B(agent)], dashed=True, start=pages, end=agent)
+    s.text(545, 512, "fallback: the model cannot\nread PDFs", 15, GREY, align="center")
 
     rows = s.box(870, 520, 190, 56, "rows.csv", font=MONO, size=17)
     merge = s.box(870, 620, 190, 60, "records.py merge", font=MONO, size=16)
     s.line([(1050, 375), (1050, 520)], start=agent, end=rows)
     s.line([B(rows), T(merge)], start=rows, end=merge)
     s.line([L(merge), (835, 650), (835, 548), L(rows)], RED, dashed=True, start=merge, end=rows)
-    s.text(690, 575, "bad rows: nothing\nwritten, fix and rerun", 15, RED)
+    s.text(625, 575, "bad rows: nothing\nwritten, fix and rerun", 15, RED)
 
     fx, fy, fw, fh = 1130, 90, 330, 620
     s.box(fx, fy, fw, fh, stroke=LINE, fill="transparent", dashed=True, rough=0)
