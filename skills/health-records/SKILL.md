@@ -1,6 +1,6 @@
 ---
 name: health-records
-description: Turn health PDFs (lab reports, discharge letters, imaging and visit reports, scans, any language) into a records folder - one faithful Markdown file per document, a markers.csv of lab results with LOINC codes for trends, and an index. Use when adding or transcribing medical PDFs, tracking blood results over time, or preparing records for the differential-panel skill.
+description: Turn health PDFs (lab reports, discharge letters, imaging and visit reports, scans, any language) into a records folder - one faithful Markdown file per document, a markers.csv of lab results with LOINC codes for trends, and an index. Use when adding or transcribing medical PDFs, tracking blood results over time, or preparing records for the health-differential skill.
 ---
 
 # Health records
@@ -8,7 +8,7 @@ description: Turn health PDFs (lab reports, discharge letters, imaging and visit
 Builds and maintains a **records folder** from health PDFs. Each PDF becomes a **document**: a
 faithful Markdown transcription with frontmatter. Every lab result becomes one row of
 `markers.csv`, named consistently across labs and languages. `index.md` is generated from both
-and is where any reader, such as the `differential-panel` skill, starts.
+and is where any reader, such as the `health-differential` skill, starts.
 
 `<skill>` below is this skill's folder. Both scripts run with `uv run` and install their own
 dependencies.
@@ -24,7 +24,7 @@ dependencies.
   documents/
     2025-03-14_lab_example-lab.pdf    copy of the original
     2025-03-14_lab_example-lab.md     its transcription
-  panels/         differential-panel reports
+  panels/         health-differential reports
 ```
 
 Document basenames are `YYYY-MM-DD_<type>_<provider-slug>`, with `-2`, `-3` added when two share

@@ -57,8 +57,8 @@ Turn a diagram that exists only as an image into editable Excalidraw or <a href=
 Turn health PDFs, in any language, into faithful documents and a <code>markers.csv</code> of lab results for trends<br>Say <em>"add these lab results"</em>
 </td>
 <td width="50%" valign="top">
-<a href="./skills/differential-panel/"><img src="./assets/differential-panel/thumb.png" alt="differential-panel diagram"></a>
-<br><a href="./skills/differential-panel/"><strong><code>differential-panel</code></strong></a><br>
+<a href="./skills/health-differential/"><img src="./assets/health-differential/thumb.png" alt="health-differential diagram"></a>
+<br><a href="./skills/health-differential/"><strong><code>health-differential</code></strong></a><br>
 Three roles on models from two labs look for what your records have not flagged<br>Say <em>"run the panel"</em>
 </td>
 </tr>
@@ -89,11 +89,11 @@ Bulk-uninstall apps from a paired iPhone, picked from a checklist page with App 
 | ui-climb | ⭐ Recommended | 🌐 Two or more | `hill-climb` | Playwright for web, simulator tooling for native |
 | diagram-rebuild | ⭐ Recommended | One | [`diagram-design`](https://github.com/cathrynlavery/diagram-design) from cathrynlavery/diagram-design, for its `dd` track | `node`, `npm` and `python3`; its setup installs Playwright with Chromium, Excalidraw, React and esbuild into `~/.cache/diagram-rebuild` |
 | health-records | Not used | One that reads PDFs, or at least images | - | [`uv`](https://docs.astral.sh/uv/) |
-| differential-panel | ⭐ Recommended | 🌐 Two | `health-records` | [`uv`](https://docs.astral.sh/uv/) |
+| health-differential | ⭐ Recommended | 🌐 Two | `health-records` | [`uv`](https://docs.astral.sh/uv/) |
 | ios-app-cleanup | Not used | One | - | macOS with Xcode, `python3`, `curl`, and an iPhone paired with Developer Mode on |
 
 - 🔒 **Required**: the skill calls T3 Code's tools (`delegate_task`, `t3_thread_launch`, `t3_thread_read`, `t3_thread_send`, `schedule_task`) and does not run without them.
-- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `differential-panel` can run its seats with the labs' CLIs. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts. `diagram-rebuild` builds alone without subagents and runs its reviews through those CLIs.
+- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `health-differential` can run its seats with the labs' CLIs. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts. `diagram-rebuild` builds alone without subagents and runs its reviews through those CLIs.
 - 🌐 **Providers**: models from different labs share fewer defaults, so the skill needs access to models from that many providers. `council` reports a missing provider instead of substituting another model.
 
 </details>
@@ -110,14 +110,14 @@ npx skills add richard-better/agent-skills --skill council-debate
 
 Add `-g` to install globally instead of into the current project, and `-a <agent>` to target a specific agent (e.g. `claude-code`, `codex`).
 
-Install a skill's dependencies too: `ui-climb` with `hill-climb`, `differential-panel` with
+Install a skill's dependencies too: `ui-climb` with `hill-climb`, `health-differential` with
 `health-records`, `council-debate` with `council`, and `diagram-rebuild` with `diagram-design`:
 
 ```bash
 npx skills add richard-better/agent-skills --skill hill-climb
 npx skills add richard-better/agent-skills --skill ui-climb
 npx skills add richard-better/agent-skills --skill health-records
-npx skills add richard-better/agent-skills --skill differential-panel
+npx skills add richard-better/agent-skills --skill health-differential
 npx skills add t3dotgg/tstack --skill council
 npx skills add cathrynlavery/diagram-design
 ```

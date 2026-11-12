@@ -307,7 +307,7 @@ def test_report_flag_disagreeing_with_range_is_kept_and_noted(records, tmp_path)
 def test_index_table_and_check(records, tmp_path):
     (records / "context.md").write_text("# Context\n")
     (records / "panels").mkdir()
-    (records / "panels" / "2025-06-01-differential-panel.md").write_text("# Panel\n")
+    (records / "panels" / "2025-06-01-health-differential.md").write_text("# Panel\n")
     run("records.py", "merge", records, stage(tmp_path / "a.csv", [
         {"original_name": "Ferritin", "value": v, "unit": "ug/l", "ref_range": "20-250", "date": d}
         for v, d in [("40", "2023-01-01"), ("31", "2024-01-01"), ("18", "2025-03-14")]
@@ -316,7 +316,7 @@ def test_index_table_and_check(records, tmp_path):
     index = (records / "index.md").read_text()
     assert "[context.md](context.md)" in index
     assert "| Ferritin | 18 L | ug/l | 20-250 | 2025-03-14 | 31 (2024-01-01); 40 (2023-01-01) | 3 | 1 |" in index
-    assert "(panels/2025-06-01-differential-panel.md)" in index
+    assert "(panels/2025-06-01-health-differential.md)" in index
     assert f"]({LETTER})" in index
 
     table = run("records.py", "table", records, "--name", "ferr").stdout

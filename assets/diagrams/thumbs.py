@@ -15,7 +15,7 @@ FIGURES = {
     "hill-climb": ("score-steps.png", "pad"),
     "ui-climb": ("round.png", "pad"),
     "health-records": ("pipeline.png", "pad"),
-    "differential-panel": ("panel.png", "pad"),
+    "health-differential": ("panel.png", "pad"),
     "diagram-rebuild": ("loop.png", "pad"),
     "ios-app-cleanup": ("checklist.png", "top"),
 }

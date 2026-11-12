@@ -19,7 +19,7 @@ LOINC code, so ferritin from three labs in two languages reads as one trend.
    analytes (English, Hungarian and German names) and the folder's own aliases, computes flags
    from reference ranges, and merges it. Rerunning on the same document replaces its rows.
 4. `records.py index` regenerates `index.md`: every document, and the latest value of every
-   analyte with its history. The [`differential-panel`](../differential-panel/) skill starts there.
+   analyte with its history. The [`health-differential`](../health-differential/) skill starts there.
 
 Reruns over the same PDF folder only pick up new files.
 

@@ -1,10 +1,10 @@
-# Differential panel
+# Health differential
 
 A second look at your health records by a panel of models, modelled on Microsoft's MAI-DxO.
 It looks for what the records have not already flagged: patterns across specialties,
 drift inside reference ranges, follow-ups that dropped, diagnoses that stalled.
 
-![Panel roles and rounds](../../assets/differential-panel/panel.png)
+![Panel roles and rounds](../../assets/health-differential/panel.png)
 
 ## How it works
 
@@ -27,7 +27,7 @@ content goes to each model's provider.
 
 ```bash
 npx skills add richard-better/agent-skills --skill health-records
-npx skills add richard-better/agent-skills --skill differential-panel
+npx skills add richard-better/agent-skills --skill health-differential
 ```
 
 Runs best in T3 Code, whose `delegate_task` puts each seat on its model; elsewhere it uses the

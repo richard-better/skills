@@ -1,9 +1,9 @@
 ---
-name: differential-panel
+name: health-differential
 description: Run a multi-model physician panel over a health records folder to find what the records have not already flagged. Use for "run the panel", "differential", "second look", "what are we missing", unexplained or multi-system symptoms, after new results land, or when a working diagnosis has stalled (a treatment trial failed, symptoms persist despite clean tests).
 ---
 
-# Differential panel
+# Health differential
 
 A virtual physician panel over one person's health records, modelled on Microsoft's MAI-DxO
 ("Sequential Diagnosis with Language Models", 2025). The gain in that work came from
@@ -31,7 +31,7 @@ The panel reads a folder in the `health-records` skill's layout. Run that skill 
 
 ## Output
 
-One file, `<records>/panels/YYYY-MM-DD-differential-panel.md`, with `-2`, `-3` added for a second
+One file, `<records>/panels/YYYY-MM-DD-health-differential.md`, with `-2`, `-3` added for a second
 run that day. Sections in this order:
 
 0. **Track record**: only when an earlier panel exists. For each of its New and Re-ranked items,
@@ -60,7 +60,7 @@ flagged list, so they are not reported as new a second time.
 ### 1. Case brief
 
 Read `index.md`, `context.md`, every document and `records.py table <records>`. Write
-`<scratch>/differential-panel/brief.md` with:
+`<scratch>/health-differential/brief.md` with:
 
 - **Demographics, medications and supplements**, with start and stop dates
 - **Problem list**: every active and recently closed problem, one line each
@@ -93,7 +93,7 @@ Every seat gets the same task, varying only its role and directory:
 ```
 You are the <ROLE> on a diagnostic panel. Your brief: <ROLE BRIEF>
 
-Read <scratch>/differential-panel/brief.md, then the records it summarises in <records>:
+Read <scratch>/health-differential/brief.md, then the records it summarises in <records>:
 index.md, context.md, documents/ and markers.csv. The brief is lossy; check the sources.
 Work read-only: the only file you write is <seat-dir>/answer.md.
 

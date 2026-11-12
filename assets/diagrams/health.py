@@ -1,7 +1,7 @@
-"""Generate the health-records and differential-panel figures as Excalidraw scenes.
+"""Generate the health-records and health-differential figures as Excalidraw scenes.
 
 Usage: python3 assets/diagrams/health.py
-Writes assets/health-records/pipeline.excalidraw and assets/differential-panel/panel.excalidraw.
+Writes assets/health-records/pipeline.excalidraw and assets/health-differential/panel.excalidraw.
 Render each to PNG as described in assets/diagrams/README.md.
 """
 
@@ -168,10 +168,10 @@ def pipeline():
         s.line([R(b), (fx + fw - 10, R(b)[1])], arrow=False)
     s.line([(fx + fw - 10, 177), (fx + fw - 10, 570), (T(idx)[0], 570), T(idx)], end=idx)
 
-    panel = s.card(1510, 595, 200, 85, "differential-panel", "starts at index.md", stroke=ORANGE,
+    panel = s.card(1510, 595, 230, 85, "health-differential", "starts at index.md", stroke=ORANGE,
                    fill=ORANGE_FILL, font=MONO, size=17)
     s.line([R(idx), L(panel)], BLUE, start=idx, end=panel)
-    s.text(1610, 690, "writes panels/<date>.md", 15, GREY, align="center")
+    s.text(1625, 690, "writes panels/<date>.md", 15, GREY, align="center")
     s.save(ASSETS / "health-records" / "pipeline.excalidraw")
 
 
@@ -241,7 +241,7 @@ def panel():
     s.line([B(rep), (1670, 620), (365, 620), B(brief)], BLUE, dashed=True, start=rep, end=brief)
     s.text(1018, 630, "next run: score each item confirmed, killed or still open;\nopen items join Already flagged",
            16, BLUE, align="center")
-    s.save(ASSETS / "differential-panel" / "panel.excalidraw")
+    s.save(ASSETS / "health-differential" / "panel.excalidraw")
 
 
 if __name__ == "__main__":
