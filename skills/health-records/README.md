@@ -9,9 +9,10 @@ LOINC code, so ferritin from three labs in two languages reads as one trend.
 
 ## How it works
 
-1. `extract.py` reads each PDF's text layer page by page and renders the pages that have none.
-   The agent reads those page images itself, which handles scans, stamps and accented languages
-   better than OCR and needs nothing installed.
+1. `extract.py --list` finds the PDFs not yet in the folder, by content hash. The agent reads
+   each one directly as a PDF, so it sees the layout, stamps and scanned pages as printed. An
+   agent that cannot read PDFs falls back to `extract.py`, which pulls each page's text layer
+   and renders the pages that need eyes as images.
 2. The agent writes `documents/<date>_<type>_<provider>.md`: the original wording, every value,
    and frontmatter with date, type, provider and a one-line summary.
 3. It stages each result as a row, and `records.py merge` names it from a table of common
@@ -29,4 +30,4 @@ npx skills add richard-better/agent-skills --skill health-records
 ```
 
 Needs [`uv`](https://docs.astral.sh/uv/), which installs PyMuPDF and PyYAML for the scripts,
-and a model that reads images for scanned PDFs. Your records stay in the folder you choose.
+and a model that reads PDFs (or, as a fallback, images). Your records stay in the folder you choose.

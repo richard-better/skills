@@ -42,7 +42,7 @@ clinician: Dr. Jane Doe   # optional
 language: hu              # ISO 639-1 code of the original
 source: 2025-03-14_lab_example-lab.pdf
 sha256: <from extract.py's meta.json>
-extraction: text          # text | vision | mixed: how the content was read
+extraction: pdf           # pdf | text | vision | mixed: how the content was read (see step 2)
 summary: Fasting glucose high (6.4), ferritin low (18), mild microcytic anaemia.
 ---
 ```
@@ -77,23 +77,38 @@ Get the PDF folder and the records folder from the owner. For a new records fold
 medications and supplements with start and stop dates, current questions). Write only what they
 give.
 
-### 2. Extract
+### 2. Read the new PDFs
 
 ```bash
-uv run <skill>/scripts/extract.py <pdf-folder> --out <scratch>/extract --records <records>
+uv run <skill>/scripts/extract.py <pdf-folder> --list --records <records>
 ```
 
-`--records` skips PDFs already in the folder, by content hash. Each PDF gets a work folder with
-`page-NNN.txt`, page images where needed, and `meta.json`. Each page's verdict says how to read
-it:
+This lists each PDF not yet in the records folder, by content hash, with its page count and
+sha256. A `FAIL` line is an encrypted or broken PDF. Carry it to the report; for an encrypted one,
+ask the owner for an unlocked copy.
+
+**Read each PDF directly**, as a document, every page: Claude Code's `Read` takes a PDF (pass
+`pages` ranges beyond 10 pages), and Gemini and other models take PDF input. A model reading the
+PDF sees the layout, so each value stays on its row, and it sees stamps, handwriting and scanned
+pages. Set `extraction: pdf`. When your harness can delegate to a stronger PDF reader, such as
+Gemini, prefer that for long or poorly scanned PDFs; the PDF then goes to that model's provider.
+Read every number twice, against its row.
+
+**Fallback**, only when you cannot read PDFs directly, or a PDF comes back empty or truncated:
+
+```bash
+uv run <skill>/scripts/extract.py <pdf> --out <scratch>/extract --records <records>
+```
+
+Each PDF gets a work folder with `page-NNN.txt` (the text layer), page images where needed, and
+`meta.json`. Each page's verdict says how to read it:
 
 - `text`: read the `.txt`. When a table's columns come out scrambled, open the page image too
-  (rerun that PDF with `--images all`).
-- `scan`: read the `.png` with your own vision. Read every number twice, against its row.
+  (rerun that PDF with `--images all`). Set `extraction: text`.
+- `scan`: read the `.png` with your own vision. Set `extraction: vision`.
 - `text+image`: read both; the image may carry content the text layer lacks.
 
-A `FAIL` line is an encrypted or broken PDF. Carry it to the report; for an encrypted one, ask the
-owner for an unlocked copy.
+Use `mixed` when a document's pages were read in more than one way.
 
 ### 3. Transcribe each document
 
@@ -106,7 +121,7 @@ Write `documents/<basename>.md` and copy the PDF beside it as `<basename>.pdf`. 
 - Replace national ID, insurance and passport numbers with `[ID]`. Keep the name and birth date.
 - Mark what you cannot read `[illegible]`, never a guess.
 
-Done when every PDF in step 2 has its document or a `FAIL` reason, and each document's
+Done when every PDF listed in step 2 has its document or a `FAIL` reason, and each document's
 frontmatter is complete.
 
 ### 4. Stage and merge the markers

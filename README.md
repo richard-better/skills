@@ -68,7 +68,7 @@ Bulk-uninstall apps from a paired iPhone, picked from a checklist page with App 
 | council-debate | 🔒 Required | 🌐 Three | [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council) from t3dotgg/tstack | Any |
 | hill-climb | ⭐ Recommended | One | - | Any |
 | ui-climb | ⭐ Recommended | 🌐 Two or more | `hill-climb` | Playwright for web, simulator tooling for native |
-| health-records | Not used | One, reading images for scanned PDFs | - | [`uv`](https://docs.astral.sh/uv/) |
+| health-records | Not used | One that reads PDFs, or at least images | - | [`uv`](https://docs.astral.sh/uv/) |
 | differential-panel | ⭐ Recommended | 🌐 Two | `health-records` | [`uv`](https://docs.astral.sh/uv/) |
 | ios-app-cleanup | Not used | One | - | macOS with Xcode, `python3`, `curl`, and an iPhone paired with Developer Mode on |
 
