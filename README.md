@@ -40,10 +40,20 @@ Climb a screen's design, scored by a blind council of models<br>Say <em>"UI clim
 
 ### For health
 
-| Skill | What it does | Say |
-|-------|--------------|-----|
-| [health-records](./skills/health-records/) | Turns health PDFs (lab reports, letters, imaging, scans, any language) into one faithful Markdown file each, a `markers.csv` of lab results with LOINC codes for trends, and an index | "add these lab results" |
-| [differential-panel](./skills/differential-panel/) | Runs a MAI-DxO-style panel over a records folder: three roles on two models from different labs look for what the records have not flagged, with a track record across runs | "run the panel" |
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="./skills/health-records/"><img src="./assets/health-records/thumb.png" alt="health-records diagram"></a>
+<br><a href="./skills/health-records/"><strong><code>health-records</code></strong></a><br>
+Turn health PDFs, in any language, into faithful documents and a <code>markers.csv</code> of lab results for trends<br>Say <em>"add these lab results"</em>
+</td>
+<td width="50%" valign="top">
+<a href="./skills/differential-panel/"><img src="./assets/differential-panel/thumb.png" alt="differential-panel diagram"></a>
+<br><a href="./skills/differential-panel/"><strong><code>differential-panel</code></strong></a><br>
+Three roles on models from two labs look for what your records have not flagged<br>Say <em>"run the panel"</em>
+</td>
+</tr>
+</table>
 
 ### Utilities
 

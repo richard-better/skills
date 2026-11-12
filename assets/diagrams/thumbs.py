@@ -14,6 +14,8 @@ FIGURES = {
     "council-debate": ("debate.png", "pad"),
     "hill-climb": ("score-steps.png", "pad"),
     "ui-climb": ("round.png", "pad"),
+    "health-records": ("pipeline.png", "pad"),
+    "differential-panel": ("panel.png", "pad"),
     "ios-app-cleanup": ("checklist.png", "top"),
 }
 W, H, PAD = 1600, 1000, 40
