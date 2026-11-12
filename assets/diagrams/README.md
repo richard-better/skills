@@ -1,0 +1,31 @@
+# Diagrams
+
+The skill pages' figures are generated as Excalidraw scenes. Each figure answers one question,
+following the visual patterns in the `domi-tech-writing` skill.
+
+| Figure | Question | Pattern |
+| --- | --- | --- |
+| `hill-climb/score-steps` | Why does the best score move in steps? | Illustrative plot |
+| `hill-climb/round` | What does a round keep? | decision-flow |
+| `ui-climb/round` | What does ui-climb change? | `hill-climb/round` with the scorer swapped |
+| `council-debate/debate` | What does debating add to a council? | decision-flow |
+| `outer-loop-t3/loops` | How does one thread keep the others moving? | nested loops |
+
+`climb.py` draws the climb figures and `skills.py` the rest. `ui-climb/round` reuses every
+position from `hill-climb/round`, so keep the two in step by editing `round_flow()` only.
+
+`thumbs.py` pads each skill's main figure to the 16:10 `thumb.png` the top-level README's grid
+shows.
+
+## Regenerate
+
+```bash
+python3 assets/diagrams/climb.py
+python3 assets/diagrams/skills.py
+for f in assets/*/*.excalidraw; do node <diagram-rebuild>/scripts/render.mjs "$f" "${f%.excalidraw}.png"; done
+python3 assets/diagrams/thumbs.py   # needs Pillow
+```
+
+`<diagram-rebuild>` is the diagram-rebuild skill's folder. Run its `scripts/setup.sh` once
+first. Open any `.excalidraw` file at excalidraw.com to edit it by hand, but regenerating
+overwrites hand edits.
