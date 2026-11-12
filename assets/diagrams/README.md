@@ -12,6 +12,7 @@ following the visual patterns in the `domi-tech-writing` skill.
 | `outer-loop-t3/loops` | How does one thread keep the others moving? | nested loops |
 | `health-records/pipeline` | How does a PDF become a document and marker rows? | decision-flow |
 | `differential-panel/panel` | How do six seats turn into one report? | decision-flow |
+| `diagram-rebuild/loop` | How does an image become source that passes review? | decision-flow |
 
 `climb.py` draws the climb figures, `health.py` the health-records and differential-panel
 figures, and `skills.py` the rest. `ui-climb/round` reuses every position from
@@ -26,11 +27,11 @@ shows.
 python3 assets/diagrams/climb.py
 python3 assets/diagrams/skills.py
 python3 assets/diagrams/health.py
-for f in assets/*/*.excalidraw; do node <diagram-rebuild>/scripts/render.mjs "$f" "${f%.excalidraw}.png"; done
+for f in assets/*/*.excalidraw; do node skills/diagram-rebuild/scripts/render.mjs "$f" "${f%.excalidraw}.png"; done
 python3 assets/diagrams/thumbs.py   # needs Pillow
 ```
 
-`<diagram-rebuild>` is the diagram-rebuild skill's folder. Run its `scripts/setup.sh` once
-first. Open any `.excalidraw` file at excalidraw.com to edit it by hand, but regenerating
-overwrites hand edits. Review every render at about 900 px wide, the width GitHub shows it: no
-overlapping or clipped text, no arrow through a label.
+Run `bash skills/diagram-rebuild/scripts/setup.sh` once first. Open any `.excalidraw` file at
+excalidraw.com to edit it by hand, but regenerating overwrites hand edits. Review every render at
+about 900 px wide, the width GitHub shows it: no overlapping or clipped text, no arrow through a
+label.

@@ -1,7 +1,8 @@
-"""Generate the council-debate and outer-loop-t3 figures as Excalidraw scenes.
+"""Generate the council-debate, outer-loop-t3 and diagram-rebuild figures as Excalidraw scenes.
 
 Usage: python3 assets/diagrams/skills.py
-Writes assets/council-debate/debate.excalidraw and assets/outer-loop-t3/loops.excalidraw.
+Writes assets/council-debate/debate.excalidraw, assets/outer-loop-t3/loops.excalidraw and
+assets/diagram-rebuild/loop.excalidraw.
 """
 
 import math
@@ -182,6 +183,41 @@ def outer_loop():
     s.save(ROOT / "outer-loop-t3" / "loops.excalidraw")
 
 
+def stage(s, x, y, w, h, title, sub, stroke=GREY, fill="#ffffff", font=None):
+    b = s.box(x, y, w, h, "", stroke=stroke, fill=fill)
+    s.text(x + w / 2, y + 22, title, 20, INK, font or 5, "center")
+    s.text(x + w / 2, y + 58, sub, 15, GREY, align="center")
+    return b
+
+
+def diagram_rebuild():
+    s = Scene(57)
+    s.text(0, 0, "A fresh reviewer checks every round until the rebuild matches the original", 24, INK)
+    y, h = 250, 110
+    orig = stage(s, 0, y, 190, h, "original.png", "an image only", font=MONO)
+    build = stage(s, 280, y, 230, h, "Builder", "draws editable source\nfrom the image", ORANGE, ORANGE_FILL)
+    s.text(395, y + h + 14, "one per track: ex (Excalidraw),\ndd (diagram-design)", 14, GREY, align="center")
+    render = stage(s, 600, y, 200, h, "render.mjs", "source to vN.png", font=MONO)
+    review = stage(s, 890, y, 240, h, "Fresh reviewer", "sees only the brief\nand both images", SKY, SKY_FILL)
+    gallery = stage(s, 1250, y, 230, h, "gallery.html", "original beside\nevery track", GREEN, GREEN_FILL,
+                    font=MONO)
+
+    s.line([R(orig), L(build)], GREY, start=orig, end=build)
+    s.line([R(build), L(render)], GREY, start=build, end=render)
+    s.line([R(render), L(review)], GREY, start=render, end=review)
+    s.line([R(review), L(gallery)], GREEN, start=review, end=gallery)
+    s.text(1190, y + 22, "PASS", 17, GREEN, MONO, "center")
+
+    s.line([T(review), (1010, 160), (395, 160), T(build)], RED, start=review, end=build)
+    s.text(702, 126, "ITERATE: located fixes go back to the builder", 17, RED, align="center")
+    s.text(702, 168, "a new reviewer each round, four rounds at most", 15, GREY, align="center")
+
+    s.line([B(orig), (95, 470), (1010, 470), B(review)], GREY, dashed=True, start=orig, end=review)
+    s.text(552, 478, "the original, for comparison", 15, GREY, align="center")
+    s.save(ROOT / "diagram-rebuild" / "loop.excalidraw")
+
+
 if __name__ == "__main__":
     council_debate()
     outer_loop()
+    diagram_rebuild()

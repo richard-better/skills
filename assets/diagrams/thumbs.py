@@ -16,6 +16,7 @@ FIGURES = {
     "ui-climb": ("round.png", "pad"),
     "health-records": ("pipeline.png", "pad"),
     "differential-panel": ("panel.png", "pad"),
+    "diagram-rebuild": ("loop.png", "pad"),
     "ios-app-cleanup": ("checklist.png", "top"),
 }
 W, H, PAD = 1600, 1000, 40
