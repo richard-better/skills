@@ -16,12 +16,12 @@ Get the decisions out of my head before any code is written.
 <td width="33%" valign="top">
 <a href="https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling"><img src="./assets/recommended/grilling/icon.svg" alt="grilling icon"></a>
 <br><a href="https://github.com/mattpocock/skills/tree/main/skills/productivity/grilling"><strong><code>grilling</code></strong></a> <sub>from <a href="https://github.com/mattpocock/skills">mattpocock/skills</a></sub><br>
-Interviews you about a plan in rounds, a whole frontier of decisions at a time, each with a recommended answer<br><em>The quickest way I know to find the decisions I had not made yet.</em><br>Say <em>"grill me on this"</em>
+Interviews you about a plan in rounds, a whole frontier of decisions at a time, each with a recommended answer<br><em>The quickest way I know to find the decisions I had not made yet.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/shadcn/improve/tree/main/skills/improve"><img src="./assets/recommended/improve/icon.svg" alt="improve icon"></a>
 <br><a href="https://github.com/shadcn/improve/tree/main/skills/improve"><strong><code>improve</code></strong></a> <sub>from <a href="https://github.com/shadcn/improve">shadcn/improve</a></sub><br>
-Surveys a codebase read-only and writes ranked plans for other agents to carry out<br><em>Turns a project I have not touched in a while into a backlog I can hand out.</em><br>Say <em>"audit this codebase"</em>
+Surveys a codebase read-only and writes ranked plans for other agents to carry out<br><em>Turns a project I have not touched in a while into a backlog I can hand out.</em>
 </td>
 </tr>
 </table>
@@ -36,12 +36,12 @@ Make a change correct, prove it, and carry it to a merged PR.
 <td width="33%" valign="top">
 <a href="https://github.com/t3dotgg/tstack/tree/main/skills/sol-loop"><img src="./assets/recommended/sol-loop/icon.svg" alt="sol-loop icon"></a>
 <br><a href="https://github.com/t3dotgg/tstack/tree/main/skills/sol-loop"><strong><code>sol-loop</code></strong></a> <sub>from <a href="https://github.com/t3dotgg/tstack">t3dotgg/tstack</a></sub><br>
-Has GPT Sol review your diff in a few bounded rounds and fixes only what holds up<br><em>My default pass before a PR goes up.</em><br>Say <em>"sol loop"</em>
+Has GPT Sol review your diff in a few bounded rounds and fixes only what holds up<br><em>My default pass before a PR goes up.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review"><img src="./assets/recommended/thermo-nuclear-code-quality-review/icon.svg" alt="thermo-nuclear-code-quality-review icon"></a>
 <br><a href="https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/thermo-nuclear-code-quality-review"><strong><code>thermo-nuclear-code-quality-review</code></strong></a> <sub>from <a href="https://github.com/cursor/plugins">cursor/plugins</a></sub><br>
-A deliberately harsh maintainability review that hunts for restructurings that make whole branches of code disappear<br><em>For a diff that works but feels heavier than it should.</em><br>Run <code>/thermo-nuclear-code-quality-review</code> (manual only)
+A deliberately harsh maintainability review that hunts for restructurings that make whole branches of code disappear<br><em>For a diff that works but feels heavier than it should.</em>
 </td>
 </tr>
 <tr></tr>
@@ -49,12 +49,12 @@ A deliberately harsh maintainability review that hunts for restructurings that m
 <td width="33%" valign="top">
 <a href="https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/verify-this"><img src="./assets/recommended/verify-this/icon.svg" alt="verify-this icon"></a>
 <br><a href="https://github.com/cursor/plugins/tree/main/cursor-team-kit/skills/verify-this"><strong><code>verify-this</code></strong></a> <sub>from <a href="https://github.com/cursor/plugins">cursor/plugins</a></sub><br>
-Checks a claim with before and after evidence and returns VERIFIED, NOT VERIFIED or INCONCLUSIVE<br><em>Replaces "it should work now" with proof.</em><br>Say <em>"verify this"</em>
+Checks a claim with before and after evidence and returns VERIFIED, NOT VERIFIED or INCONCLUSIVE<br><em>Replaces "it should work now" with proof.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/t3dotgg/tstack/tree/main/skills/full-send"><img src="./assets/recommended/full-send/icon.svg" alt="full-send icon"></a>
 <br><a href="https://github.com/t3dotgg/tstack/tree/main/skills/full-send"><strong><code>full-send</code></strong></a> <sub>from <a href="https://github.com/t3dotgg/tstack">t3dotgg/tstack</a></sub><br>
-Takes the work from wherever it is to a merged PR, on its own<br><em>For tasks I want finished while I am not watching.</em><br>Say <em>"full send"</em>
+Takes the work from wherever it is to a merged PR, on its own<br><em>For tasks I want finished while I am not watching.</em>
 </td>
 </tr>
 <tr></tr>
@@ -62,7 +62,7 @@ Takes the work from wherever it is to a merged PR, on its own<br><em>For tasks I
 <td width="33%" valign="top">
 <a href="https://github.com/t3dotgg/tstack/tree/main/skills/babysit-pr"><img src="./assets/recommended/babysit-pr/icon.svg" alt="babysit-pr icon"></a>
 <br><a href="https://github.com/t3dotgg/tstack/tree/main/skills/babysit-pr"><strong><code>babysit-pr</code></strong></a> <sub>from <a href="https://github.com/t3dotgg/tstack">t3dotgg/tstack</a></sub><br>
-Watches a PR through CI and review bots, fixing and replying until it can merge<br><em>Keeps a PR moving without me refreshing GitHub.</em><br>Say <em>"babysit this PR"</em>
+Watches a PR through CI and review bots, fixing and replying until it can merge<br><em>Keeps a PR moving without me refreshing GitHub.</em>
 </td>
 <td width="33%"></td>
 </tr>
@@ -78,12 +78,12 @@ Words agents follow, words people want to read, and pictures instead of words.
 <td width="33%" valign="top">
 <a href="https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents"><img src="./assets/recommended/writing-for-agents/icon.svg" alt="writing-for-agents icon"></a>
 <br><a href="https://github.com/mattpocock/skills/tree/main/skills/productivity/writing-for-agents"><strong><code>writing-for-agents</code></strong></a> <sub>from <a href="https://github.com/mattpocock/skills">mattpocock/skills</a></sub><br>
-How to write skills and <code>AGENTS.md</code> files that agents follow the same way every run<br><em>I load it whenever I write or edit a skill.</em><br>Loads when you edit a skill or <code>AGENTS.md</code>
+How to write skills and <code>AGENTS.md</code> files that agents follow the same way every run<br><em>I load it whenever I write or edit a skill.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/cursor/plugins/tree/main/pstack/skills/unslop"><img src="./assets/recommended/unslop/icon.svg" alt="unslop icon"></a>
 <br><a href="https://github.com/cursor/plugins/tree/main/pstack/skills/unslop"><strong><code>unslop</code></strong></a> <sub>from <a href="https://github.com/cursor/plugins">cursor/plugins</a></sub><br>
-Cuts AI tells from any writing<br><em>I run it on anything that goes out under my name.</em><br>Run <code>/unslop</code> (manual only)
+Cuts AI tells from any writing<br><em>I run it on anything that goes out under my name.</em>
 </td>
 </tr>
 <tr></tr>
@@ -91,12 +91,12 @@ Cuts AI tells from any writing<br><em>I run it on anything that goes out under m
 <td width="33%" valign="top">
 <a href="https://github.com/cursor/plugins/tree/main/pstack/skills/bro"><img src="./assets/recommended/bro/icon.svg" alt="bro icon"></a>
 <br><a href="https://github.com/cursor/plugins/tree/main/pstack/skills/bro"><strong><code>bro</code></strong></a> <sub>from <a href="https://github.com/cursor/plugins">cursor/plugins</a></sub><br>
-Restates the last answer in plain words, with no jargon<br><em>One word when an answer gets too dense to read.</em><br>Run <code>/bro</code> (manual only)
+Restates the last answer in plain words, with no jargon<br><em>One word when an answer gets too dense to read.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/humanlayer/skills/tree/main/plugins/show-me/skills/show-me"><img src="./assets/recommended/show-me/icon.svg" alt="show-me icon"></a>
 <br><a href="https://github.com/humanlayer/skills/tree/main/plugins/show-me/skills/show-me"><strong><code>show-me</code></strong></a> <sub>from <a href="https://github.com/humanlayer/skills">humanlayer/skills</a></sub><br>
-Explains the current topic visually, with pseudocode, call trees and small diagrams<br><em>Faster for me to take in than paragraphs.</em><br>Run <code>/show-me</code> (manual only)
+Explains the current topic visually, with pseudocode, call trees and small diagrams<br><em>Faster for me to take in than paragraphs.</em>
 </td>
 </tr>
 <tr></tr>
@@ -104,7 +104,7 @@ Explains the current topic visually, with pseudocode, call trees and small diagr
 <td width="33%" valign="top">
 <a href="https://github.com/cathrynlavery/diagram-design/tree/main/skills/diagram-design"><img src="./assets/recommended/diagram-design/icon.svg" alt="diagram-design icon"></a>
 <br><a href="https://github.com/cathrynlavery/diagram-design/tree/main/skills/diagram-design"><strong><code>diagram-design</code></strong></a> <sub>from <a href="https://github.com/cathrynlavery/diagram-design">cathrynlavery/diagram-design</a></sub><br>
-Draws dozens of diagram types, from architecture to Sankey, as clean HTML, SVG or PNG<br><em>My go-to when a diagram has to look finished.</em><br>Say <em>"draw a diagram of..."</em>
+Draws dozens of diagram types, from architecture to Sankey, as clean HTML, SVG or PNG<br><em>My go-to when a diagram has to look finished.</em>
 </td>
 <td width="33%"></td>
 </tr>
@@ -120,12 +120,12 @@ Interfaces and motion that feel right.
 <td width="33%" valign="top">
 <a href="https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng"><img src="./assets/recommended/emil-design-eng/icon.svg" alt="emil-design-eng icon"></a>
 <br><a href="https://github.com/emilkowalski/skills/tree/main/skills/emil-design-eng"><strong><code>emil-design-eng</code></strong></a> <sub>from <a href="https://github.com/emilkowalski/skills">emilkowalski/skills</a></sub><br>
-Emil Kowalski's design engineering philosophy: polish, component design and the details that make UI feel right<br><em>Raises the floor on any UI work.</em><br>Loads for UI polish
+Emil Kowalski's design engineering philosophy: polish, component design and the details that make UI feel right<br><em>Raises the floor on any UI work.</em>
 </td>
 <td width="33%" valign="top">
 <a href="https://github.com/emilkowalski/skills/tree/main/skills/apple-design"><img src="./assets/recommended/emil-apple-design/icon.svg" alt="emil-apple-design icon"></a>
 <br><a href="https://github.com/emilkowalski/skills/tree/main/skills/apple-design"><strong><code>emil-apple-design</code></strong></a> <sub>from <a href="https://github.com/emilkowalski/skills">emilkowalski/skills</a></sub><br>
-Apple's approach to fluid, physical interfaces, translated for the web<br><em>For gestures, sheets and springs.</em><br>Loads for gestures, springs and sheets
+Apple's approach to fluid, physical interfaces, translated for the web<br><em>For gestures, sheets and springs.</em>
 </td>
 </tr>
 <tr></tr>
@@ -133,7 +133,7 @@ Apple's approach to fluid, physical interfaces, translated for the web<br><em>Fo
 <td width="33%" valign="top">
 <a href="https://github.com/emilkowalski/skills/tree/main/skills/animate"><img src="./assets/recommended/emil-animate/icon.svg" alt="emil-animate icon"></a>
 <br><a href="https://github.com/emilkowalski/skills/tree/main/skills/animate"><strong><code>emil-animate</code></strong></a> <sub>from <a href="https://github.com/emilkowalski/skills">emilkowalski/skills</a></sub><br>
-Builds an animation in the order that decides whether it feels right, starting with whether it should animate at all<br><em>Gets the curve and duration right the first time.</em><br>Say <em>"animate this"</em>
+Builds an animation in the order that decides whether it feels right, starting with whether it should animate at all<br><em>Gets the curve and duration right the first time.</em>
 </td>
 <td width="33%"></td>
 </tr>
