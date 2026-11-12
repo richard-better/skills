@@ -19,9 +19,6 @@ following the visual patterns in the `domi-tech-writing` skill.
 figures, and `skills.py` the rest. `ui-climb/round` reuses every position from
 `hill-climb/round`, so keep the two in step by editing `round_flow()` only.
 
-`thumbs.py` pads each skill's main figure to the 16:10 `thumb.png` the top-level README's grid
-shows.
-
 ## Regenerate
 
 ```bash
@@ -29,7 +26,6 @@ python3 assets/diagrams/climb.py
 python3 assets/diagrams/skills.py
 python3 assets/diagrams/health.py
 for f in assets/*/*.excalidraw; do node skills/diagram-rebuild/scripts/render.mjs "$f" "${f%.excalidraw}.png"; done
-python3 assets/diagrams/thumbs.py   # needs Pillow
 ```
 
 Run `bash skills/diagram-rebuild/scripts/setup.sh` once first. Open any `.excalidraw` file at
