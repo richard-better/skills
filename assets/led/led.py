@@ -25,6 +25,10 @@ RANK = {"dim": 0, "on": 1, "hot": 2}
 DECAY = 0.26  # seconds of afterglow after a frame ends
 GLOW = "cubic-bezier(0.23,1,0.32,1)"  # strong ease-out: fast drop, long tail
 ICON, ICON_S, ICON_R = 25, 24, 7.6  # icons: 25 x 25 board, cell size, dot radius
+PALETTES = {  # unlit dot, dim, on, hot, background
+    "amber": ("#2a251f", "#7a501a", "#ffaa33", "#fff0c4", "#13100d"),  # your own skills
+    "cyan": ("#1b2729", "#16596a", "#3fd4f2", "#dcfaff", "#0b1113"),  # skills recommended from others
+}
 
 
 class F(dict):
@@ -76,7 +80,8 @@ def layer(prefix, frames, step, S, rad):
     return css, groups
 
 
-def board(cols, rows, layers=(), static=None, S=ICON_S, rad=ICON_R, rx=30, scale=2, blur=4.5, label=None):
+def board(cols, rows, layers=(), static=None, S=ICON_S, rad=ICON_R, rx=30, scale=2, blur=4.5, label=None,
+          palette="amber"):
     """An SVG board. layers: [(prefix, frames, step, poster)]; static: cells lit throughout."""
     W, H = cols * S, rows * S
     css, groups, still = "", dots(static, S, rad) if static else "", ""
@@ -87,18 +92,20 @@ def board(cols, rows, layers=(), static=None, S=ICON_S, rad=ICON_R, rx=30, scale
         still += f"g[class^={prefix}]{{animation:none!important;opacity:0}}g.{prefix}{poster % len(frames)}{{opacity:1}}"
     base = "".join(f'<circle cx="{c*S+S/2:g}" cy="{r*S+S/2:g}" r="{rad:g}"/>' for c in range(cols) for r in range(rows))
     aria = f' role="img" aria-label="{label}"' if label else ""
+    base_c, dim_c, on_c, hot_c, bg = PALETTES[palette]
     media = f"@media (prefers-reduced-motion:reduce){{{still}}}" if still else ""
     return f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W:g} {H:g}" width="{W*scale:g}" height="{H*scale:g}"{aria}>
 <defs><clipPath id="clip"><rect width="{W:g}" height="{H:g}" rx="{rx}"/></clipPath>
 <filter id="g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="{blur}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-<style>.base{{fill:#2a251f}}.dim{{fill:#7a501a}}.on{{fill:#ffaa33}}.hot{{fill:#fff0c4}}{css}
+<style>.base{{fill:{base_c}}}.dim{{fill:{dim_c}}}.on{{fill:{on_c}}}.hot{{fill:{hot_c}}}{css}
 {media}</style>
-<g clip-path="url(#clip)"><rect width="{W:g}" height="{H:g}" fill="#13100d"/><g class="base">{base}</g><g filter="url(#g)">{groups}</g></g></svg>'''
+<g clip-path="url(#clip)"><rect width="{W:g}" height="{H:g}" fill="{bg}"/><g class="base">{base}</g><g filter="url(#g)">{groups}</g></g></svg>'''
 
 
-def icon(skill, frames, step, poster=-1):
-    path = ROOT / skill / "icon.svg"
-    path.write_text(board(ICON, ICON, [("f", frames, step, poster)]))
+def icon(skill, frames, step, poster=-1, palette="amber", folder=""):
+    path = ROOT / folder / skill / "icon.svg"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(board(ICON, ICON, [("f", frames, step, poster)], palette=palette))
     print(f"wrote {path.relative_to(ROOT.parent)}")
 
 
