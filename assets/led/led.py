@@ -519,7 +519,7 @@ def improve():
     rec("improve", fr, 0.12, poster=-2)
 
 
-def thermo_nuclear():
+def thermo_frames():
     """A sprawling, tangled file meets the blast; a small, tidy file is what is left."""
     import random
     rng = random.Random(7)
@@ -549,7 +549,11 @@ def thermo_nuclear():
         fr.append((F(clean).add(ln, "hot"), 2))
         clean.add(ln, "on")
     fr += [(F(clean).add(small + sum(lines, []), "hot"), 2), (clean, 12), (F(), 3)]
-    rec("thermo-nuclear-code-quality-review", fr, 0.1, poster=-2)
+    return fr
+
+
+def thermo_nuclear():
+    rec("thermo-nuclear-code-quality-review", thermo_frames(), 0.1, poster=-2)
 
 
 def sol_loop():
@@ -693,7 +697,7 @@ def unslop():
     rec("unslop", fr, 0.11, poster=-2)
 
 
-def bro():
+def bro_frames():
     """A bubble packed with jargon says the same thing again in two plain lines."""
     import random
     rng = random.Random(3)
@@ -705,7 +709,11 @@ def bro():
     fr = [(F(base).add(noise(0.5), "on").add(noise(0.08), "hot"), 1) for _ in range(12)]
     fr += [(F(base).add(noise(p), "dim"), 1) for p in (0.3, 0.15, 0.05)]
     fr += [(F(base), 2), (F(base).add(plain, "hot"), 2), (F(base).add(plain, "on"), 14), (F(base), 2)]
-    rec("bro", fr, 0.12, poster=-2)
+    return fr
+
+
+def bro():
+    rec("bro", bro_frames(), 0.12, poster=-2)
 
 
 def show_me():
@@ -854,14 +862,19 @@ GLYPH = {
     "K": ["X...X", "X..X.", "X.X..", "XX...", "X.X..", "X..X.", "X...X"],
     "I": [".XXX.", "..X..", "..X..", "..X..", "..X..", "..X..", ".XXX."],
     "L": ["X....", "X....", "X....", "X....", "X....", "X....", "XXXXX"],
+    "R": ["XXXX.", "X...X", "X...X", "XXXX.", "X.X..", "X..X.", "X...X"],
+    "C": [".XXX.", "X...X", "X....", "X....", "X....", "X...X", ".XXX."],
+    "O": [".XXX.", "X...X", "X...X", "X...X", "X...X", "X...X", ".XXX."],
+    "M": ["X...X", "XX.XX", "X.X.X", "X.X.X", "X...X", "X...X", "X...X"],
+    "D": ["XXXX.", "X...X", "X...X", "X...X", "X...X", "X...X", "XXXX."],
     " ": ["....."] * 7,
 }
 TITLE = "AGENT SKILLS"
 TW = len(TITLE) * 6 - 1
 
 
-def title(c0, r0):
-    return [(c0 + i * 6 + c, r0 + r) for i, ch in enumerate(TITLE)
+def title(c0, r0, text=TITLE):
+    return [(c0 + i * 6 + c, r0 + r) for i, ch in enumerate(text)
             for r, row in enumerate(GLYPH[ch]) for c, x in enumerate(row) if x == "X"]
 
 
@@ -874,6 +887,26 @@ def banner():
               ("c", comet, 0.035, -1)]
     path = ROOT / "banner.svg"
     path.write_text(board(C, R, layers, static=text, S=12, rad=3.9, rx=20, scale=1, blur=2.6, label="Agent Skills"))
+    print(f"wrote {path.relative_to(ROOT.parent)}")
+
+
+def moved(frames, dc, dr):
+    return [(F({(c + dc, r + dr): cl for (c, r), cl in f.items()}), h) for f, h in frames]
+
+
+def recommended_banner():
+    """The RECOMMENDED.md title in cyan, between thermo-nuclear review and bro."""
+    C, R, text = 126, 21, "RECOMMENDED"
+    w = len(text) * 6 - 1
+    c0 = (C - w) // 2
+    words = F().add(title(c0, 7, text), "on").add(hl(16, c0, c0 + w - 1), "dim")
+    comet = [(F().add([(c, 16)], "hot").add([(c - 1, 16)], "on"), 1) for c in range(c0, c0 + w)] + [(F(), 30)]
+    layers = [("t", moved(thermo_frames(), 0, -2), 0.1, -2),
+              ("b", moved(bro_frames(), 101, -1), 0.12, -2),
+              ("c", comet, 0.035, -1)]
+    path = ROOT / "recommended" / "banner.svg"
+    path.write_text(board(C, R, layers, static=words, S=12, rad=3.9, rx=20, scale=1, blur=2.6,
+                          label="Recommended skills", palette="cyan"))
     print(f"wrote {path.relative_to(ROOT.parent)}")
 
 
@@ -926,5 +959,6 @@ if __name__ == "__main__":
         draw()
     skillsfile()
     banner()
+    recommended_banner()
     if "--png" in sys.argv:
         social_preview()

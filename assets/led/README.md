@@ -8,6 +8,7 @@ along with the static social preview.
 | --- | --- |
 | `assets/banner.svg` | `council-debate` and `hill-climb` either side of the title |
 | `assets/<skill>/icon.svg` | One loop per skill, on a square 25 x 25 board |
+| `assets/recommended/banner.svg` | `RECOMMENDED.md`'s title between `thermo-nuclear-code-quality-review` and `bro` |
 | `assets/recommended/<skill>/icon.svg` | The same for each skill in `RECOMMENDED.md`, in cyan so they read as someone else's |
 | `assets/skillsfile/demo.svg` | The install section's `skillsfile` card: repos, a pinned `skills.yaml`, installed skills, and a patch that survives an update |
 | `assets/social-preview.png` | 1280 x 640 still for the repository's social preview |

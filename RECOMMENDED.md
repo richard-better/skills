@@ -1,4 +1,4 @@
-# Recommended skills
+<h1><img src="./assets/recommended/banner.svg" alt="Recommended skills"></h1>
 
 Skills by other people that I use and recommend. My own are in the [README](./README.md).
 
