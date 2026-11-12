@@ -466,6 +466,361 @@ def skillsfile():
                           label="skillsfile: repos to a pinned skills.yaml to installed skills"))
     print(f"wrote {path.relative_to(ROOT.parent)}")
 
+# ---------- recommended skills, drawn in cyan ----------
+
+def rec(skill, frames, step, poster=-1):
+    icon(skill, frames, step, poster, palette="cyan", folder="recommended")
+
+
+def disc(cx, cy, rad):
+    return [(c, r) for c in range(cx - 3, cx + 4) for r in range(cy - 3, cy + 4) if (c - cx) ** 2 + (r - cy) ** 2 <= rad * rad]
+
+
+def grilling():
+    """A decision tree grows one round at a time: the whole frontier is asked, then settled."""
+    lv = [[(12, 3)], [(6, 11), (18, 11)], [(3, 20), (9, 20), (15, 20), (21, 20)]]
+    edge = lambda a, b: line((a[0], a[1] + 2), (b[0], b[1] - 2))
+    done, fr = F(), []
+    for i, nodes in enumerate(lv):
+        if i:
+            paths = [edge(p, k) for n, p in enumerate(lv[i - 1]) for k in lv[i][2 * n:2 * n + 2]]
+            done = F(done).add(sum(paths, []), "dim")
+            fr += sparks(done, paths, 5)
+        boxes = sum((box(*n) for n in nodes), [])
+        fr += [(F(done).add(boxes, "hot" if k % 2 == 0 else "dim"), 1) for k in range(5)]
+        done.add(boxes, "on").add(nodes, "hot")
+        fr.append((F(done), 4))
+    fr += [(F(done).add(sum((box(*n) for n in sum(lv, [])), []), "hot"), 8), (F(), 3)]
+    rec("grilling", fr, 0.14, poster=-2)
+
+
+def improve():
+    """Read the code top to bottom, flag what matters, then hand over a ranked plan."""
+    rows = [3 + 2 * i for i in range(10)]
+    lens, indent = [8, 5, 9, 6, 3, 7, 6, 4, 8, 5], [0, 1, 1, 2, 2, 1, 0, 1, 2, 1]
+    code = [hl(r, 3 + d, 2 + d + n) for r, d, n in zip(rows, indent, lens)]
+    flagged = [2, 4, 8]
+    plan = rect(15, 3, 23, 21)
+    items = [hl(r, 17, 21) + hl(r + 2, 17, 19) for r in (6, 11, 16)]
+    base, fr = F().add(sum(code, []), "dim"), []
+    marks = F()
+    for i in range(len(rows)):
+        fr.append((F(base).add(code[i], "hot").add(marks.keys(), "on"), 1))
+        if i in flagged:
+            marks.add(code[i] + [(1, rows[i])], "on")
+            fr.append((F(base).add(marks.keys(), "on").add(code[i] + [(1, rows[i])], "hot"), 2))
+    base.add(marks.keys(), "on")
+    fr.append((F(base).add(plan, "on"), 3))
+    shown = F(base).add(plan, "on")
+    for k, i in enumerate(flagged):
+        fr.append((F(shown).add(items[k] + code[i] + [(1, rows[i])], "hot"), 3))
+        shown.add(items[k], "on")
+    fr += [(F(shown).add(sum(items, []), "hot"), 8), (F(), 3)]
+    rec("improve", fr, 0.12, poster=-2)
+
+
+def thermo_nuclear():
+    """A sprawling, tangled file meets the blast; a small, tidy file is what is left."""
+    import random
+    rng = random.Random(7)
+    tangle = rect(2, 2, 22, 22)
+    for r in range(4, 21, 2):
+        c = rng.randint(4, 8)
+        while c < 20:
+            n = rng.randint(2, 5)
+            tangle += hl(r, c, min(c + n, 20))
+            c += n + rng.randint(2, 3)
+    for _ in range(9):
+        c, r = rng.randint(4, 20), rng.randint(4, 18)
+        tangle += vl(c, r, r + rng.randint(2, 4))
+    tangle = list(dict.fromkeys(tangle))
+    fr = [(F().add(tangle, "on"), 8)]
+    fr += [(F().add(tangle, "on" if k % 2 else "hot"), 1) for k in range(4)]
+    for rad in range(1, 18):
+        f = F().add([p for p in tangle if math.dist(p, (12, 12)) > rad + 0.5], "on")
+        fr.append((f.add(ring(12, 12, rad - 1), "on").add(ring(12, 12, rad), "hot"), 1))
+    fr.append((F(), 4))
+    small = rect(8, 7, 16, 17)
+    lines = [hl(10, 10, 14), hl(12, 11, 13), hl(14, 10, 12)]
+    clean = F()
+    fr.append((F(clean).add(small, "hot"), 2))
+    clean.add(small, "on")
+    for ln in lines:
+        fr.append((F(clean).add(ln, "hot"), 2))
+        clean.add(ln, "on")
+    fr += [(F(clean).add(small + sum(lines, []), "hot"), 2), (clean, 12), (F(), 3)]
+    rec("thermo-nuclear-code-quality-review", fr, 0.1, poster=-2)
+
+
+def sol_loop():
+    """The diff goes to the Sol reviewer and back; each round brings fewer findings until it passes."""
+    sun_c = (12, 6)
+    sun = disc(*sun_c, 2.2) + [(12, 2), (12, 10), (8, 6), (16, 6), (9, 3), (15, 3), (9, 9), (15, 9)]
+    diff = rect(8, 15, 16, 21) + hl(17, 10, 14) + hl(19, 10, 12)
+    up = [(7, 18), (6, 18), (5, 18)] + [(5, r) for r in range(17, 5, -1)] + [(6, 6), (7, 6)]
+    down = [(17, 6), (18, 6), (19, 6)] + [(19, r) for r in range(7, 19)] + [(18, 18), (17, 18)]
+    pips = lambda n: [(10 + 2 * i, 23) for i in range(n)]
+    base, fr = F().add(up + down, "dim").add(sun + diff, "on"), []
+    count = 3
+    for n in [2, 1, 0]:
+        f0 = F(base).add(pips(count), "on")
+        fr += [(F(f0).add(diff, "hot"), 2)]
+        fr += sparks(f0, [up], 6)
+        fr += [(F(f0).add(sun, "hot" if k % 2 == 0 else "on"), 1) for k in range(3)]
+        fr += sparks(f0, [down], 6)
+        fr.append((F(base).add(pips(n), "hot"), 3))
+        count = n
+    fr += [(F(base).add(diff + sun, "hot"), 10), (F(base), 4)]
+    rec("sol-loop", fr, 0.11, poster=-2)
+
+
+def verify_this():
+    """The same check runs before and after; the two results sit side by side, then the verdict."""
+    panels = rect(2, 2, 11, 17) + rect(13, 2, 22, 17)
+    bar = lambda x, h: fill(x, 17 - h, x + 3, 16)
+    check = [(9, 21), (10, 22), (11, 23), (12, 22), (13, 21), (14, 20), (15, 19)]
+    base, fr = F().add(panels, "on"), [(F().add(panels, "on"), 4)]
+    for x, h in [(5, 12), (16, 4)]:
+        for k in range(1, h + 1):
+            fr.append((F(base).add(bar(x, k), "hot"), 1))
+        base.add(bar(x, h), "on")
+        fr.append((F(base), 3))
+    fr += [(F(base).add(hl(12, 3, 21), "hot" if k % 2 == 0 else "dim"), 1) for k in range(4)]
+    fr += [(F(base).add(check, "hot"), 12), (F(base).add(check, "on"), 2), (F(), 3)]
+    rec("verify-this", fr, 0.1, poster=-3)
+
+
+def full_send():
+    """Branch, commits, checks, merge, carried through to the end without stopping to ask."""
+    main = hl(17, 1, 23)
+    fork = line((3, 16), (7, 10))
+    commits = [(8, 8), (13, 8), (18, 8)]
+    links = [hl(8, 10, 11), hl(8, 15, 16)]
+    merge = line((19, 10), (21, 15))
+    base, fr = F().add(main, "on").add(fork + sum(links, []) + merge, "dim"), []
+    fr.append((F(base), 4))
+    fr += sparks(base, [fork], 5)
+    state = F(base)
+    for i, c in enumerate(commits):
+        if i:
+            fr += sparks(state, [links[i - 1]], 3)
+        fr.append((F(state).add(box(*c) + [c], "hot"), 2))
+        state.add(box(*c), "on")
+    fr += [(F(state).add(sum((box(*c) for c in commits), []), "hot" if k % 2 == 0 else "dim"), 1) for k in range(6)]
+    state.add(commits, "hot")
+    fr += sparks(state, [merge], 4)
+    fr.append((F(state).add(box(22, 17) + [(22, 17)], "hot"), 3))
+    fr += [(F(state).add(box(22, 17), "on").add([(c, 17)], "hot").add([(c - 1, 17)], "on"), 1) for c in range(1, 21, 2)]
+    fr += [(F(state).add(box(22, 17), "hot").add(main, "hot"), 8), (F(base), 3)]
+    rec("full-send", fr, 0.1, poster=-2)
+
+
+def babysit_pr():
+    """Checks spin while you are away; a failure gets fixed and rerun until everything passes."""
+    card = rect(2, 2, 22, 22) + hl(5, 5, 15)
+    rows = [10, 14, 18]
+    text = [hl(10, 10, 19), hl(14, 10, 17), hl(18, 10, 20)]
+    border = lambda r: [(5, r - 1), (6, r - 1), (7, r - 1), (7, r), (7, r + 1), (6, r + 1), (5, r + 1), (5, r)]
+    passed = lambda r: [(5, r), (6, r + 1), (7, r), (8, r - 1)]
+    failed = lambda r: [(5, r - 1), (7, r - 1), (6, r), (5, r + 1), (7, r + 1)]
+    base = F().add(card + sum(text, []), "on")
+
+    def frame(k, state):
+        f = F(base)
+        for r, s in zip(rows, state):
+            if s == "spin":
+                f.add(border(r), "dim").add([border(r)[k % 8]], "hot")
+            elif s == "pass":
+                f.add(passed(r), "on")
+            else:
+                f.add(failed(r), "hot" if k % 2 == 0 else "dim")
+        return (f, 1)
+
+    fr = [frame(k, ["spin"] * 3) for k in range(10)]
+    fr += [frame(k, ["pass", "spin", "spin"]) for k in range(6)]
+    fr += [frame(k, ["pass", "spin", "pass"]) for k in range(4)]
+    fr += [frame(k, ["pass", "fail", "pass"]) for k in range(6)]
+    fr += [frame(k, ["pass", "spin", "pass"]) for k in range(10)]
+    done = frame(0, ["pass"] * 3)[0]
+    fr += [(F(done).add(sum((passed(r) for r in rows), []), "hot"), 3), (done, 10), (F(base), 3)]
+    rec("babysit-pr", fr, 0.1, poster=-2)
+
+
+def writing_for_agents():
+    """One short line in context points at a full document, opened only when it is needed."""
+    ctx = [hl(r, 2, 2 + n) for r, n in zip([4, 7, 10, 13, 16, 19], [5, 3, 6, 4, 5, 2])]
+    pointer = hl(13, 2, 6)
+    arrow = hl(13, 8, 12) + [(11, 12), (11, 14)]
+    doc = [p for p in rect(14, 3, 22, 21) if p != (22, 3)] + [(21, 4)]
+    body = [hl(6, 16, 20)] + [hl(r, 16, 16 + n) for r, n in zip([9, 11, 13, 15, 17, 19], [4, 3, 4, 2, 4, 3])]
+    base = F().add(sum(ctx, []), "on").add(arrow, "dim").add(doc, "dim")
+    fr = [(F(base), 6)]
+    fr += [(F(base).add(pointer, "hot" if k % 2 == 0 else "on"), 1) for k in range(4)]
+    fr += sparks(F(base).add(pointer, "hot"), [hl(13, 8, 13)], 4)
+    opened = F(base).add(pointer + arrow, "on").add(doc, "on")
+    fr.append((F(opened).add(doc, "hot"), 2))
+    for b in body:
+        fr.append((F(opened).add(b, "hot"), 1))
+        opened.add(b, "on")
+    fr += [(opened, 12), (F(base), 3)]
+    rec("writing-for-agents", fr, 0.12, poster=-2)
+
+
+def unslop():
+    """Wordy lines lose their filler words and close up."""
+    lines = [[4, 3, "6", 4, 2], [3, "5", 4, 3, "3"], [5, "4", 3, 5], [2, 4, "5", 3, 3], [4, 3, "3", 5]]
+    rows = [4, 8, 12, 16, 20]
+
+    def words(keep_slop):
+        out, slop = [], []
+        for r, ws in zip(rows, lines):
+            c = 2
+            for w in ws:
+                is_slop = isinstance(w, str)
+                if is_slop and not keep_slop:
+                    continue
+                n = int(w)
+                (slop if is_slop else out).append(hl(r, c, c + n - 1))
+                c += n + 1
+        return sum(out, []), sum(slop, [])
+
+    plain, slop = words(True)
+    tight, _ = words(False)
+    full = F().add(plain + slop, "on")
+    fr = [(full, 8)]
+    fr += [(F().add(plain, "on").add(slop, "hot" if k % 2 == 0 else "dim"), 1) for k in range(6)]
+    fr += [(F().add(plain, "on"), 4), (F().add(tight, "hot"), 2), (F().add(tight, "on"), 14), (F(), 3)]
+    rec("unslop", fr, 0.11, poster=-2)
+
+
+def bro():
+    """A bubble packed with jargon says the same thing again in two plain lines."""
+    import random
+    rng = random.Random(3)
+    bubble = rect(2, 3, 22, 17) + [(6, 18), (5, 19), (4, 20)]
+    inside = fill(4, 5, 20, 15)
+    noise = lambda p: [c for c in inside if rng.random() < p]
+    plain = hl(8, 5, 19) + hl(12, 5, 13)
+    base = F().add(bubble, "on")
+    fr = [(F(base).add(noise(0.5), "on").add(noise(0.08), "hot"), 1) for _ in range(12)]
+    fr += [(F(base).add(noise(p), "dim"), 1) for p in (0.3, 0.15, 0.05)]
+    fr += [(F(base), 2), (F(base).add(plain, "hot"), 2), (F(base).add(plain, "on"), 14), (F(base), 2)]
+    rec("bro", fr, 0.12, poster=-2)
+
+
+def show_me():
+    """A wall of explanation turns into a small picture: three boxes and the arrows between them."""
+    text = [hl(r, 2, 2 + n) for r, n in zip(range(3, 23, 2), [18, 15, 20, 12, 17, 19, 14, 18, 9, 16])]
+    boxes = [rect(c - 2, 10, c + 2, 14) for c in (4, 12, 20)]
+    arrows = [hl(12, 7, 9) + [(8, 11), (8, 13)], hl(12, 15, 17) + [(16, 11), (16, 13)]]
+    fr = [(F().add(sum(text, []), "on"), 8), (F().add(sum(text, []), "dim"), 2), (F(), 2)]
+    pic = F()
+    for i, b in enumerate(boxes):
+        if i:
+            fr += sparks(pic, [hl(12, 8 * i - 1, 8 * i + 1)], 3)
+            pic.add(arrows[i - 1], "on")
+        fr.append((F(pic).add(b, "hot"), 2))
+        pic.add(b, "on")
+    fr += [(F(pic).add(sum(boxes, []) + sum(arrows, []), "hot"), 2), (pic, 12), (F(), 3)]
+    rec("show-me", fr, 0.12, poster=-2)
+
+
+def diagram_design():
+    """One skill, many kinds of diagram: a bar chart, a ring chart and a flowchart in turn."""
+    fr = []
+    axes = vl(3, 3, 21) + hl(21, 3, 22)
+    bars = [(6, 8), (10, 13), (14, 6), (18, 16)]
+    for k in range(1, 5):
+        f = F().add(axes, "on")
+        for x, h in bars:
+            f.add(fill(x, 21 - round(h * k / 4), x + 1, 20), "hot" if k == 4 else "on")
+        fr.append((f, 1 if k < 4 else 2))
+    done = F().add(axes, "on").add(sum((fill(x, 21 - h, x + 1, 20) for x, h in bars), []), "on")
+    fr += [(done, 8), (F(), 2)]
+    turn = lambda p: (math.degrees(math.atan2(p[1] - 12, p[0] - 12)) + 90) % 360 / 360  # 0 at the top
+    shade = lambda u: "hot" if u < 0.45 else "on" if u < 0.8 else "dim"
+    donut = ring(12, 12, 8) + ring(12, 12, 7)
+    for k in range(1, 7):
+        f = F()
+        for p in donut:
+            if turn(p) < k / 6:
+                f.add([p], shade(turn(p)))
+        fr.append((f, 1))
+    fr += [(fr[-1][0], 8), (F(), 2)]
+    diamond = [(12 + dx, 12 + dy) for dx in range(-3, 4) for dy in range(-3, 4) if abs(dx) + abs(dy) == 3]
+    flow = [rect(8, 2, 16, 6), vl(12, 7, 8), diamond, vl(12, 16, 17), rect(8, 18, 16, 22)]
+    f = F()
+    for part in flow:
+        fr.append((F(f).add(part, "hot"), 2))
+        f.add(part, "on")
+    fr += [(f, 8), (F(), 2)]
+    rec("diagram-design", fr, 0.12, poster=4)
+
+
+def emil_design_eng():
+    """A toggle switch: the knob eases across, the track lights up, and it eases back."""
+    left, right = ring(6, 12, 3), ring(18, 12, 3)
+    track = [p for p in left if p[0] <= 6] + [p for p in right if p[0] >= 18] + hl(9, 6, 18) + hl(15, 6, 18)
+    inside = [(c, r) for c in range(4, 21) for r in range(10, 15) if math.hypot(max(6 - c, 0, c - 18), r - 12) < 2.5]
+    out = lambda t: 1 - (1 - t) ** 3
+    knob = lambda x: disc(round(x), 12, 1.6)
+    fr = [(F().add(track, "on").add(knob(6), "hot"), 8)]
+    for k in range(1, 9):
+        x = 6 + 12 * out(k / 8)
+        fr.append((F().add(track, "on").add(inside if k > 4 else [], "dim").add(knob(x), "hot"), 1))
+    fr.append((F().add(track, "hot").add(inside, "dim").add(knob(18), "hot"), 14))
+    for k in range(1, 9):
+        x = 18 - 12 * out(k / 8)
+        fr.append((F().add(track, "on").add(inside if k < 4 else [], "dim").add(knob(x), "hot"), 1))
+    fr.append((F().add(track, "on").add(knob(6), "hot"), 6))
+    rec("emil-design-eng", fr, 0.06, poster=-10)
+
+
+def emil_apple_design():
+    """A sheet springs up from the bottom of a phone, overshoots a touch and settles."""
+    phone = rect(5, 1, 19, 23) + hl(3, 10, 14)
+    app = F().add(phone, "on").add(hl(6, 7, 15) + hl(8, 7, 12) + hl(10, 7, 14), "dim")
+
+    def sheet(y):
+        y = round(y)
+        cells = hl(y, 6, 18) + vl(6, y, 22) + vl(18, y, 22)
+        inner = [(c, r) for c, r in hl(y + 2, 11, 13) + hl(y + 5, 8, 16) + hl(y + 7, 8, 13) if r <= 22]
+        return F(app).add([p for p in cells if p[1] <= 22], "on").add(hl(y, 6, 18), "hot").add(inner, "on")
+
+    fr = [(F(app), 8)]
+    for k in range(1, 15):  # damped spring from 23 to 10
+        t = k / 3.0
+        fr.append((sheet(10 + 13 * math.exp(-0.9 * t) * math.cos(1.9 * t)), 1))
+    fr.append((sheet(10), 14))
+    fr += [(sheet(10 + 13 * (k / 4) ** 2), 1) for k in range(1, 5)]
+    fr.append((F(app), 6))
+    rec("emil-apple-design", fr, 0.06, poster=-6)
+
+
+def emil_animate():
+    """An ease-out curve is plotted while a ball runs the same timing: a fast start, a gentle landing."""
+    ease = lambda t: 1 - (1 - t) ** 4
+    axes = vl(3, 8, 22) + hl(22, 3, 22)
+    track = hl(3, 3, 22)
+    base = F().add(axes + track, "dim")
+    N, fr, trail = 16, [(F(base).add(fill(2, 2, 4, 4), "hot"), 6)], F()
+    prev = (3, 22)
+    for k in range(N):
+        t = k / (N - 1)
+        pt = (3 + round(19 * t), 22 - round(14 * ease(t)))
+        trail.add(line(prev, pt), "on")
+        prev = pt
+        x = 3 + round(19 * ease(t))
+        fr.append((F(base).add(trail.keys(), "on").add([pt], "hot").add(fill(x - 1, 2, x + 1, 4), "hot"), 1))
+    fr += [(F(base).add(trail.keys(), "on").add(fill(21, 2, 23, 4), "hot"), 12), (F(base), 3)]
+    rec("emil-animate", fr, 0.08, poster=-2)
+
+
+RECOMMENDED = [grilling, improve, thermo_nuclear, sol_loop, verify_this, full_send, babysit_pr,
+               writing_for_agents, unslop, bro, show_me, diagram_design, emil_design_eng,
+               emil_apple_design, emil_animate]
+
+
 # ---------- banner and social preview ----------
 
 GLYPH = {
@@ -546,6 +901,8 @@ if __name__ == "__main__":
     health_records()
     health_differential()
     ios_app_cleanup()
+    for draw in RECOMMENDED:
+        draw()
     skillsfile()
     banner()
     if "--png" in sys.argv:
