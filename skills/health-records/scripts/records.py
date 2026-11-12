@@ -410,7 +410,7 @@ def problems(records: Path) -> tuple[list[str], list[str]]:
         if len(units) > 1:
             warnings.append(f"{analyte}: results in {len(units)} units ({', '.join(sorted({r['unit'] for r in rows}))}); compare with care")
         if analyte not in known and not any(r["loinc"] for r in rows):
-            warnings.append(f"{analyte}: no LOINC; look one up (see SKILL.md step 4)")
+            warnings.append(f"{analyte}: no LOINC; look one up (see references/loinc.md)")
     return errors, warnings
 
 

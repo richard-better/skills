@@ -23,6 +23,9 @@ LOINC code, so ferritin from three labs in two languages reads as one trend.
 
 Reruns over the same PDF folder only pick up new files.
 
+`markers.csv` is CSV rather than YAML or JSON because one line per result appends and diffs
+cleanly, `grep '^Ferritin,'` prints a trend, and pandas, DuckDB and spreadsheets read it as is.
+
 ## Install
 
 ```bash
