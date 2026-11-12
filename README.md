@@ -11,12 +11,32 @@ best in T3 Code.
 
 ### For work
 
-| Skill | What it does | Say |
-|-------|--------------|-----|
-| [outer-loop-t3](./skills/outer-loop-t3/) | Makes one T3 Code thread the conversation that launches, unblocks and supervises your other threads | "outer loop" |
-| [council-debate](./skills/council-debate/) | Adds debate rounds to the [`council`](https://github.com/t3dotgg/tstack/tree/main/skills/council) skill from t3dotgg/tstack: after the council answers, members read and rebut each other's answers | "council, debate this" |
-| [hill-climb](./skills/hill-climb/) | Pushes a measured number (size, speed, score, pass rate) toward a target in rounds of competing candidates, keeping only changes that beat the noise floor, with a ledger of everything tried | "hill climb this to X" |
-| [ui-climb](./skills/ui-climb/) | Runs a hill-climb on a screen's design, scored by a blind council of models from different labs on screenshots against reference apps, with owner checkpoints on before-and-after pages | "UI climb" |
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="./skills/outer-loop-t3/"><img src="./assets/outer-loop-t3/thumb.png" alt="outer-loop-t3 diagram"></a>
+<br><a href="./skills/outer-loop-t3/"><strong><code>outer-loop-t3</code></strong></a><br>
+One thread that launches, unblocks and supervises your other threads<br>Say <em>"outer loop"</em>
+</td>
+<td width="50%" valign="top">
+<a href="./skills/council-debate/"><img src="./assets/council-debate/thumb.png" alt="council-debate diagram"></a>
+<br><a href="./skills/council-debate/"><strong><code>council-debate</code></strong></a><br>
+Debate rounds for <a href="https://github.com/t3dotgg/tstack/tree/main/skills/council"><code>council</code></a>: models from three labs answer, then rebut each other<br>Say <em>"council, debate this"</em>
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+<a href="./skills/hill-climb/"><img src="./assets/hill-climb/thumb.png" alt="hill-climb diagram"></a>
+<br><a href="./skills/hill-climb/"><strong><code>hill-climb</code></strong></a><br>
+Push a measured number toward a target, keeping only real wins<br>Say <em>"hill climb this to X"</em>
+</td>
+<td width="50%" valign="top">
+<a href="./skills/ui-climb/"><img src="./assets/ui-climb/thumb.png" alt="ui-climb diagram"></a>
+<br><a href="./skills/ui-climb/"><strong><code>ui-climb</code></strong></a><br>
+Climb a screen's design, scored by a blind council of models<br>Say <em>"UI climb"</em>
+</td>
+</tr>
+</table>
 
 ### Utilities
 
