@@ -40,9 +40,17 @@ Climb a screen's design, scored by a blind council of models<br>Say <em>"UI clim
 
 ### Utilities
 
-| Skill | What it does | Say |
-|-------|--------------|-----|
-| [ios-app-cleanup](./skills/ios-app-cleanup/) | Bulk-uninstalls apps from a paired iPhone with `xcrun devicectl`, picking them from a generated checklist page with App Store icons | `/ios-app-cleanup` (manual only) |
+<table>
+<tr>
+<td width="50%" valign="top">
+<a href="./skills/ios-app-cleanup/"><img src="./assets/ios-app-cleanup/thumb.png" alt="ios-app-cleanup checklist page"></a>
+</td>
+<td width="50%" valign="top">
+<a href="./skills/ios-app-cleanup/"><strong><code>ios-app-cleanup</code></strong></a><br>
+Bulk-uninstall apps from a paired iPhone, picked from a checklist page with App Store icons<br>Run <code>/ios-app-cleanup</code> (manual only)
+</td>
+</tr>
+</table>
 
 <details>
 <summary><strong>What each skill needs</strong></summary>
