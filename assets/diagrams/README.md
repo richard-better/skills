@@ -11,7 +11,7 @@ following the visual patterns in the `domi-tech-writing` skill.
 | `council-debate/debate` | What does debating add to a council? | decision-flow |
 | `outer-loop-t3/loops` | How does one thread keep the others moving? | nested loops |
 | `health-records/pipeline` | How does a PDF become a document and marker rows? | decision-flow |
-| `health-differential/panel` | How do six seats turn into one report? | decision-flow |
+| `health-differential/panel` | How do three councils turn into one report? | decision-flow |
 | `diagram-rebuild/loop` | How does an image become source that passes review? | decision-flow |
 
 `climb.py` draws the climb figures, `health.py` the health-records and health-differential

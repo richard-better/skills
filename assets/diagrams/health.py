@@ -177,8 +177,8 @@ def pipeline():
 
 def panel():
     s = Scene(13)
-    s.text(0, 0, "Six seats read the same records from three angles;\n"
-                 "a finding ranks high when both models raise it", 24, INK)
+    s.text(0, 0, "One council per role: nine members read the same records from three angles;\n"
+                 "a finding ranks high when two or three labs raise it", 24, INK)
 
     recs = s.card(0, 300, 190, 110, "records folder", "index.md, documents,\nmarkers.csv, context.md")
     brief = s.box(250, 260, 230, 190, stroke=BOX)
@@ -192,54 +192,54 @@ def panel():
     roles = ["Hypothesis", "Challenger", "Data auditor"]
     jobs = ["ranks diagnoses, unifying ones too", "assumes each working diagnosis is wrong",
             "trends every value, finds dropped follow-ups"]
-    models = [("Model A", ORANGE, ORANGE_FILL), ("Model B", GREEN, GREEN_FILL)]
-    cx = [720, 920]
-    s.text(cx[0] + 80, 100, "Model A", 18, ORANGE, align="center")
-    s.text(cx[1] + 80, 100, "Model B", 18, GREEN, align="center")
-    s.text(cx[0] + 180, 128, "from different labs, same task", 15, GREY, align="center")
+    labs = [("Lab A", ORANGE, ORANGE_FILL), ("Lab B", GREEN, GREEN_FILL), ("Lab C", BLUE, BLUE_FILL)]
+    cx = [720, 900, 1080]
+    for c, (lab, st, _) in enumerate(labs):
+        s.text(cx[c] + 70, 100, lab, 18, st, align="center")
+    s.text(cx[1] + 70, 128, "one council per role, same task", 15, GREY, align="center")
     bands = []
     for r, (role, job) in enumerate(zip(roles, jobs, strict=True)):
         y = 165 + r * 140
         s.text(cx[0] - 30, y - 6, role, 18, INK, align="right")
         s.els[-1]["x"] -= s.els[-1]["width"]
-        bands.append(s.box(cx[0] - 15, y - 12, 390, 94, stroke=BOX, fill="#f8f9fa", rough=0))
-        for c, (_, st, fi) in enumerate(models):
-            s.box(cx[c], y, 160, 70, "answer.md", stroke=st, fill=fi, font=MONO, size=16)
-        s.text(cx[0] + 180, y + 86, job, 15, GREY, align="center")
+        bands.append(s.box(cx[0] - 15, y - 12, 530, 94, stroke=BOX, fill="#f8f9fa", rough=0))
+        for c, (_, st, fi) in enumerate(labs):
+            s.box(cx[c], y, 140, 70, "answer", stroke=st, fill=fi, size=16)
+        s.text(cx[1] + 70, y + 86, job, 15, GREY, align="center")
     # brief fans out to the grid through one trunk
     s.line([R(brief), (530, 355)], arrow=False)
     s.line([(530, 200), (530, 480)], arrow=False)
     for r in range(3):
         s.line([(530, 200 + r * 140), L(bands[r])], end=bands[r])
 
-    syn = s.box(1180, 165, 280, 350, stroke=BLUE, fill="#ffffff")
-    s.text(1320, 180, "Synthesis", 20, INK, align="center")
-    steps = ["1 rank: both models, then\n   two roles, then one seat",
+    syn = s.box(1320, 165, 280, 350, stroke=BLUE, fill="#ffffff")
+    s.text(1460, 180, "Synthesis", 20, INK, align="center")
+    steps = ["1 rank: two or three labs,\n   then two roles, then one",
              "2 novelty check against\n   Already flagged",
              "3 verify each value\n   against its document",
              "4 pick steps that\n   discriminate, cheapest first"]
     for i, st in enumerate(steps):
-        s.text(1200, 222 + i * 70, st, 16, INK)
+        s.text(1340, 222 + i * 70, st, 16, INK)
     for r in range(3):
         y = 200 + r * 140
-        s.line([R(bands[r]), (1130, y)], arrow=False)
-    s.line([(1130, 200), (1130, 480)], arrow=False)
-    s.line([(1130, 340), L(syn)], end=syn)
+        s.line([R(bands[r]), (1270, y)], arrow=False)
+    s.line([(1270, 200), (1270, 480)], arrow=False)
+    s.line([(1270, 340), L(syn)], end=syn)
 
-    rep = s.box(1540, 140, 260, 400, stroke=BOX, fill="#ffffff")
-    s.text(1670, 152, "panels/<date>.md", 17, INK, MONO, "center")
-    sections = [("0 Track record", True), ("1 New", False), ("2 Re-ranked", False),
-                ("3 Next steps, 5 at most", False), ("4 Questions for the doctor", False),
-                ("5 Not worth chasing", False)]
+    rep = s.box(1680, 140, 260, 400, stroke=BOX, fill="#ffffff")
+    s.text(1810, 152, "panels/<date>.md", 17, INK, MONO, "center")
+    sections = [("Track record", True), ("New", False), ("Re-ranked", False),
+                ("Next steps, 5 at most", False), ("Questions for the doctor", False),
+                ("Not worth chasing", False)]
     for i, (name, loop) in enumerate(sections):
         y = 195 + i * 55
-        s.box(1555, y, 230, 44, name, stroke=BLUE if loop else BOX, fill=BLUE_FILL if loop else "#f8f9fa",
+        s.box(1695, y, 230, 44, name, stroke=BLUE if loop else BOX, fill=BLUE_FILL if loop else "#f8f9fa",
               size=15, rough=0)
     s.line([R(syn), L(rep)], start=syn, end=rep)
 
     # the loop: next run scores this run's items, and open ones join Already flagged
-    s.line([B(rep), (1670, 620), (365, 620), B(brief)], BLUE, dashed=True, start=rep, end=brief)
-    s.text(1018, 630, "next run: score each item confirmed, killed or still open;\nopen items join Already flagged",
+    s.line([B(rep), (1810, 620), (365, 620), B(brief)], BLUE, dashed=True, start=rep, end=brief)
+    s.text(1088, 630, "next run: score each item confirmed, killed or still open;\nopen items join Already flagged",
            16, BLUE, align="center")
     s.save(ASSETS / "health-differential" / "panel.excalidraw")
 

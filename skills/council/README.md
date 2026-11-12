@@ -18,7 +18,8 @@ code review rules (fixes before the audit, scores out of 10, the fix loop, the P
 3. The agent checks answers as they arrive, then summarizes findings, disagreements, who raised
    what, and its recommendation.
 
-[`council-debate`](../council-debate/) adds rebuttal rounds on top.
+[`council-debate`](../council-debate/) adds rebuttal rounds on top, and
+[`health-differential`](../health-differential/) runs one council per diagnostic role.
 
 ## Use it
 

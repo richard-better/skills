@@ -1,140 +1,98 @@
 ---
 name: health-differential
-description: Run a multi-model physician panel over a health records folder to find what the records have not already flagged. Use for "run the panel", "differential", "second look", "what are we missing", unexplained or multi-system symptoms, after new results land, or when a working diagnosis has stalled (a treatment trial failed, symptoms persist despite clean tests).
+description: A panel of models takes a second look at a health records folder to find what the records have not already flagged. Use when asked for a differential or second look, after new results land, or when symptoms persist without a diagnosis.
 ---
 
 # Health differential
 
-A virtual physician panel over one person's health records, modelled on Microsoft's MAI-DxO
-("Sequential Diagnosis with Language Models", 2025). The gain in that work came from
-**structure, not the model**: separate roles that hypothesise, attack the leading view, and
-weigh each test's information against its cost. One model asked "what's wrong?" anchors on
-whatever the records already say. The panel exists to find what the records have **not**
-already flagged.
+A panel of models reads one person's health records and looks for what they have not
+**already flagged**. It follows Microsoft's MAI-DxO, where the gain came from structure, not the
+model: separate roles that propose diagnoses, attack the leading view, and audit the data, each
+in fresh context. Frame everything as preparation for clinicians.
 
-Frame everything as preparation for clinicians, never as a diagnosis.
+The records folder is built by `health-records`. Run that skill first when `index.md` is missing
+or new PDFs have arrived. `records.py` is in its `scripts/` folder; run it with `uv run`.
 
-## The records folder
+## 1. Track record
 
-The panel reads a folder in the `health-records` skill's layout. Run that skill first when
-`index.md` is missing or PDFs have arrived since it was generated.
+If `<records>/panels/` holds an earlier report, read the latest. Its items are its New and
+Re-ranked items, plus any its own Track record left `still open`. Score each `confirmed`,
+`killed` or `still open` from evidence dated after that report: documents in `index.md`, rows in
+`markers.csv`, and `context.md`. Items still open join this run's Already flagged list.
 
-| Path | Holds |
-| --- | --- |
-| `index.md` | The way in: every document with date, type and summary; the latest result of each analyte |
-| `context.md` | The owner's own account: age, sex, conditions, medications with dates, questions |
-| `documents/*.md` | Faithful transcriptions, frontmatter on top, PDF beside each |
-| `markers.csv` | Every lab result, one row each; `records.py table <records>` prints each analyte's history |
-| `panels/` | Earlier panel reports, the track record's input |
+## 2. Case brief
 
-`records.py` is in the `health-records` skill's `scripts/` folder; run it with `uv run`.
-
-## Output
-
-One file, `<records>/panels/YYYY-MM-DD-health-differential.md`, with `-2`, `-3` added for a second
-run that day. Sections in this order:
-
-0. **Track record**: only when an earlier panel exists. For each of its New and Re-ranked items,
-   `confirmed`, `killed` or `still open`, with the result and date that settled it. Close with a
-   tally, one line per model and per role: hits, misses, open.
-1. **New**: findings not in Already flagged. Each: claim, evidence with dates and documents,
-   who raised it (role and model), what would confirm or kill it, and the cheapest
-   discriminating step.
-2. **Re-ranked**: existing hypotheses whose likelihood the panel moved, and why.
-3. **Next steps**: at most 5, ranked by information per cost and effort. Mark which can ride an
-   already planned blood draw or visit.
-4. **Questions for the doctor**: short, ready to copy.
-5. **Checked, not worth chasing**: considered and dropped, with the reason.
-
-## Process
-
-### 0. Track record
-
-If `panels/` holds an earlier report, read the latest. Its items are its New and Re-ranked
-items plus the items its own Track record left `still open`, so a hypothesis stays tracked until
-a result settles it. For each item, look for evidence dated after that report: documents in
-`index.md`, rows in `markers.csv`, and `context.md`. Score each item `confirmed`, `killed` or
-`still open` and write the Track record section first. Items still open join this run's Already
-flagged list, so they are not reported as new a second time.
-
-### 1. Case brief
-
-Read `index.md`, `context.md`, every document and `records.py table <records>`. Write
+Read `index.md`, `context.md`, every document, and `records.py table <records>`. Write
 `<scratch>/health-differential/brief.md` with:
 
 - **Demographics, medications and supplements**, with start and stop dates
 - **Problem list**: every active and recently closed problem, one line each
-- **Lab table**: the output of `records.py table`, every analyte with every value, date and
-  reference range, so trends are visible
-- **Already flagged**: every diagnosis, hypothesis, planned test and conclusion already in the
+- **Lab table**: the full output of `records.py table`
+- **Already flagged**: every diagnosis, hypothesis, planned test and conclusion in the
   documents, `context.md` and open panel items, one line each with its source
 
-Done when every document in `index.md` has contributed its problems, conclusions and plans to
-the brief, or is named as having none.
+Done when every document in `index.md` has contributed to the brief, or is named as having none.
 
-### 2. Panel: six seats
+## 3. Panel
 
-Three roles, each run on two models from different labs, so six seats with fresh context.
-Use the models the owner names; otherwise the strongest reasoning model each of two labs
-offers. Name both in the report. When one model is unavailable, run its three seats on the
-other and say so; never swap in a third model silently. The seats read the records, so their
-content goes to each model's provider.
-
-Create one output directory per seat, then dispatch all six at once, read-only:
-
-| Harness | One seat |
-| --- | --- |
-| T3 Code | `delegate_task` with `mode: "async"`, `role: "review"`, the model in `target`, and a `clientRequestId` of `differential-<date>-<role>-<model>`; check `orchestrator_capabilities` once for model names. End the turn and wait for the completions |
-| A lab's CLI | Its non-interactive, read-only mode: `codex exec --sandbox read-only`, `claude -p` with only read tools allowed |
-| Your own subagents | Only for seats on your own model; the other lab's seats still need one of the rows above |
-
-Every seat gets the same task, varying only its role and directory:
+Run `council` three times at once, one per role, so each member holds one role in fresh context:
+nine answers from three labs. Each member's task:
 
 ```
-You are the <ROLE> on a diagnostic panel. Your brief: <ROLE BRIEF>
+You are the <ROLE> on a diagnostic panel. <ROLE BRIEF>
 
 Read <scratch>/health-differential/brief.md, then the records it summarises in <records>:
 index.md, context.md, documents/ and markers.csv. The brief is lossy; check the sources.
-Work read-only: the only file you write is <seat-dir>/answer.md.
 
 Write each finding as: claim / evidence (value, date, document) / confidence / discriminating
 test. Mark each NEW or ALREADY-FLAGGED against the brief's Already flagged list.
 ```
 
-| Role | Role brief |
-| --- | --- |
-| **Hypothesis** | Probability-ranked possible diagnoses, both per problem and **unifying** (one cause behind several problems). Update explicitly on every finding. Top 3 per cluster, with percentages. |
-| **Challenger** | Assume each working diagnosis in Already flagged is wrong. Find contradicting evidence, anchoring, premature closure, treatment trials that failed without the diagnosis being revisited, and links across specialties nobody connected. |
-| **Data auditor** | Trend every lab value, including drift inside the range. Find abnormal values never commented on, tests ordered but never resulted, follow-ups that dropped, medication timing that lines up with symptom onset, and records that conflict. |
+- **Hypothesis**: probability-ranked diagnoses, per problem and **unifying** (one cause behind
+  several problems). Update explicitly on every finding. Top 3 per cluster, with percentages.
+- **Challenger**: assume each working diagnosis in Already flagged is wrong. Find contradicting
+  evidence, anchoring, premature closure, treatment trials that failed without the diagnosis
+  being revisited, and links across specialties nobody connected.
+- **Data auditor**: trend every lab value, including drift inside the range. Find abnormal
+  values never commented on, tests ordered but never resulted, dropped follow-ups, medication
+  timing that lines up with symptom onset, and records that conflict.
 
-Done when all six seats have written `answer.md` or failed; list failed seats with their error.
+Done when all nine members have answered or failed.
 
-### 3. Synthesis
+## 4. Synthesis
 
-You are the test chooser, the steward of cost, and the checklist.
+You are the test chooser and the steward of cost.
 
-1. Read every `answer.md`. Merge duplicates across seats. Rank higher what **both models**
-   raised independently, then what two or more roles raised; a finding from one seat needs
-   stronger evidence to make New. Record which seats raised each finding.
+1. Merge duplicates. Rank higher what two or three labs raised independently, then what two or
+   more roles raised; a single member's finding needs stronger evidence to make New.
 2. **Novelty check**: grep the records folder for each finding's key terms. A finding already
-   in Already flagged moves to Re-ranked or is dropped, never presented as new.
-3. **Verify** every cited value against its document. Drop findings that rest on a misread.
-4. For each surviving hypothesis, pick the 1 to 3 steps that best **discriminate** between the
+   flagged moves to Re-ranked or is dropped.
+3. **Verify** every cited value against its document, and drop findings that rest on a misread.
+   Compare values across units with care; `records.py check` names those analytes.
+4. For each surviving hypothesis, pick the 1 to 3 steps that best discriminate between the
    leading candidates. Prefer history questions and add-ons to planned blood draws over new
    visits, and new visits over imaging.
-5. Write the report to `panels/`, then run `records.py index <records>` so the index lists it.
-   Leave `context.md` and the documents unchanged; propose edits to the owner instead.
-6. When the records folder is a git repository, commit the report and the index.
 
-## Common mistakes
+Done when every New item cites a value you checked against its document, and grep found no
+earlier mention of it.
 
-| Mistake | Fix |
-| --- | --- |
-| Restating the records' own conclusions as findings | Novelty check against Already flagged |
-| Seats working only from the brief | The task sends them to the sources; the brief is lossy |
-| Long test wish lists | At most 5 next steps, each tied to the hypothesis it discriminates |
-| Ignoring drift inside the range | The data auditor trends every analyte, not only flagged ones |
-| Treating one seat's idea as consensus | Report which roles and models raised it |
-| Reading probabilities as calculated | They are model estimates; the track record calibrates them |
-| Re-reporting last run's open items as new | Step 0 carries them into Already flagged |
-| Comparing values across units | `records.py check` names analytes measured in more than one unit |
+## 5. Report
+
+Write `<records>/panels/YYYY-MM-DD-health-differential.md`, with `-2`, `-3` for another run that
+day. Name the council's models at the top, then these sections in order:
+
+- **Track record**, only when an earlier report exists: each item `confirmed`, `killed` or
+  `still open`, with the result and date that settled it, then a tally of hits, misses and open
+  items per model and per role.
+- **New**: claim, evidence with dates and documents, who raised it (role and model), what would
+  confirm or kill it, and the cheapest discriminating step. Probabilities are model estimates;
+  the track record calibrates them.
+- **Re-ranked**: existing hypotheses whose likelihood the panel moved, and why.
+- **Next steps**: at most 5, ranked by information per cost and effort. Mark which can ride an
+  already planned blood draw or visit.
+- **Questions for the doctor**: short, ready to copy.
+- **Checked, not worth chasing**: considered and dropped, with the reason.
+
+Then run `records.py index <records>` so the index lists the report. Propose edits to
+`context.md` and the documents to the owner rather than making them. When the records folder is a
+git repository, commit the report and the index.
