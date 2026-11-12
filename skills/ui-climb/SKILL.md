@@ -20,8 +20,9 @@ those guards in `climb.md`. A measured guard settles what the council argues abo
 
 When the repository has climb tooling, use it and follow its README for commands. Without
 tooling, capture web with Playwright and native apps with the harness's simulator tooling (in T3
-Code, `device_open`, then its `agent-device` command), and score with
-[scripts/score.py](scripts/score.py).
+Code, `device_open`, then its `agent-device` command), score with
+[scripts/score.py](scripts/score.py), and build owner pages with
+[scripts/owner_page.py](scripts/owner_page.py).
 
 ## 1. Setup
 
@@ -76,9 +77,11 @@ so the owner chooses between built options.
 
 ## 3. Owner pages
 
-The owner decides from one page per checkpoint. The format in
-[references/owner-page.md](references/owner-page.md) converged over many rounds; follow it.
-Each page opens with one line saying which kind it is:
+The owner decides from one page per checkpoint, built with
+[scripts/owner_page.py](scripts/owner_page.py) as in
+[references/owner-page.md](references/owner-page.md): each fix sits next to its spot,
+highlighted on the shot. Capture the shots clean and record each fix's element boxes while
+capturing. Each page opens with one line saying which kind it is:
 
 - **Proposals**: fixes to decide before building. Answers: Do it, Not now, Tweak.
 - **Check**: changes already built. Answers: Keep, Drop, Tweak.
