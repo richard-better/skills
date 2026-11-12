@@ -1,7 +1,7 @@
-"""Generate the council-debate, outer-loop-t3 and diagram-rebuild figures as Excalidraw scenes.
+"""Generate the council, council-debate, outer-loop-t3 and diagram-rebuild figures as Excalidraw scenes.
 
 Usage: python3 assets/diagrams/skills.py
-Writes assets/council-debate/debate.excalidraw, assets/outer-loop-t3/loops.excalidraw and
+Writes assets/council/council.excalidraw, assets/council-debate/debate.excalidraw, assets/outer-loop-t3/loops.excalidraw and
 assets/diagram-rebuild/loop.excalidraw.
 """
 
@@ -34,6 +34,40 @@ def badge(s, x, y, n, color=RED):
     d = s.dot(x, y, 15, color, color)
     s.text(x, y - 12, str(n), 18, "#ffffff", align="center")
     return d
+
+
+def council():
+    s = Scene(43)
+    s.text(0, 0, "Three labs answer the same brief on their own; the synthesis shows\n"
+                 "where they agree, where they disagree, and who raised what", 24, INK)
+    members = [("Claude Opus", ORANGE, ORANGE_FILL), ("GPT Sol", GREEN, GREEN_FILL),
+               ("Gemini Pro", SKY, SKY_FILL)]
+    ys = [130, 260, 390]
+    cy = 305
+
+    brief = s.box(0, cy - 55, 200, 110, "brief\n", size=20)
+    s.text(100, cy + 8, "neutral, your view\nstays out", 15, GREY, align="center")
+
+    s.text(390, 85, "in parallel, read-only", 17, GREY, align="center")
+    answers = []
+    for (name, st, fi), y in zip(members, ys):
+        answers.append(s.box(300, y, 180, 90, f"{name}\nanswers alone", stroke=st, fill=fi, size=18))
+    for b, y in zip(answers, ys):
+        s.line([R(brief), (250, cy), (250, y + 45), L(b)], GREY, start=brief if b is answers[1] else None, end=b)
+
+    syn = s.box(580, cy - 110, 260, 220, "", stroke=BLUE, fill="#ffffff")
+    s.text(710, cy - 95, "Synthesis", 20, INK, align="center")
+    for i, item in enumerate(["findings", "disagreements", "who raised what", "next steps"]):
+        s.text(710, cy - 50 + i * 36, item, 17, GREY, align="center")
+    for b, y in zip(answers, ys):
+        s.line([R(b), (530, y + 45), (530, cy), L(syn)], GREY, arrow=b is answers[1],
+               end=syn if b is answers[1] else None)
+
+    code = s.box(580, 470, 260, 95, "code or PR review:\nreferences/code-review.md", stroke=PURPLE,
+                 fill="#ffffff", size=15, dashed=True)
+    s.text(710, 575, "fixes first, scores, fix loop,\nPR table", 14, GREY, align="center")
+    s.line([B(syn), T(code)], PURPLE, dashed=True, start=syn, end=code)
+    s.save(ROOT / "council" / "council.excalidraw")
 
 
 def council_debate():
@@ -218,6 +252,7 @@ def diagram_rebuild():
 
 
 if __name__ == "__main__":
+    council()
     council_debate()
     outer_loop()
     diagram_rebuild()

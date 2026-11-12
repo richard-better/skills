@@ -11,6 +11,7 @@ from climb import ROOT
 
 FIGURES = {
     "outer-loop-t3": ("loops.png", "pad"),
+    "council": ("council.png", "pad"),
     "council-debate": ("debate.png", "pad"),
     "hill-climb": ("score-steps.png", "pad"),
     "ui-climb": ("round.png", "pad"),

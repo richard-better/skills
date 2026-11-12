@@ -8,6 +8,7 @@ following the visual patterns in the `domi-tech-writing` skill.
 | `hill-climb/score-steps` | Why does the best score move in steps? | Illustrative plot |
 | `hill-climb/round` | What does a round keep? | decision-flow |
 | `ui-climb/round` | What does ui-climb change? | `hill-climb/round` with the scorer swapped |
+| `council/council` | What does a council add over one model? | decision-flow |
 | `council-debate/debate` | What does debating add to a council? | decision-flow |
 | `outer-loop-t3/loops` | How does one thread keep the others moving? | nested loops |
 | `health-records/pipeline` | How does a PDF become a document and marker rows? | decision-flow |
