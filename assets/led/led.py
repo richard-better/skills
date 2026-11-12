@@ -757,27 +757,49 @@ def diagram_design():
     rec("diagram-design", fr, 0.12, poster=4)
 
 
+def bezier(x1, y1, x2, y2):
+    """A CSS cubic-bezier(x1, y1, x2, y2) easing as a function of progress."""
+    at = lambda t, p1, p2: 3 * (1 - t) ** 2 * t * p1 + 3 * (1 - t) * t * t * p2 + t ** 3
+
+    def ease(x):
+        lo, hi = 0.0, 1.0
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if at(mid, x1, x2) < x else (lo, mid)
+        return at((lo + hi) / 2, y1, y2)
+    return ease
+
+
+EASE_OUT = bezier(0.23, 1, 0.32, 1)  # entering and exiting
+EASE_IN_OUT = bezier(0.77, 0, 0.175, 1)  # moving on screen
+EASE_DRAWER = bezier(0.32, 0.72, 0, 1)  # iOS-like sheet
+
+
+def spring(t, duration=0.5, bounce=0.2):
+    """Progress 0 -> 1 of a spring set like Motion's { duration, bounce }, at t seconds."""
+    zeta, w = 1 - bounce, 2 * math.pi / duration
+    wd = w * math.sqrt(1 - zeta * zeta)
+    return 1 - math.exp(-zeta * w * t) * (math.cos(wd * t) + zeta * w / wd * math.sin(wd * t))
+
+
 def emil_design_eng():
-    """A toggle switch: the knob eases across, the track lights up, and it eases back."""
+    """A toggle switch: the knob slides across in 240 ms on a strong ease-in-out, and back."""
     left, right = ring(6, 12, 3), ring(18, 12, 3)
     track = [p for p in left if p[0] <= 6] + [p for p in right if p[0] >= 18] + hl(9, 6, 18) + hl(15, 6, 18)
     inside = [(c, r) for c in range(4, 21) for r in range(10, 15) if math.hypot(max(6 - c, 0, c - 18), r - 12) < 2.5]
-    out = lambda t: 1 - (1 - t) ** 3
     knob = lambda x: disc(round(x), 12, 1.6)
-    fr = [(F().add(track, "on").add(knob(6), "hot"), 8)]
-    for k in range(1, 9):
-        x = 6 + 12 * out(k / 8)
-        fr.append((F().add(track, "on").add(inside if k > 4 else [], "dim").add(knob(x), "hot"), 1))
-    fr.append((F().add(track, "hot").add(inside, "dim").add(knob(18), "hot"), 14))
-    for k in range(1, 9):
-        x = 18 - 12 * out(k / 8)
-        fr.append((F().add(track, "on").add(inside if k < 4 else [], "dim").add(knob(x), "hot"), 1))
-    fr.append((F().add(track, "on").add(knob(6), "hot"), 6))
-    rec("emil-design-eng", fr, 0.06, poster=-10)
+    state = lambda x, lit: F().add(track, "hot" if lit == 2 else "on").add(inside if lit else [], "dim").add(knob(x), "hot")
+    n = 8  # 8 ticks of 30 ms
+    fr = [(state(6, 0), 40)]
+    fr += [(state(6 + 12 * EASE_IN_OUT(k / n), 1 if k > n // 2 else 0), 1) for k in range(1, n)]
+    fr.append((state(18, 2), 50))
+    fr += [(state(18 - 12 * EASE_IN_OUT(k / n), 1 if k < n // 2 else 0), 1) for k in range(1, n)]
+    fr.append((state(6, 0), 10))
+    rec("emil-design-eng", fr, 0.03, poster=n)
 
 
 def emil_apple_design():
-    """A sheet springs up from the bottom of a phone, overshoots a touch and settles."""
+    """A sheet rises on a spring (0.5 s, bounce 0.2), rests, and leaves the way it came on the drawer curve."""
     phone = rect(5, 1, 19, 23) + hl(3, 10, 14)
     app = F().add(phone, "on").add(hl(6, 7, 15) + hl(8, 7, 12) + hl(10, 7, 14), "dim")
 
@@ -787,33 +809,32 @@ def emil_apple_design():
         inner = [(c, r) for c, r in hl(y + 2, 11, 13) + hl(y + 5, 8, 16) + hl(y + 7, 8, 13) if r <= 22]
         return F(app).add([p for p in cells if p[1] <= 22], "on").add(hl(y, 6, 18), "hot").add(inner, "on")
 
-    fr = [(F(app), 8)]
-    for k in range(1, 15):  # damped spring from 23 to 10
-        t = k / 3.0
-        fr.append((sheet(10 + 13 * math.exp(-0.9 * t) * math.cos(1.9 * t)), 1))
-    fr.append((sheet(10), 14))
-    fr += [(sheet(10 + 13 * (k / 4) ** 2), 1) for k in range(1, 5)]
-    fr.append((F(app), 6))
-    rec("emil-apple-design", fr, 0.06, poster=-6)
+    step, top, bottom = 0.03, 10, 23
+    fr = [(F(app), 30)]
+    fr += [(sheet(bottom - (bottom - top) * spring(k * step)), 1) for k in range(1, 20)]
+    fr.append((sheet(top), 50))
+    n = 10  # 300 ms out
+    fr += [(sheet(top + (bottom - top) * EASE_DRAWER(k / n)), 1) for k in range(1, n)]
+    fr.append((F(app), 20))
+    rec("emil-apple-design", fr, step, poster=20)
 
 
 def emil_animate():
-    """An ease-out curve is plotted while a ball runs the same timing: a fast start, a gentle landing."""
-    ease = lambda t: 1 - (1 - t) ** 4
+    """cubic-bezier(0.23, 1, 0.32, 1) is plotted while a ball runs the same timing: a fast start, a gentle landing."""
     axes = vl(3, 8, 22) + hl(22, 3, 22)
     track = hl(3, 3, 22)
     base = F().add(axes + track, "dim")
-    N, fr, trail = 16, [(F(base).add(fill(2, 2, 4, 4), "hot"), 6)], F()
+    N, fr, trail = 16, [(F(base).add(fill(2, 2, 4, 4), "hot"), 15)], F()
     prev = (3, 22)
     for k in range(N):
         t = k / (N - 1)
-        pt = (3 + round(19 * t), 22 - round(14 * ease(t)))
+        pt = (3 + round(19 * t), 22 - round(14 * EASE_OUT(t)))
         trail.add(line(prev, pt), "on")
         prev = pt
-        x = 3 + round(19 * ease(t))
+        x = 3 + round(19 * EASE_OUT(t))
         fr.append((F(base).add(trail.keys(), "on").add([pt], "hot").add(fill(x - 1, 2, x + 1, 4), "hot"), 1))
-    fr += [(F(base).add(trail.keys(), "on").add(fill(21, 2, 23, 4), "hot"), 12), (F(base), 3)]
-    rec("emil-animate", fr, 0.08, poster=-2)
+    fr += [(F(base).add(trail.keys(), "on").add(fill(21, 2, 23, 4), "hot"), 30), (F(base), 8)]
+    rec("emil-animate", fr, 0.05, poster=-2)
 
 
 RECOMMENDED = [grilling, improve, thermo_nuclear, sol_loop, verify_this, full_send, babysit_pr,
