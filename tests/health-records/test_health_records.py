@@ -109,6 +109,19 @@ def test_records_flag_skips_known_pdfs(extracted, tmp_path):
     assert [d.name.split("-")[0] for d in (tmp_path / "work").iterdir()] == ["scan0001"]
 
 
+def test_list_names_new_pdfs_and_writes_nothing(extracted, tmp_path):
+    root, files, _, metas = extracted
+    records = tmp_path / "records"
+    doc(records, LAB, sha256=f'"{metas[files["lab"].name]["sha256"]}"')
+    p = run("extract.py", root / "inbox", "--list", "--records", records, check=False)
+    assert p.returncode == 1  # the encrypted and corrupt PDFs
+    new = [line.split()[1] for line in p.stdout.splitlines() if line.startswith("new ")]
+    assert sorted(Path(n).name for n in new) == sorted([files["scan"].name, files["mixed"].name])
+    assert f"1 page  sha256 {metas[files['scan'].name]['sha256']}" in p.stdout
+    assert "already in records" in p.stdout and "encrypted" in p.stdout
+    assert list(tmp_path.iterdir()) == [records]
+
+
 # ---------------------------------------------------------------- records.py merge
 
 

@@ -3,12 +3,16 @@
 # requires-python = ">=3.11"
 # dependencies = ["pymupdf==1.26.5"]
 # ///
-"""Pull the text layer out of health PDFs, page by page, and render the pages that need eyes.
+"""List new health PDFs, or pull their text layer page by page and render the pages that need eyes.
 
-Usage: uv run extract.py <pdf-or-folder>... --out <work-dir> [--records <records-dir>]
+Usage: uv run extract.py <pdf-or-folder>... --list [--records <records-dir>]
+       uv run extract.py <pdf-or-folder>... --out <work-dir> [--records <records-dir>]
                          [--images needed|all|none] [--dpi 200] [--min-chars 40]
 
-For each PDF, writes <work-dir>/<stem>-<sha8>/ with:
+With --list, prints each new PDF with its sha256 and page count and writes nothing. This is the
+first step whatever reads the PDFs: an agent that reads PDFs directly needs only this.
+
+Otherwise, for agents that cannot read PDFs directly, writes for each PDF <work-dir>/<stem>-<sha8>/ with:
 
 - page-NNN.txt  the page's text layer in reading order (empty for a scan)
 - page-NNN.png  the page rendered as an image, for pages whose verdict is not `text`
@@ -22,7 +26,7 @@ A page's verdict:
 - text+image  a text layer plus a large image (a stamp, an embedded scan, a chart); read both
 
 With --records, PDFs whose sha256 already appears in <records-dir>/documents/*.md frontmatter
-are skipped, so a rerun over the same folder only extracts new files. Encrypted PDFs are
+are skipped, so a rerun over the same folder only lists or extracts new files. Encrypted PDFs are
 reported and skipped. Prints one line per PDF and exits non-zero if any PDF failed to open.
 """
 
@@ -124,6 +128,13 @@ def extract(pdf: Path, out_root: Path, images: str, dpi: int, min_chars: int, di
     return meta
 
 
+def inspect(pdf: Path, digest: str) -> dict:
+    doc = pymupdf.open(pdf)
+    if doc.needs_pass:
+        return {"file": str(pdf), "sha256": digest, "error": "encrypted: ask the owner for the password"}
+    return {"file": str(pdf), "sha256": digest, "page_count": doc.page_count}
+
+
 def collect(inputs: list[str]) -> list[Path]:
     pdfs: list[Path] = []
     for raw in inputs:
@@ -140,8 +151,10 @@ def collect(inputs: list[str]) -> list[Path]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("inputs", nargs="+", help="PDF files or folders (searched recursively)")
-    ap.add_argument("--out", required=True, type=Path, help="work directory for page text and images")
-    ap.add_argument("--records", type=Path, help="records folder: skip PDFs already extracted there")
+    mode = ap.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--list", action="store_true", help="only list new PDFs with sha256 and page count")
+    mode.add_argument("--out", type=Path, help="work directory for page text and images")
+    ap.add_argument("--records", type=Path, help="records folder: skip PDFs already transcribed there")
     ap.add_argument("--images", choices=["needed", "all", "none"], default="needed")
     ap.add_argument("--dpi", type=int, default=200)
     ap.add_argument("--min-chars", type=int, default=40, help="below this a page counts as a scan")
@@ -160,7 +173,10 @@ def main() -> int:
             continue
         seen[digest] = pdf
         try:
-            meta = extract(pdf, args.out, args.images, args.dpi, args.min_chars, digest)
+            if args.list:
+                meta = inspect(pdf, digest)
+            else:
+                meta = extract(pdf, args.out, args.images, args.dpi, args.min_chars, digest)
         except Exception as e:  # a corrupt PDF must not stop the batch
             print(f"FAIL   {pdf}  {type(e).__name__}: {e}")
             failed += 1
@@ -168,6 +184,10 @@ def main() -> int:
         if "error" in meta:
             print(f"FAIL   {pdf}  {meta['error']}")
             failed += 1
+            continue
+        if args.list:
+            n = meta['page_count']
+            print(f"new    {pdf}  {n} page{'' if n == 1 else 's'}  sha256 {digest}")
             continue
         counts: dict[str, int] = {}
         for p in meta["pages"]:
