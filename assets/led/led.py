@@ -202,6 +202,8 @@ def spring(t, duration=0.5, bounce=0.2):
 
 PULSE = 0.24  # seconds a single accent stays hot
 GLINT = 0.6  # seconds one glint takes to cross a mark
+HOLD = 1.4  # seconds a finished drawing rests before the loop clears it
+REST = 0.4  # seconds of the cleared board before the loop starts again
 
 
 def ticks(seconds, step):
@@ -268,8 +270,8 @@ def debate(cols, cy, d, step=0.15):
         fr += sparks(base, pin, 6)
         fr += pulse(base, mids, step)
         fr += sparks(base, pout, 6)
-        fr.append((base.copy().add(box(*hub) + [hub], "hot"), 2 if hub == hubs[1] else 9))
-    fr.append((base, 4))
+        fr.append((base.copy().add(box(*hub) + [hub], "hot"), 2 if hub == hubs[1] else ticks(HOLD, step)))
+    fr.append((base, ticks(REST, step)))
     return fr
 
 
@@ -290,7 +292,7 @@ def climb(ox, oy, step=0.1):
         landing = i == 0 or pos[i][1] != pos[i - 1][1]
         fr.append((base.copy().add(sq(p), "hot"), 3 if landing else 2))
     fr += pulse(base.copy().add(sq(pos[-1]), "hot"), flag, step)
-    fr += [(base.copy().add(sq(pos[-1]), "hot"), 6), (base, 4)]
+    fr += [(base.copy().add(sq(pos[-1]), "hot"), ticks(HOLD, step)), (base, ticks(REST, step))]
     return fr
 
 
@@ -321,7 +323,7 @@ def council():
     fr += sparks(base, pin, 6)
     fr += pulse(base, mids, 0.16)
     fr += sparks(base, pout, 6)
-    fr += [(base.copy().add(box(*dst) + [dst], "hot"), 9), (base, 4)]
+    fr += [(base.copy().add(box(*dst) + [dst], "hot"), ticks(HOLD, 0.16)), (base, ticks(REST, 0.16))]
     icon("council", fr, 0.16, poster=-2)
 
 
@@ -348,7 +350,7 @@ def ui_climb():
         prev = score
     full = base.copy().add(win(chrome + versions["ref"]) + hl(20, 7, 17), "on")
     fr = finer(fr, 2) + glint(full, win(chrome + versions["ref"]) + hl(20, 7, 17), 0.05)
-    fr += [(full, 28), (base.copy().add(win(chrome), "on"), 8)]
+    fr += [(full, ticks(HOLD, 0.05)), (base.copy().add(win(chrome), "on"), ticks(REST, 0.05))]
     icon("ui-climb", fr, 0.05, poster=-2)
 
 
@@ -369,7 +371,7 @@ def diagram_rebuild():
                (base.copy().add(shift(b + e, 13, 5), "on"), 4)]
     done = shift(tb + te, 13, 5)
     full = base.copy().add(done, "on")
-    fr = finer(fr, 4) + glint(full, done, 0.05) + [(full, 28), (base, 8)]
+    fr = finer(fr, 4) + glint(full, done, 0.05) + [(full, ticks(HOLD, 0.05)), (base, ticks(REST, 0.05))]
     icon("diagram-rebuild", fr, 0.05, poster=-2)
 
 
@@ -396,9 +398,9 @@ def health_records():
     full = base.copy()
     full.update(done)
     full.add(row(rows[3]), "on")
-    fr = finer(fr, 4) + glint(full, table + sum((row(y) for y in rows), []), 0.05) + [(full, 28)]
+    fr = finer(fr, 4) + glint(full, table + sum((row(y) for y in rows), []), 0.05) + [(full, ticks(HOLD, 0.05))]
     empty = F().add(table, "on")
-    fr.append((empty, 8))
+    fr.append((empty, ticks(REST, 0.05)))
     fr += [(F(empty).add(sum((doc(*d) for d in docs[:i]), []), "on"), 4) for i in range(1, 4)]
     icon("health-records", fr, 0.05, poster=-5)
 
@@ -420,7 +422,7 @@ def health_differential():
     fr += sparks(base, pin, 5)
     fr += pulse(base, sum((trio(r) for r in roles), []), 0.17)
     fr += sparks(base, pout, 5)
-    fr += [(base.copy().add(cross, "hot"), 9), (base, 4)]
+    fr += [(base.copy().add(cross, "hot"), ticks(HOLD, 0.17)), (base, ticks(REST, 0.17))]
     icon("health-differential", fr, 0.17, poster=-2)
 
 
@@ -445,7 +447,7 @@ def ios_app_cleanup():
         if pos[j] != slots[j]:
             pos[j] = slots[j]
             fr.append((apps(pos), 1))
-    fr += [(apps(pos), 16), (base.copy(), 3)]
+    fr += [(apps(pos), ticks(HOLD, 0.08)), (base.copy(), ticks(REST, 0.08))]
     fr += [(apps(slots[:3 * r]), 1) for r in range(1, 6)]  # refill row by row
     icon("ios-app-cleanup", fr, 0.08, poster=-7)
 
@@ -557,7 +559,7 @@ def grilling():
         fr += pulse(done, boxes, 0.14)
         done.add(boxes, "on").add(nodes, "hot")
         fr.append((F(done), 4))
-    fr = finer(fr, 3) + glint(done, list(done), 0.14 / 3) + [(F(done), 24), (F(), 9)]
+    fr = finer(fr, 3) + glint(done, list(done), 0.14 / 3) + [(F(done), ticks(HOLD, 0.14 / 3)), (F(), ticks(REST, 0.14 / 3))]
     rec("grilling", fr, 0.14 / 3, poster=-2)
 
 
@@ -582,7 +584,7 @@ def improve():
     for k, i in enumerate(flagged):
         fr.append((F(shown).add(items[k] + code[i] + [(1, rows[i])], "hot"), 3))
         shown.add(items[k], "on")
-    fr = finer(fr, 3) + glint(shown, list(shown), 0.04) + [(shown, 24), (F(), 9)]
+    fr = finer(fr, 3) + glint(shown, list(shown), 0.04) + [(shown, ticks(HOLD, 0.04)), (F(), ticks(REST, 0.04))]
     rec("improve", fr, 0.04, poster=-2)
 
 
@@ -615,7 +617,7 @@ def thermo_frames():
     for ln in lines:
         fr.append((F(clean).add(ln, "hot"), 2))
         clean.add(ln, "on")
-    return finer(fr, 2) + glint(clean, small + sum(lines, []), 0.05) + [(clean, 24), (F(), 6)]
+    return finer(fr, 2) + glint(clean, small + sum(lines, []), 0.05) + [(clean, ticks(HOLD, 0.05)), (F(), ticks(REST, 0.05))]
 
 
 def thermo_nuclear():
@@ -640,7 +642,7 @@ def sol_loop():
         fr += sparks(f0, [down], 6)
         fr.append((F(base).add(pips(n), "hot"), 3))
         count = n
-    fr = finer(fr, 2) + glint(F(base), diff + sun, 0.055) + [(F(base), 28)]
+    fr = finer(fr, 2) + glint(F(base), diff + sun, 0.055) + [(F(base), ticks(HOLD + REST, 0.055))]
     rec("sol-loop", fr, 0.055)
 
 
@@ -655,7 +657,7 @@ def verify_this():
         base.add(bar(x, h), "on")
         fr.append((F(base), 3))
     fr += pulse(base, hl(12, 3, 21), 0.1)
-    fr += [(F(base).add(check, "hot"), 12), (F(base).add(check, "on"), 2), (F(), 3)]
+    fr += [(F(base).add(check, "hot"), ticks(HOLD, 0.1)), (F(base).add(check, "on"), 2), (F(), ticks(REST, 0.1))]
     rec("verify-this", fr, 0.1, poster=-3)
 
 
@@ -680,7 +682,7 @@ def full_send():
     fr += sparks(state, [merge], 4)
     fr.append((F(state).add(box(22, 17) + [(22, 17)], "hot"), 3))
     fr += [(F(state).add(box(22, 17), "on").add([(c, 17)], "hot").add([(c - 1, 17)], "on"), 1) for c in dict.fromkeys(1 + round(19 * EASE_IN_OUT(i / 9)) for i in range(10))]
-    fr += [(F(state).add(box(22, 17) + main, "on"), 8), (F(base), 3)]  # the comet along main already said done
+    fr += [(F(state).add(box(22, 17) + main, "on"), ticks(HOLD, 0.1)), (F(base), ticks(REST, 0.1))]  # the comet along main already said done
     rec("full-send", fr, 0.1, poster=-2)
 
 
@@ -711,7 +713,7 @@ def babysit_pr():
     fr += [frame(k, ["pass", "fail", "pass"]) for k in range(6)]
     fr += [frame(k, ["pass", "spin", "pass"]) for k in range(10)]
     done = frame(0, ["pass"] * 3)[0]
-    fr += [(F(done).add(sum((passed(r) for r in rows), []), "hot"), 3), (done, 10), (F(base), 3)]
+    fr += [(F(done).add(sum((passed(r) for r in rows), []), "hot"), 3), (done, ticks(HOLD, 0.1)), (F(base), ticks(REST, 0.1))]
     rec("babysit-pr", fr, 0.1, poster=-2)
 
 
@@ -730,7 +732,7 @@ def writing_for_agents():
     fr.append((F(opened).add(doc, "hot"), 2))
     fr += sweep(len(body), 0.6, 0.12, EASE_OUT, lambda a, b: F(opened).add(sum(body[:a], []), "on").add(sum(body[a:b], []), "hot"))
     opened.add(sum(body, []), "on")
-    fr += [(opened, 12), (F(base), 3)]
+    fr += [(opened, ticks(HOLD, 0.12)), (F(base), ticks(REST, 0.12))]
     rec("writing-for-agents", fr, 0.12, poster=-2)
 
 
@@ -757,7 +759,7 @@ def unslop():
     full = F().add(plain + slop, "on")
     fr = [(full, 8)]
     fr += pulse(F().add(plain, "on"), slop, 0.11)
-    fr += [(F().add(plain, "on"), 4), (F().add(tight, "hot"), 2), (F().add(tight, "on"), 14), (F(), 3)]
+    fr += [(F().add(plain, "on"), 4), (F().add(tight, "hot"), 2), (F().add(tight, "on"), ticks(HOLD, 0.11)), (F(), ticks(REST, 0.11))]
     rec("unslop", fr, 0.11, poster=-2)
 
 
@@ -772,7 +774,7 @@ def bro_frames():
     base = F().add(bubble, "on")
     fr = [(F(base).add(noise(0.5), "on").add(noise(0.08), "hot"), 1) for _ in range(12)]
     fr += [(F(base).add(noise(p), "dim"), 1) for p in (0.3, 0.15, 0.05)]
-    fr += [(F(base), 2), (F(base).add(plain, "hot"), 2), (F(base).add(plain, "on"), 14), (F(base), 2)]
+    fr += [(F(base), 2), (F(base).add(plain, "hot"), 2), (F(base).add(plain, "on"), ticks(HOLD, 0.12)), (F(base), ticks(REST, 0.12))]
     return fr
 
 
@@ -793,7 +795,7 @@ def show_me():
             pic.add(arrows[i - 1], "on")
         fr.append((F(pic).add(b, "hot"), 2))
         pic.add(b, "on")
-    fr = finer(fr, 3) + glint(pic, sum(boxes, []) + sum(arrows, []), 0.04) + [(pic, 36), (F(), 9)]
+    fr = finer(fr, 3) + glint(pic, sum(boxes, []) + sum(arrows, []), 0.04) + [(pic, ticks(HOLD, 0.04)), (F(), ticks(REST, 0.04))]
     rec("show-me", fr, 0.04, poster=-2)
 
 
