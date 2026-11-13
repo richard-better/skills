@@ -1,8 +1,8 @@
 """Generate the hill-climb and ui-climb figures as Excalidraw scenes.
 
-Usage: python3 assets/diagrams/climb.py
-Writes assets/hill-climb/{score-steps,round}.excalidraw and assets/ui-climb/round.excalidraw.
-Render each with diagram-rebuild's render.mjs (see assets/diagrams/README.md).
+Usage: python3 .assets/diagrams/climb.py
+Writes .assets/hill-climb/{score-steps,round}.excalidraw and .assets/ui-climb/round.excalidraw.
+Render each with diagram-rebuild's render.mjs (see .assets/diagrams/README.md).
 """
 
 import json
@@ -101,7 +101,7 @@ class Scene:
 
     def save(self, path, bg=BG):
         path.parent.mkdir(parents=True, exist_ok=True)
-        scene = {"type": "excalidraw", "version": 2, "source": "assets/diagrams/climb.py",
+        scene = {"type": "excalidraw", "version": 2, "source": ".assets/diagrams/climb.py",
                  "elements": self.els, "appState": {"viewBackgroundColor": bg}, "files": {}}
         path.write_text(json.dumps(scene, indent=1) + "\n")
         print(f"wrote {path.relative_to(ROOT.parent)}")

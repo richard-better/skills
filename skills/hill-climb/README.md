@@ -4,7 +4,7 @@ Pushes one measured number (bundle size, response time, eval pass rate) toward a
 round builds competing candidates in parallel and keeps one only when it beats the best by more
 than the noise floor.
 
-![The best score moves in steps](../../assets/hill-climb/score-steps.png)
+![The best score moves in steps](../../.assets/hill-climb/score-steps.png)
 
 ## How it works
 
@@ -12,7 +12,7 @@ A climb needs two things before the first change: a command that prints the numb
 concrete target. The best score then moves in rungs. Changes inside the noise floor are reverted,
 plateaus trigger a contest round with bigger approaches, and a holdout catches overfitting.
 
-![One round of a climb](../../assets/hill-climb/round.png)
+![One round of a climb](../../.assets/hill-climb/round.png)
 
 Every candidate gets a row in the ledger with its verdict, kept or reverted, so no idea is tried
 twice.

@@ -3,7 +3,7 @@
 Bulk-delete apps from your iPhone with an agent. It lists every app on a phone paired with
 your Mac, builds a checklist page with App Store icons, and uninstalls whatever you tick.
 
-![Checklist page](../../assets/ios-app-cleanup/checklist.png)
+![Checklist page](../../.assets/ios-app-cleanup/checklist.png)
 
 ## How it works
 

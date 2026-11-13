@@ -1,8 +1,8 @@
 """Generate the council, council-debate, outer-loop-t3 and diagram-rebuild figures as Excalidraw scenes.
 
-Usage: python3 assets/diagrams/skills.py
-Writes assets/council/council.excalidraw, assets/council-debate/debate.excalidraw, assets/outer-loop-t3/loops.excalidraw and
-assets/diagram-rebuild/loop.excalidraw.
+Usage: python3 .assets/diagrams/skills.py
+Writes .assets/council/council.excalidraw, .assets/council-debate/debate.excalidraw, .assets/outer-loop-t3/loops.excalidraw and
+.assets/diagram-rebuild/loop.excalidraw.
 """
 
 import math

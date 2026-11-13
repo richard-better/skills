@@ -5,7 +5,7 @@ discharge letters and imaging reports, typed or scanned, in any language, become
 Markdown file each. Every lab result lands in a single `markers.csv` with a canonical name and
 LOINC code, so ferritin from three labs in two languages reads as one trend.
 
-![From PDFs to the records folder](../../assets/health-records/pipeline.png)
+![From PDFs to the records folder](../../.assets/health-records/pipeline.png)
 
 ## How it works
 

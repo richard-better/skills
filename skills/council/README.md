@@ -9,7 +9,7 @@ tstack. That version is built around code review; here the core works for any qu
 code review rules (fixes before the audit, scores out of 10, the fix loop, the PR table) live in
 [`references/code-review.md`](references/code-review.md), loaded only for a code or PR review.
 
-![Three labs answer the same brief on their own; the synthesis shows where they agree, where they disagree, and who raised what](../../assets/council/council.png)
+![Three labs answer the same brief on their own; the synthesis shows where they agree, where they disagree, and who raised what](../../.assets/council/council.png)
 
 ## How it works
 

@@ -4,7 +4,7 @@ Adds debate rounds to the [`council`](../council/) skill. After models from thre
 independently, each one reads the others' answers and rebuts them, so you end up with what is settled and what is really
 yours to decide.
 
-![Debate turns three independent answers into what is settled and what is yours to decide](../../assets/council-debate/debate.png)
+![Debate turns three independent answers into what is settled and what is yours to decide](../../.assets/council-debate/debate.png)
 
 ## How it works
 

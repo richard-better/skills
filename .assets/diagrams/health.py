@@ -1,8 +1,8 @@
 """Generate the health-records and health-differential figures as Excalidraw scenes.
 
-Usage: python3 assets/diagrams/health.py
-Writes assets/health-records/pipeline.excalidraw and assets/health-differential/panel.excalidraw.
-Render each to PNG as described in assets/diagrams/README.md.
+Usage: python3 .assets/diagrams/health.py
+Writes .assets/health-records/pipeline.excalidraw and .assets/health-differential/panel.excalidraw.
+Render each to PNG as described in .assets/diagrams/README.md.
 """
 
 import json
@@ -102,7 +102,7 @@ class Scene:
 
     def save(self, path: Path):
         path.parent.mkdir(parents=True, exist_ok=True)
-        scene = {"type": "excalidraw", "version": 2, "source": "assets/diagrams/health.py",
+        scene = {"type": "excalidraw", "version": 2, "source": ".assets/diagrams/health.py",
                  "elements": self.els, "appState": {"viewBackgroundColor": BG}, "files": {}}
         path.write_text(json.dumps(scene, indent=1) + "\n")
         print(f"wrote {path.relative_to(ASSETS.parent)}")

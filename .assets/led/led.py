@@ -1,9 +1,9 @@
 """Draw the README's LED dot-matrix art: one animated icon per skill, the banner, and the
 social preview.
 
-Usage: python3 assets/led/led.py [--png]
-Writes assets/<skill>/icon.svg and assets/banner.svg. With --png it also draws the social preview
-and screenshots it to assets/social-preview.png with headless Chrome (set CHROME to its path if
+Usage: python3 .assets/led/led.py [--png]
+Writes .assets/<skill>/icon.svg and .assets/banner.svg. With --png it also draws the social preview
+and screenshots it to .assets/social-preview.png with headless Chrome (set CHROME to its path if
 it is not found).
 
 Every image is a board of dots. An animation is a list of (frame, ticks) pairs; a frame maps

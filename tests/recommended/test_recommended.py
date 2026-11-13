@@ -10,7 +10,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 PAGE = (ROOT / "RECOMMENDED.md").read_text()
-CARD = re.compile(r'<a href="https://github\.com/([^/]+/[^/]+)/tree/main/([^"]+)"><img src="\./assets/recommended/([^/]+)/icon\.svg"')
+CARD = re.compile(r'<a href="https://github\.com/([^/]+/[^/]+)/tree/main/([^"]+)"><img src="\./\.assets/recommended/([^/]+)/icon\.svg"')
 
 
 def cards():
@@ -38,7 +38,7 @@ def test_cards_link_to_the_installed_source():
 
 def test_every_card_has_an_icon():
     for name in cards():
-        assert (ROOT / "assets" / "recommended" / name / "icon.svg").is_file(), name
+        assert (ROOT / ".assets" / "recommended" / name / "icon.svg").is_file(), name
 
 
 def test_readme_points_here():

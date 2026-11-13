@@ -4,7 +4,7 @@ A second look at your health records by a panel of models, modelled on Microsoft
 It looks for what the records have not already flagged: patterns across specialties,
 drift inside reference ranges, follow-ups that dropped, diagnoses that stalled.
 
-![Panel roles and rounds](../../assets/health-differential/panel.png)
+![Panel roles and rounds](../../.assets/health-differential/panel.png)
 
 ## How it works
 

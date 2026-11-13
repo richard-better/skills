@@ -5,7 +5,7 @@ longer have) into source you can edit: an Excalidraw scene, a
 [`diagram-design`](https://github.com/cathrynlavery/diagram-design) page, or both. Every label,
 arrow and annotation is kept word for word; the target style decides the look.
 
-![A fresh reviewer checks every round until the rebuild matches the original](../../assets/diagram-rebuild/loop.png)
+![A fresh reviewer checks every round until the rebuild matches the original](../../.assets/diagram-rebuild/loop.png)
 
 ## How it works
 

@@ -3,7 +3,7 @@
 Turns one T3 Code thread into the only conversation you need. It launches, unblocks and
 supervises your other threads, the workstreams, and brings you just the decisions that are yours.
 
-![One outer loop keeps several inner loops moving](../../assets/outer-loop-t3/loops.png)
+![One outer loop keeps several inner loops moving](../../.assets/outer-loop-t3/loops.png)
 
 ## How it works
 
