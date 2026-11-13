@@ -603,7 +603,7 @@ def thermo_frames():
     tangle = list(dict.fromkeys(tangle))
     fr = [(F().add(tangle, "on"), 8)]
     fr += pulse(F(), tangle, 0.1)
-    for rad in range(1, 18):
+    for rad in dict.fromkeys(max(1, round(17 * EASE_OUT(i / 12))) for i in range(1, 13)):  # the blast slows as it spreads
         f = F().add([p for p in tangle if math.dist(p, (12, 12)) > rad + 0.5], "on")
         fr.append((f.add(ring(12, 12, rad - 1), "on").add(ring(12, 12, rad), "hot"), 1))
     fr.append((F(), 4))
@@ -651,8 +651,7 @@ def verify_this():
     check = [(9, 21), (10, 22), (11, 23), (12, 22), (13, 21), (14, 20), (15, 19)]
     base, fr = F().add(panels, "on"), [(F().add(panels, "on"), 4)]
     for x, h in [(5, 12), (16, 4)]:
-        for k in range(1, h + 1):
-            fr.append((F(base).add(bar(x, k), "hot"), 1))
+        fr += sweep(h, 0.07 * h, 0.1, EASE_OUT, lambda a, b: F(base).add(bar(x, b), "hot"))
         base.add(bar(x, h), "on")
         fr.append((F(base), 3))
     fr += pulse(base, hl(12, 3, 21), 0.1)
@@ -680,7 +679,7 @@ def full_send():
     state.add(commits, "hot")
     fr += sparks(state, [merge], 4)
     fr.append((F(state).add(box(22, 17) + [(22, 17)], "hot"), 3))
-    fr += [(F(state).add(box(22, 17), "on").add([(c, 17)], "hot").add([(c - 1, 17)], "on"), 1) for c in range(1, 21, 2)]
+    fr += [(F(state).add(box(22, 17), "on").add([(c, 17)], "hot").add([(c - 1, 17)], "on"), 1) for c in dict.fromkeys(1 + round(19 * EASE_IN_OUT(i / 9)) for i in range(10))]
     fr += [(F(state).add(box(22, 17) + main, "on"), 8), (F(base), 3)]  # the comet along main already said done
     rec("full-send", fr, 0.1, poster=-2)
 
@@ -729,9 +728,8 @@ def writing_for_agents():
     fr += sparks(F(base).add(pointer, "hot"), [hl(13, 8, 13)], 4)
     opened = F(base).add(pointer + arrow, "on").add(doc, "on")
     fr.append((F(opened).add(doc, "hot"), 2))
-    for b in body:
-        fr.append((F(opened).add(b, "hot"), 1))
-        opened.add(b, "on")
+    fr += sweep(len(body), 0.6, 0.12, EASE_OUT, lambda a, b: F(opened).add(sum(body[:a], []), "on").add(sum(body[a:b], []), "hot"))
+    opened.add(sum(body, []), "on")
     fr += [(opened, 12), (F(base), 3)]
     rec("writing-for-agents", fr, 0.12, poster=-2)
 
@@ -807,7 +805,7 @@ def diagram_design():
     for k in range(1, 5):
         f = F().add(axes, "on")
         for x, h in bars:
-            f.add(fill(x, 21 - round(h * k / 4), x + 1, 20), "hot" if k == 4 else "on")
+            f.add(fill(x, 21 - round(h * EASE_OUT(k / 4)), x + 1, 20), "hot" if k == 4 else "on")
         fr.append((f, 1 if k < 4 else 2))
     done = F().add(axes, "on").add(sum((fill(x, 21 - h, x + 1, 20) for x, h in bars), []), "on")
     fr += [(done, 8), (F(), 2)]
@@ -817,7 +815,7 @@ def diagram_design():
     for k in range(1, 7):
         f = F()
         for p in donut:
-            if turn(p) < k / 6:
+            if turn(p) < EASE_OUT(k / 6):
                 f.add([p], shade(turn(p)))
         fr.append((f, 1))
     fr += [(fr[-1][0], 8), (F(), 2)]
