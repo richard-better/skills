@@ -170,6 +170,33 @@ def sparks(base, paths, n):
     return [(base.copy().add([at(p, inout(i / (n - 1))) for p in paths], "hot"), 1) for i in range(n)]
 
 
+# ---------- motion ----------
+
+def bezier(x1, y1, x2, y2):
+    """A CSS cubic-bezier(x1, y1, x2, y2) easing as a function of progress."""
+    at = lambda t, p1, p2: 3 * (1 - t) ** 2 * t * p1 + 3 * (1 - t) * t * t * p2 + t ** 3
+
+    def ease(x):
+        lo, hi = 0.0, 1.0
+        for _ in range(40):
+            mid = (lo + hi) / 2
+            lo, hi = (mid, hi) if at(mid, x1, x2) < x else (lo, mid)
+        return at((lo + hi) / 2, y1, y2)
+    return ease
+
+
+EASE_OUT = bezier(0.23, 1, 0.32, 1)  # entering and exiting
+EASE_IN_OUT = bezier(0.77, 0, 0.175, 1)  # moving on screen
+EASE_DRAWER = bezier(0.32, 0.72, 0, 1)  # iOS-like sheet
+
+
+def spring(t, duration=0.5, bounce=0.2):
+    """Progress 0 -> 1 of a spring set like Motion's { duration, bounce }, at t seconds."""
+    zeta, w = 1 - bounce, 2 * math.pi / duration
+    wd = w * math.sqrt(1 - zeta * zeta)
+    return 1 - math.exp(-zeta * w * t) * (math.cos(wd * t) + zeta * w / wd * math.sin(wd * t))
+
+
 # ---------- motifs shared by icons, banner and social preview ----------
 
 def debate(cols, cy, d):
@@ -763,31 +790,6 @@ def diagram_design():
         f.add(part, "on")
     fr += [(f, 8), (F(), 2)]
     rec("diagram-design", fr, 0.12, poster=4)
-
-
-def bezier(x1, y1, x2, y2):
-    """A CSS cubic-bezier(x1, y1, x2, y2) easing as a function of progress."""
-    at = lambda t, p1, p2: 3 * (1 - t) ** 2 * t * p1 + 3 * (1 - t) * t * t * p2 + t ** 3
-
-    def ease(x):
-        lo, hi = 0.0, 1.0
-        for _ in range(40):
-            mid = (lo + hi) / 2
-            lo, hi = (mid, hi) if at(mid, x1, x2) < x else (lo, mid)
-        return at((lo + hi) / 2, y1, y2)
-    return ease
-
-
-EASE_OUT = bezier(0.23, 1, 0.32, 1)  # entering and exiting
-EASE_IN_OUT = bezier(0.77, 0, 0.175, 1)  # moving on screen
-EASE_DRAWER = bezier(0.32, 0.72, 0, 1)  # iOS-like sheet
-
-
-def spring(t, duration=0.5, bounce=0.2):
-    """Progress 0 -> 1 of a spring set like Motion's { duration, bounce }, at t seconds."""
-    zeta, w = 1 - bounce, 2 * math.pi / duration
-    wd = w * math.sqrt(1 - zeta * zeta)
-    return 1 - math.exp(-zeta * w * t) * (math.cos(wd * t) + zeta * w / wd * math.sin(wd * t))
 
 
 def emil_design_eng():
