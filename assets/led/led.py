@@ -171,6 +171,9 @@ def sparks(base, paths, n):
 
 
 # ---------- motion ----------
+# Shared timing, after Emil Kowalski's animation rules: one accent per beat and no blinking,
+# eased reveals rather than constant-speed ones, and a glint rather than a whole-mark flash to
+# say "done". The phosphor afterglow (DECAY on GLOW) is each frame's exit.
 
 def bezier(x1, y1, x2, y2):
     """A CSS cubic-bezier(x1, y1, x2, y2) easing as a function of progress."""
@@ -197,9 +200,22 @@ def spring(t, duration=0.5, bounce=0.2):
     return 1 - math.exp(-zeta * w * t) * (math.cos(wd * t) + zeta * w / wd * math.sin(wd * t))
 
 
+PULSE = 0.24  # seconds a single accent stays hot
+GLINT = 0.6  # seconds one glint takes to cross a mark
+
+
+def ticks(seconds, step):
+    return max(1, round(seconds / step))
+
+
+def pulse(base, cells, step):
+    """One accent: the cells go hot once, for PULSE seconds."""
+    return [(F(base).add(cells, "hot"), ticks(PULSE, step))]
+
+
 # ---------- motifs shared by icons, banner and social preview ----------
 
-def debate(cols, cy, d):
+def debate(cols, cy, d, step=0.15):
     """One -> three -> one -> three -> one, hubs on row cy and models d rows above and below."""
     rows = [cy - d, cy, cy + d]
     hubs = [(cols[0], cy), (cols[2], cy), (cols[4], cy)]
@@ -221,14 +237,14 @@ def debate(cols, cy, d):
     fr = [(base.copy().add(box(*hubs[0]) + [hubs[0]], "hot"), 2)]
     for pin, mids, pout, hub in [(p1, m1, q1, hubs[1]), (p2, m2, q2, hubs[2])]:
         fr += sparks(base, pin, 6)
-        fr += [(base.copy().add(mids, "hot" if k % 2 == 0 else "on"), 1) for k in range(3)]
+        fr += pulse(base, mids, step)
         fr += sparks(base, pout, 6)
         fr.append((base.copy().add(box(*hub) + [hub], "hot"), 2 if hub == hubs[1] else 9))
     fr.append((base, 4))
     return fr
 
 
-def climb(ox, oy):
+def climb(ox, oy, step=0.1):
     """Five steps and a flag; a 2x2 square lands, steps and hops to the top."""
     stairs, pos = [], []
     for k in range(5):
@@ -244,7 +260,7 @@ def climb(ox, oy):
     for i, p in enumerate(pos):
         landing = i == 0 or pos[i][1] != pos[i - 1][1]
         fr.append((base.copy().add(sq(p), "hot"), 3 if landing else 2))
-    fr += [(base.copy().add(sq(pos[-1]), "hot").add(flag, "hot" if k % 2 == 0 else "on"), 2) for k in range(4)]
+    fr += pulse(base.copy().add(sq(pos[-1]), "hot"), flag, step)
     fr += [(base.copy().add(sq(pos[-1]), "hot"), 6), (base, 4)]
     return fr
 
@@ -274,7 +290,7 @@ def council():
     base = F().add(sum(pin + pout, []), "dim").add(box(*src) + box(*dst) + sum((box(*m) for m in mids), []), "on")
     fr = [(base.copy().add(box(*src) + [src], "hot"), 2)]
     fr += sparks(base, pin, 6)
-    fr += [(base.copy().add(mids, "hot" if k % 2 == 0 else "on"), 1) for k in range(3)]
+    fr += pulse(base, mids, 0.16)
     fr += sparks(base, pout, 6)
     fr += [(base.copy().add(box(*dst) + [dst], "hot"), 9), (base, 4)]
     icon("council", fr, 0.16, poster=-2)
@@ -367,13 +383,9 @@ def health_differential():
             [(15, r)] + (vl(16, r, 12) if r < 12 else vl(16, 12, r)[::-1]) + [(17, 12), (18, 12)] for r in roles]
     base = (F().add(sum(pin + pout, []), "dim").add(heart, "on").add(sum((role(r) for r in roles), []), "on")
             .add(sum((trio(r) for r in roles), []), "dim").add(cross, "on"))
-    fr = [(base.copy().add(heart, "hot"), 1), (base, 1), (base.copy().add(heart, "hot"), 2)]
+    fr = pulse(base, heart, 0.17)
     fr += sparks(base, pin, 5)
-    for k in range(6):
-        f = base.copy()
-        for r in roles:
-            f.add([trio(r)[(k + r) % 3]], "hot")
-        fr.append((f, 1))
+    fr += pulse(base, sum((trio(r) for r in roles), []), 0.17)
     fr += sparks(base, pout, 5)
     fr += [(base.copy().add(cross, "hot"), 9), (base, 4)]
     icon("health-differential", fr, 0.17, poster=-2)
@@ -393,11 +405,7 @@ def ios_app_cleanup():
         return f
 
     fr = [(apps(slots), 8)]
-    for k in range(4):
-        f = apps(slots)
-        for i in remove:
-            f.add(tile(slots[i]), "hot" if k % 2 == 0 else "dim")
-        fr.append((f, 2))
+    fr += pulse(apps(slots), sum((tile(slots[i]) for i in remove), []), 0.08)
     pos = [slots[i] for i in keep]
     fr.append((apps(pos), 6))
     for j in range(len(keep)):  # survivors slide into place one at a time
@@ -477,8 +485,7 @@ def skillsfile():
     fr.append((frame((patch(17), "hot")), 3))  # your own edit to one skill
     state.add(patch(17), "on")
     fr.append((frame(), 10))
-    for k in range(3):  # upstream moves
-        fr.append((frame((commit(17), "hot" if k % 2 == 0 else "on")), 2))
+    fr.append((frame((commit(17), "hot")), ticks(PULSE, 0.1)))  # upstream moves
     fr += travel([feed(17)])
     fr.append((frame((lock(17), "hot"), (entry(17), "hot")), 3))  # re-pinned to the new commit
     fr += travel([out(17)])
@@ -514,7 +521,7 @@ def grilling():
             done = F(done).add(sum(paths, []), "dim")
             fr += sparks(done, paths, 5)
         boxes = sum((box(*n) for n in nodes), [])
-        fr += [(F(done).add(boxes, "hot" if k % 2 == 0 else "dim"), 1) for k in range(5)]
+        fr += pulse(done, boxes, 0.14)
         done.add(boxes, "on").add(nodes, "hot")
         fr.append((F(done), 4))
     fr += [(F(done).add(sum((box(*n) for n in sum(lv, [])), []), "hot"), 8), (F(), 3)]
@@ -562,7 +569,7 @@ def thermo_frames():
         tangle += vl(c, r, r + rng.randint(2, 4))
     tangle = list(dict.fromkeys(tangle))
     fr = [(F().add(tangle, "on"), 8)]
-    fr += [(F().add(tangle, "on" if k % 2 else "hot"), 1) for k in range(4)]
+    fr += pulse(F(), tangle, 0.1)
     for rad in range(1, 18):
         f = F().add([p for p in tangle if math.dist(p, (12, 12)) > rad + 0.5], "on")
         fr.append((f.add(ring(12, 12, rad - 1), "on").add(ring(12, 12, rad), "hot"), 1))
@@ -597,7 +604,7 @@ def sol_loop():
         f0 = F(base).add(pips(count), "on")
         fr += [(F(f0).add(diff, "hot"), 2)]
         fr += sparks(f0, [up], 6)
-        fr += [(F(f0).add(sun, "hot" if k % 2 == 0 else "on"), 1) for k in range(3)]
+        fr += pulse(f0, sun, 0.11)
         fr += sparks(f0, [down], 6)
         fr.append((F(base).add(pips(n), "hot"), 3))
         count = n
@@ -616,7 +623,7 @@ def verify_this():
             fr.append((F(base).add(bar(x, k), "hot"), 1))
         base.add(bar(x, h), "on")
         fr.append((F(base), 3))
-    fr += [(F(base).add(hl(12, 3, 21), "hot" if k % 2 == 0 else "dim"), 1) for k in range(4)]
+    fr += pulse(base, hl(12, 3, 21), 0.1)
     fr += [(F(base).add(check, "hot"), 12), (F(base).add(check, "on"), 2), (F(), 3)]
     rec("verify-this", fr, 0.1, poster=-3)
 
@@ -637,7 +644,7 @@ def full_send():
             fr += sparks(state, [links[i - 1]], 3)
         fr.append((F(state).add(box(*c) + [c], "hot"), 2))
         state.add(box(*c), "on")
-    fr += [(F(state).add(sum((box(*c) for c in commits), []), "hot" if k % 2 == 0 else "dim"), 1) for k in range(6)]
+    fr += pulse(state, sum((box(*c) for c in commits), []), 0.1)
     state.add(commits, "hot")
     fr += sparks(state, [merge], 4)
     fr.append((F(state).add(box(22, 17) + [(22, 17)], "hot"), 3))
@@ -664,7 +671,7 @@ def babysit_pr():
             elif s == "pass":
                 f.add(passed(r), "on")
             else:
-                f.add(failed(r), "hot" if k % 2 == 0 else "dim")
+                f.add(failed(r), "hot")
         return (f, 1)
 
     fr = [frame(k, ["spin"] * 3) for k in range(10)]
@@ -686,7 +693,7 @@ def writing_for_agents():
     body = [hl(6, 16, 20)] + [hl(r, 16, 16 + n) for r, n in zip([9, 11, 13, 15, 17, 19], [4, 3, 4, 2, 4, 3])]
     base = F().add(sum(ctx, []), "on").add(arrow, "dim").add(doc, "dim")
     fr = [(F(base), 6)]
-    fr += [(F(base).add(pointer, "hot" if k % 2 == 0 else "on"), 1) for k in range(4)]
+    fr += pulse(base, pointer, 0.12)
     fr += sparks(F(base).add(pointer, "hot"), [hl(13, 8, 13)], 4)
     opened = F(base).add(pointer + arrow, "on").add(doc, "on")
     fr.append((F(opened).add(doc, "hot"), 2))
@@ -719,7 +726,7 @@ def unslop():
     tight, _ = words(False)
     full = F().add(plain + slop, "on")
     fr = [(full, 8)]
-    fr += [(F().add(plain, "on").add(slop, "hot" if k % 2 == 0 else "dim"), 1) for k in range(6)]
+    fr += pulse(F().add(plain, "on"), slop, 0.11)
     fr += [(F().add(plain, "on"), 4), (F().add(tight, "hot"), 2), (F().add(tight, "on"), 14), (F(), 3)]
     rec("unslop", fr, 0.11, poster=-2)
 
