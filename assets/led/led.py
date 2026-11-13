@@ -105,7 +105,7 @@ def board(cols, rows, layers=(), static=None, S=ICON_S, rad=ICON_R, rx=30, scale
 def icon(skill, frames, step, poster=-1, palette="amber", folder=""):
     path = ROOT / folder / skill / "icon.svg"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(board(ICON, ICON, [("f", frames, step, poster)], palette=palette))
+    path.write_text(board(ICON, ICON, [("f", frames, step, poster)], label=skill, palette=palette))
     print(f"wrote {path.relative_to(ROOT.parent)}")
 
 
