@@ -213,6 +213,35 @@ def pulse(base, cells, step):
     return [(F(base).add(cells, "hot"), ticks(PULSE, step))]
 
 
+def finer(frames, k):
+    """The same frames on a clock k times faster, so a glint can be added at that resolution."""
+    return [(f, h * k) for f, h in frames]
+
+
+def bands(cells, key):
+    """Cells grouped by key, in key order."""
+    out = {}
+    for p in cells:
+        out.setdefault(key(p), []).append(p)
+    return [out[k] for k in sorted(out)]
+
+
+def sweep(n, seconds, step, ease, frame):
+    """One frame per tick of an eased pass through n items; frame(a, b) draws items a..b-1 as crossed."""
+    out, shown, total = [], 0, ticks(seconds, step)
+    for i in range(1, total + 1):
+        upto = round(ease(i / total) * n)
+        out.append((frame(shown, upto), 1))
+        shown = upto
+    return out
+
+
+def glint(full, cells, step, key=lambda p: p[0] - p[1]):
+    """One hot band crossing the cells on the strong ease-in-out: the way a finished mark says done."""
+    bs = bands(set(cells), key)
+    return sweep(len(bs), GLINT, step, EASE_IN_OUT, lambda a, b: F(full).add(sum(bs[a:b], []), "hot"))
+
+
 # ---------- motifs shared by icons, banner and social preview ----------
 
 def debate(cols, cy, d, step=0.15):
@@ -317,9 +346,10 @@ def ui_climb():
         fr += [(base.copy().add(full, "on").add(bar(n), "hot"), 1) for n in range(prev + 1, score + 1)]
         fr.append((base.copy().add(full, "on").add(bar(score), "on"), 8 if v != "ref" else 2))
         prev = score
-    fr.append((base.copy().add(win(chrome + versions["ref"]), "hot").add(hl(20, 7, 17), "hot"), 14))
-    fr.append((base.copy().add(win(chrome), "on"), 4))
-    icon("ui-climb", fr, 0.1, poster=-2)
+    full = base.copy().add(win(chrome + versions["ref"]) + hl(20, 7, 17), "on")
+    fr = finer(fr, 2) + glint(full, win(chrome + versions["ref"]) + hl(20, 7, 17), 0.05)
+    fr += [(full, 28), (base.copy().add(win(chrome), "on"), 8)]
+    icon("ui-climb", fr, 0.05, poster=-2)
 
 
 def diagram_rebuild():
@@ -337,8 +367,10 @@ def diagram_rebuild():
         b, e = graph(*g)
         fr += [(base.copy(), 1), (base.copy().add(shift(b, 13, 5), "on"), 1),
                (base.copy().add(shift(b + e, 13, 5), "on"), 4)]
-    fr += [(base.copy().add(shift(tb + te, 13, 5), "hot"), 7), (base, 2)]
-    icon("diagram-rebuild", fr, 0.2, poster=-2)
+    done = shift(tb + te, 13, 5)
+    full = base.copy().add(done, "on")
+    fr = finer(fr, 4) + glint(full, done, 0.05) + [(full, 28), (base, 8)]
+    icon("diagram-rebuild", fr, 0.05, poster=-2)
 
 
 def health_records():
@@ -361,13 +393,14 @@ def health_records():
         f = base.copy()
         f.update(done)
         fr.append((f.add(row(rows[i]), "hot"), 2))
-    f = base.copy()
-    f.update(done)
-    fr.append((f.add(row(rows[3]), "on").add(table, "hot"), 7))
+    full = base.copy()
+    full.update(done)
+    full.add(row(rows[3]), "on")
+    fr = finer(fr, 4) + glint(full, table + sum((row(y) for y in rows), []), 0.05) + [(full, 28)]
     empty = F().add(table, "on")
-    fr.append((empty, 2))
-    fr += [(F(empty).add(sum((doc(*d) for d in docs[:i]), []), "on"), 1) for i in range(1, 4)]
-    icon("health-records", fr, 0.2, poster=-5)
+    fr.append((empty, 8))
+    fr += [(F(empty).add(sum((doc(*d) for d in docs[:i]), []), "on"), 4) for i in range(1, 4)]
+    icon("health-records", fr, 0.05, poster=-5)
 
 
 def health_differential():
@@ -524,8 +557,8 @@ def grilling():
         fr += pulse(done, boxes, 0.14)
         done.add(boxes, "on").add(nodes, "hot")
         fr.append((F(done), 4))
-    fr += [(F(done).add(sum((box(*n) for n in sum(lv, [])), []), "hot"), 8), (F(), 3)]
-    rec("grilling", fr, 0.14, poster=-2)
+    fr = finer(fr, 3) + glint(done, list(done), 0.14 / 3) + [(F(done), 24), (F(), 9)]
+    rec("grilling", fr, 0.14 / 3, poster=-2)
 
 
 def improve():
@@ -549,8 +582,8 @@ def improve():
     for k, i in enumerate(flagged):
         fr.append((F(shown).add(items[k] + code[i] + [(1, rows[i])], "hot"), 3))
         shown.add(items[k], "on")
-    fr += [(F(shown).add(sum(items, []), "hot"), 8), (F(), 3)]
-    rec("improve", fr, 0.12, poster=-2)
+    fr = finer(fr, 3) + glint(shown, list(shown), 0.04) + [(shown, 24), (F(), 9)]
+    rec("improve", fr, 0.04, poster=-2)
 
 
 def thermo_frames():
@@ -582,12 +615,11 @@ def thermo_frames():
     for ln in lines:
         fr.append((F(clean).add(ln, "hot"), 2))
         clean.add(ln, "on")
-    fr += [(F(clean).add(small + sum(lines, []), "hot"), 2), (clean, 12), (F(), 3)]
-    return fr
+    return finer(fr, 2) + glint(clean, small + sum(lines, []), 0.05) + [(clean, 24), (F(), 6)]
 
 
 def thermo_nuclear():
-    rec("thermo-nuclear-code-quality-review", thermo_frames(), 0.1, poster=-2)
+    rec("thermo-nuclear-code-quality-review", thermo_frames(), 0.05, poster=-2)
 
 
 def sol_loop():
@@ -608,8 +640,8 @@ def sol_loop():
         fr += sparks(f0, [down], 6)
         fr.append((F(base).add(pips(n), "hot"), 3))
         count = n
-    fr += [(F(base).add(diff + sun, "hot"), 10), (F(base), 4)]
-    rec("sol-loop", fr, 0.11, poster=-2)
+    fr = finer(fr, 2) + glint(F(base), diff + sun, 0.055) + [(F(base), 28)]
+    rec("sol-loop", fr, 0.055)
 
 
 def verify_this():
@@ -649,7 +681,7 @@ def full_send():
     fr += sparks(state, [merge], 4)
     fr.append((F(state).add(box(22, 17) + [(22, 17)], "hot"), 3))
     fr += [(F(state).add(box(22, 17), "on").add([(c, 17)], "hot").add([(c - 1, 17)], "on"), 1) for c in range(1, 21, 2)]
-    fr += [(F(state).add(box(22, 17), "hot").add(main, "hot"), 8), (F(base), 3)]
+    fr += [(F(state).add(box(22, 17) + main, "on"), 8), (F(base), 3)]  # the comet along main already said done
     rec("full-send", fr, 0.1, poster=-2)
 
 
@@ -763,8 +795,8 @@ def show_me():
             pic.add(arrows[i - 1], "on")
         fr.append((F(pic).add(b, "hot"), 2))
         pic.add(b, "on")
-    fr += [(F(pic).add(sum(boxes, []) + sum(arrows, []), "hot"), 2), (pic, 12), (F(), 3)]
-    rec("show-me", fr, 0.12, poster=-2)
+    fr = finer(fr, 3) + glint(pic, sum(boxes, []) + sum(arrows, []), 0.04) + [(pic, 36), (F(), 9)]
+    rec("show-me", fr, 0.04, poster=-2)
 
 
 def diagram_design():
@@ -910,7 +942,7 @@ def recommended_banner():
     c0 = (C - w) // 2
     words = F().add(title(c0, 7, text), "on").add(hl(16, c0, c0 + w - 1), "dim")
     comet = [(F().add([(c, 16)], "hot").add([(c - 1, 16)], "on"), 1) for c in range(c0, c0 + w)] + [(F(), 30)]
-    layers = [("t", moved(thermo_frames(), 0, -2), 0.1, -2),
+    layers = [("t", moved(thermo_frames(), 0, -2), 0.05, -2),
               ("b", moved(bro_frames(), 101, -1), 0.12, -2),
               ("c", comet, 0.035, -1)]
     path = ROOT / "recommended" / "banner.svg"
