@@ -966,7 +966,7 @@ def social_preview():
     S, c0 = 1280 / C, (C - TW) // 2
     still = (F().add(title(c0, 8), "on").add(hl(17, c0, c0 + TW - 1), "dim")
              .add([(c0 + 44, 17)], "hot").add([(c0 + 43, 17), (c0 + 42, 17)], "on"))
-    still.update(freeze(debate([13, 18, 23, 28, 33], 31, 7), 29))  # sparks heading into the last merge
+    still.update(freeze(debate([13, 18, 23, 28, 33], 31, 7), 25))  # sparks heading into the last merge
     still.update(freeze(climb(60, 19), 7))
     still.update(freeze(orbit(48, 31, 9, [(48, 27), (52, 33), (44, 33)]), 2))
     screenshot(board(C, R, static=still, S=S, rad=S * 0.32, rx=0, scale=1, blur=2.8), ROOT / "social-preview.png", 1280, 640)
