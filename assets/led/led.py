@@ -159,6 +159,11 @@ def ring(cx, cy, rad):
     return [p for p, _ in sorted(pts.items(), key=lambda kv: kv[1])]
 
 
+def bitmap(rows, c0, r0):
+    """Cells marked X in rows of text, with the top-left at (c0, r0)."""
+    return [(c0 + c, r0 + r) for r, row in enumerate(rows) for c, x in enumerate(row) if x == "X"]
+
+
 def shift(cells, dc, dr):
     return [(c + dc, r + dr) for c, r in cells]
 
@@ -406,8 +411,7 @@ def health_records():
 
 
 def health_differential():
-    heart_rows = [".X.X.", "XXXXX", ".XXX.", "..X.."]
-    heart = [(2 + c, 10 + r) for r, s in enumerate(heart_rows) for c, ch in enumerate(s) if ch == "X"]
+    heart = bitmap([".X.X.", "XXXXX", ".XXX.", "..X.."], 2, 10)
     roles = [4, 12, 20]
     role = lambda r: rect(10, r - 2, 14, r + 2)
     trio = lambda r: [(11, r - 1), (13, r - 1), (12, r + 1)]
@@ -469,9 +473,8 @@ def label(text, cx, r0):
     width = sum(len(SMALL[ch][0]) + 1 for ch in text) - 1
     c, out = cx - width // 2, []
     for ch in text:
-        g = SMALL[ch]
-        out += [(c + x, r0 + y) for y, row in enumerate(g) for x, v in enumerate(row) if v == "X"]
-        c += len(g[0]) + 1
+        out += bitmap(SMALL[ch], c, r0)
+        c += len(SMALL[ch][0]) + 1
     return out
 
 
@@ -915,8 +918,7 @@ TW = len(TITLE) * 6 - 1
 
 
 def title(c0, r0, text=TITLE):
-    return [(c0 + i * 6 + c, r0 + r) for i, ch in enumerate(text)
-            for r, row in enumerate(GLYPH[ch]) for c, x in enumerate(row) if x == "X"]
+    return sum((bitmap(GLYPH[ch], c0 + i * 6, r0) for i, ch in enumerate(text)), [])
 
 
 def banner():
