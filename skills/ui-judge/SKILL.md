@@ -20,7 +20,8 @@ replace.
 
 Take the taste and the rubric each from the first of these that has one:
 
-1. **This run**: a file or values the user gives in the request.
+1. **This run**: a file or values the user gives in the request, or a taste shipped beside the
+   default that the request names: [Richard's](references/richard-taste.md).
 2. **The project**: a path the repository's `AGENTS.md` or `CLAUDE.md` names, else
    `docs/ui-taste.md` and `docs/ui-rubric.md`.
 3. **The user**: a path their agent instructions name.
