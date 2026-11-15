@@ -11,7 +11,7 @@ best in T3 Code.
 
 <table>
 <tr>
-<td width="34%" valign="top" rowspan="5">
+<td width="34%" valign="top" rowspan="7">
 <code>01</code>
 <h3>For work</h3>
 Ask several models at once, and let agents grind toward a goal you can measure.
@@ -45,13 +45,22 @@ Push a measured number toward a target, keeping only real wins<br>Say <em>"hill 
 <td width="33%" valign="top">
 <a href="./skills/ui-climb/"><img src="./.assets/ui-climb/icon.svg" alt="ui-climb icon"></a>
 <br><a href="./skills/ui-climb/"><strong><code>ui-climb</code></strong></a><br>
-Climb a screen's design, scored by a blind council of models<br>Say <em>"UI climb"</em>
+Climb a screen's design, scored by <code>ui-judge</code><br>Say <em>"UI climb"</em>
 </td>
+<td width="33%" valign="top">
+<a href="./skills/ui-judge/"><img src="./.assets/ui-judge/icon.svg" alt="ui-judge icon"></a>
+<br><a href="./skills/ui-judge/"><strong><code>ui-judge</code></strong></a><br>
+Score screenshots with a blind panel of models from different labs, against your own taste file<br>Say <em>"judge this UI"</em>
+</td>
+</tr>
+<tr></tr>
+<tr>
 <td width="33%" valign="top">
 <a href="./skills/diagram-rebuild/"><img src="./.assets/diagram-rebuild/icon.svg" alt="diagram-rebuild icon"></a>
 <br><a href="./skills/diagram-rebuild/"><strong><code>diagram-rebuild</code></strong></a><br>
 Turn a diagram that exists only as an image into editable Excalidraw or <a href="https://github.com/cathrynlavery/diagram-design"><code>diagram-design</code></a> source, checked by a fresh reviewer each round<br>Say <em>"rebuild this diagram"</em>
 </td>
+<td width="33%"></td>
 </tr>
 </table>
 
@@ -100,14 +109,15 @@ Bulk-uninstall apps from a paired iPhone, picked from a checklist page with App 
 | council | ⭐ Recommended | 🌐 Three | - | Any |
 | council-debate | 🔒 Required | 🌐 Three | `council` | Any |
 | hill-climb | ⭐ Recommended | One | - | Any |
-| ui-climb | ⭐ Recommended | 🌐 Two or more | `hill-climb` | Playwright for web, simulator tooling for native |
+| ui-climb | ⭐ Recommended | 🌐 Two or more | `hill-climb`, `ui-judge` | Playwright for web, simulator tooling for native |
+| ui-judge | ⭐ Recommended | 🌐 Two or more | - | `python3` |
 | diagram-rebuild | ⭐ Recommended | One | [`diagram-design`](https://github.com/cathrynlavery/diagram-design) from cathrynlavery/diagram-design, for its `dd` track | `node`, `npm` and `python3`; its setup installs Playwright with Chromium, Excalidraw, React and esbuild into `~/.cache/diagram-rebuild` |
 | health-records | Not used | One that reads PDFs, or at least images | - | [`uv`](https://docs.astral.sh/uv/) |
 | health-differential | ⭐ Recommended | 🌐 Three | `health-records`, `council` | [`uv`](https://docs.astral.sh/uv/) |
 | ios-app-cleanup | Not used | One | - | macOS with Xcode, `python3`, `curl`, and an iPhone paired with Developer Mode on |
 
 - 🔒 **Required**: the skill calls T3 Code's tools (`delegate_task`, `t3_thread_launch`, `t3_thread_read`, `t3_thread_send`, `schedule_task`) and does not run without them.
-- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `council`, and `health-differential` through it, run members with subagents or the labs' CLIs. `ui-climb` can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts. `diagram-rebuild` builds alone without subagents and runs its reviews through those CLIs.
+- ⭐ **Recommended**: the skill uses T3 Code's tools when they are there and falls back to other harnesses. `hill-climb` builds candidates with Claude Code's `Agent`, another harness's subagents, or one at a time. `council`, and `health-differential` through it, run members with subagents or the labs' CLIs. `ui-judge`, and `ui-climb` through it, can score with lab CLIs (`codex exec`, `claude -p`, `gemini -p`) or API scripts. `diagram-rebuild` builds alone without subagents and runs its reviews through those CLIs.
 - 🌐 **Providers**: models from different labs share fewer defaults, so the skill needs access to models from that many providers. `council` reports a missing provider instead of substituting another model.
 
 </details>
@@ -131,6 +141,7 @@ skills:
   council-debate: richard-better/agent-skills
   hill-climb: richard-better/agent-skills
   ui-climb: richard-better/agent-skills
+  ui-judge: richard-better/agent-skills
   health-records: richard-better/agent-skills
   health-differential: richard-better/agent-skills
   diagram-design: cathrynlavery/diagram-design
@@ -153,12 +164,13 @@ npx skills add richard-better/agent-skills --skill council
 
 Add `-g` to install globally instead of into the current project, and `-a <agent>` to target a specific agent (e.g. `claude-code`, `codex`).
 
-Install a skill's dependencies too: `ui-climb` with `hill-climb`, `health-differential` with
+Install a skill's dependencies too: `ui-climb` with `hill-climb` and `ui-judge`, `health-differential` with
 `health-records` and `council`, `council-debate` with `council`, and `diagram-rebuild` with `diagram-design`:
 
 ```bash
 npx skills add richard-better/agent-skills --skill hill-climb
 npx skills add richard-better/agent-skills --skill ui-climb
+npx skills add richard-better/agent-skills --skill ui-judge
 npx skills add richard-better/agent-skills --skill council
 npx skills add richard-better/agent-skills --skill council-debate
 npx skills add richard-better/agent-skills --skill health-records

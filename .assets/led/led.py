@@ -359,6 +359,29 @@ def ui_climb():
     icon("ui-climb", fr, 0.05, poster=-2)
 
 
+def ui_judge():
+    """Three reviewers look at one screen, raise their scores, and the median says done."""
+    step = 0.05
+    screen = rect(6, 1, 18, 9) + hl(3, 6, 18) + [(8, 2), (10, 2)] + fill(8, 5, 10, 7) + hl(5, 12, 16) + hl(7, 12, 14)
+    judges = [(5, 13), (12, 13), (19, 13)]
+    looks = [line((12, 10), (j[0], 11)) for j in judges]
+    scores = [5, 8, 6]
+    bar = lambda j, n: fill(j[0], 24 - n, j[0] + 1, 23) if n else []
+    bars = lambda n: sum((bar(j, min(n, s)) for j, s in zip(judges, scores)), [])
+    base = F().add(screen, "on").add(sum((box(*j) for j in judges), []), "on").add(sum(looks, []), "dim")
+    fr = pulse(base, screen, step)
+    fr += sparks(base, looks, 10)
+    fr += sweep(max(scores), 0.6, step, EASE_OUT,
+                lambda a, b: F(base).add(bars(b), "on").add([c for c in bars(b) if c not in bars(a)], "hot"))
+    full = F(base).add(bars(max(scores)), "on")
+    median = judges[scores.index(sorted(scores)[1])]
+    mark = box(*median) + [median] + bar(median, sorted(scores)[1])
+    fr += [(full, ticks(0.3, step))] + pulse(full, mark, step)
+    fr += glint(full, mark, step, key=lambda p: -p[1])
+    fr += [(full, ticks(HOLD, step)), (base, ticks(REST, step))]
+    icon("ui-judge", fr, step, poster=-2)
+
+
 def diagram_rebuild():
     def graph(A, B, C):
         nodes = [A, B, C]
@@ -994,6 +1017,7 @@ if __name__ == "__main__":
     icon("outer-loop-t3", orbit(12, 12, 10, [(12, 8), (16, 14), (8, 14)]), 0.3)
     icon("hill-climb", climb(0, 0), 0.1, poster=-2)
     ui_climb()
+    ui_judge()
     diagram_rebuild()
     health_records()
     health_differential()
