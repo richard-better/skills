@@ -1,8 +1,8 @@
 # UI climb
 
-A [hill climb](../hill-climb/) on how a screen looks. No program can score that, so a blind
-council of models from different labs scores screenshots against reference apps, and you check
-before-and-after pages along the way.
+A [hill climb](../hill-climb/) on how a screen looks. No program can score that, so
+[`ui-judge`](../ui-judge/)'s blind panel of models from different labs scores screenshots
+against reference apps and your taste file, and you check before-and-after pages along the way.
 
 The main inspiration is [Theo's thread](https://x.com/theo/status/2114280056784921048) on how he
 hill-climbs UI with a council of models.
@@ -12,12 +12,12 @@ hill-climbs UI with a council of models.
 ## How it works
 
 The round is the same as in `hill-climb`; only the scorer changes. Screenshots of the product
-and the references go to the scoring council, which rates them blind against a rubric. Whatever
+and the references go to `ui-judge`'s panel, which rates them blind against a rubric. Whatever
 a program can measure (contrast, clipped text, tap counts) stays a measured guard. Fixtures use
 the real screens with realistic data, so weak sample content does not read as weak design.
 
 ## Use it
 
-Install `hill-climb` too, then say "UI climb". It needs models from two or more providers, and
+Install `hill-climb` and `ui-judge` too, then say "UI climb". It needs models from two or more providers, and
 Playwright for web or simulator tooling for native apps; see
 [what each skill needs](../../README.md#skills).

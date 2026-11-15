@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score a UI climb round from its council reviews.
+"""Score a ui-judge round from its panel reviews.
 
 Usage: score.py <round-dir> [--prev <round-dir>] [--frozen <baseline-round-dir>]
 
@@ -8,7 +8,7 @@ Reads every `review-<repeat>-<Reviewer>.md` in the round directory, parses each 
 `labels.json` ({"A": "product", "B": "<reference>", ...}), and prints one Markdown table per
 row group:
 
-- general: the median of the general rubric rows, the climb's target score
+- general: the median of the general rubric rows, the headline score
 - case:<name>: each owner's case, reported apart
 - veto:<name>: the veto row, reported apart
 

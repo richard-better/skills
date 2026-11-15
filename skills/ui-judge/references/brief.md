@@ -12,9 +12,9 @@ round, and write the key to `rounds/<n>/labels.json`:
 { "A": "reference-1", "B": "product", "C": "reference-2" }
 ```
 
-Which subjects are scored depends on the round, as in [council.md](council.md#frozen-references):
+Which subjects are scored depends on the round, as in [panel.md](panel.md#frozen-references):
 
-- **Baseline**: the product and every reference. Use `product` for the climb's own screens and
+- **Baseline**: the product and every reference. Use `product` for the screens being judged and
   the reference folder names for the rest.
 - **Later rounds**: the product only. References still appear, under "Reference shots", as the
   bar for craft, with no label and no score.
@@ -39,7 +39,8 @@ review file named in your task.
 
 Judge within these settled values; never ask to undo them:
 
-- <Owner decisions and taste from judge-context.md>
+- <Settled decisions from judge-context.md>
+- <Values from the taste file that bear on this screen, as written there>
 
 Known capture artifacts, not product bugs: <list, or "none">.
 
@@ -61,7 +62,7 @@ Score each subject on its own shots, in this order. Score only what the shots sh
 Scale: 1 to 10 in half points. 5 is functional but generic, 7 a good shipping app, 9 best in
 class.
 
-<General rows, owner's cases and veto row from the climb's rubric, each with its question.>
+<General rows, owner's cases and veto row from the rubric, each with its question.>
 
 ## Scores
 
@@ -94,4 +95,4 @@ each ranked MUST or SHOULD, with the shot and the location on screen:
 ## What stays out
 
 The target, the stop rule, past scores, the round number and the names behind the labels. Keep
-those in `climb.md`, `ledger.md` and `labels.json`.
+those in `labels.json`, and in `climb.md` and `ledger.md` for a climb.

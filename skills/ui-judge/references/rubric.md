@@ -7,7 +7,7 @@ class.
 
 ## General rows
 
-Their median is the climb's target score.
+Their median is the headline score, and a climb's target score.
 
 | Row | Question |
 | --- | --- |
@@ -22,7 +22,7 @@ Their median is the climb's target score.
 ## Owner's cases
 
 Reported apart from the general rows, so polish cannot hide a product regression. Written with
-the owner for each climb, as questions with anchors. Examples that worked:
+the owner for each screen, as questions with anchors. Examples that worked:
 
 - **One assistant**: "Does the screen look like one chat with one entity? 3: bot marketplace, 5:
   neutral, 7: clearly one assistant, 9: it never occurs to you that more than one thing works."
