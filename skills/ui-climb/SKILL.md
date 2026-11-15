@@ -110,5 +110,6 @@ much of it does not.
 
 ## Owner taste
 
-`ui-judge` reads the owner's taste file. When a climb's `decisions.md` shows a value the owner
-held on more than one screen, offer to add it to the taste file at close.
+`ui-judge` judges with the owner's taste file, or its default taste when they have none. When a
+climb's `decisions.md` shows a value the owner held on more than one screen, offer at close to
+add it to their taste file, starting one from the default if needed.

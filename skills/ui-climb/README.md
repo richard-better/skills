@@ -2,7 +2,7 @@
 
 A [hill climb](../hill-climb/) on how a screen looks. No program can score that, so
 [`ui-judge`](../ui-judge/)'s blind panel of models from different labs scores screenshots
-against reference apps and your taste file, and you check before-and-after pages along the way.
+against reference apps and a taste file (its default or yours), and you check before-and-after pages along the way.
 
 The main inspiration is [Theo's thread](https://x.com/theo/status/2114280056784921048) on how he
 hill-climbs UI with a council of models.

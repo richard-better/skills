@@ -50,7 +50,7 @@ Climb a screen's design, scored by <code>ui-judge</code><br>Say <em>"UI climb"</
 <td width="33%" valign="top">
 <a href="./skills/ui-judge/"><img src="./.assets/ui-judge/icon.svg" alt="ui-judge icon"></a>
 <br><a href="./skills/ui-judge/"><strong><code>ui-judge</code></strong></a><br>
-Score screenshots with a blind panel of models from different labs, against your own taste file<br>Say <em>"judge this UI"</em>
+Score screenshots with a blind panel of models from different labs, against a default taste or your own<br>Say <em>"judge this UI"</em>
 </td>
 </tr>
 <tr></tr>

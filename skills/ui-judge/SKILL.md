@@ -1,37 +1,36 @@
 ---
 name: ui-judge
-description: Score screenshots of a screen with a blind panel of models from different labs, against a rubric, reference apps and the owner's taste file. Use for "judge this UI", rating or comparing screen designs from screenshots, and as the scorer of a ui-climb.
+description: Score screenshots of a screen with a blind panel of models from different labs, against a rubric, reference apps and a taste file (a built-in default, or the user's own). Use for "judge this UI", rating or comparing screen designs from screenshots, and as the scorer of a ui-climb.
 ---
 
 # UI judge
 
 A **panel** of models from different labs scores screenshots of a screen, blind, against a
-**rubric**, **reference** shots and the owner's **taste file**, and lists ranked fixes. The panel
+**rubric**, **reference** shots and a **taste file**, and lists ranked fixes. The panel
 scores opinions, so the rules here keep them honest: neutral labels, repeats, a noise floor,
 frozen references and a control.
 
-The skill holds what is the same for every owner: the panel rules, the brief, the general
-rubric rows, the measured checks and `score.py`. What one owner or one screen wants lives in
-files the skill reads:
+The skill holds what is the same for everyone: the panel rules, the brief, the measured checks
+and `score.py`. It also ships a **default taste** ([references/taste.md](references/taste.md),
+distilled from Emil Kowalski's design skills) and a **default rubric**
+([references/rubric.md](references/rubric.md)), which a user, a project or a single run can
+replace.
 
-| File | Holds | Written by |
-| --- | --- | --- |
-| Taste file | Recurring taste across screens and projects | The owner, once, edited over time |
-| `judge-context.md` | This screen's purpose, settled decisions, known capture artifacts | The owner and the agent, per screen |
-| Rubric | General rows, plus the owner's cases and a veto row for this screen | Copied from [references/rubric.md](references/rubric.md), cases added with the owner |
+## Taste and rubric
 
-Swap the taste file and the same panel judges for someone else.
+Take the taste and the rubric each from the first of these that has one:
 
-## Taste file
+1. **This run**: a file or values the user gives in the request.
+2. **The project**: a path the repository's `AGENTS.md` or `CLAUDE.md` names, else
+   `docs/ui-taste.md` and `docs/ui-rubric.md`.
+3. **The user**: a path their agent instructions name.
+4. **The default** in this skill.
 
-Read the owner's taste file at setup, in this order:
-
-1. The repository's: a path its `AGENTS.md` or `CLAUDE.md` names, else `docs/ui-taste.md`.
-2. The owner's personal one: a path their agent instructions name.
-
-When both exist, read both; a repository value wins where they conflict. When neither exists,
-offer to collect one as in [references/taste.md](references/taste.md), and judge with the
-general rows meanwhile.
+The one found replaces the default whole. On top of either, each screen adds its own
+`judge-context.md` (purpose, settled decisions, capture artifacts) and the owner's cases and
+veto row in the rubric. A change of taste or rubric after a baseline starts a new baseline,
+since scores from before and after are not comparable. A user who wants their
+own taste file writes it as in [references/custom-taste.md](references/custom-taste.md).
 
 ## Measure first
 
@@ -51,15 +50,15 @@ folder when the shots are private.
 2. **Write `judge-context.md`**: the screen's purpose ("an audit log: nobody comes here to find
    work"), the owner's settled decisions phrased as "judge within these", and known capture
    artifacts.
-3. **Read the taste file** and note the values that bear on this screen.
-4. **Write the rubric** from [references/rubric.md](references/rubric.md): the general rows as
-   they are, plus the owner's cases and a veto row when the owner has them.
+3. **Resolve the taste and the rubric** as in [Taste and rubric](#taste-and-rubric), and note
+   the taste values that bear on this screen.
+4. **Add the owner's cases** and a veto row to the rubric when the owner has them.
 5. **Collect the shots**: the product's, each cropped to the subject at most 1280 px wide, in
    every state and appearance being judged, and the references the owner chose, one app or site
    per folder with a README describing each shot.
 
-Done when `judge-context.md` states the purpose, the panel is named, the rubric is written and
-every shot is in place.
+Done when `judge-context.md` states the purpose and names the taste and rubric sources, the
+panel is named, and every shot is in place.
 
 ## 2. Score a round
 
@@ -82,6 +81,7 @@ is the noise floor; a change inside it is no change.
 
 ## 3. Report
 
+- The taste and rubric used: the default, or whose file.
 - The measured checks, pass or fail.
 - `score.py`'s tables: one series per reviewer and the median, general rows apart from the
   owner's cases and the veto row, with the noise floor when there is a baseline.
@@ -91,6 +91,7 @@ is the noise floor; a change inside it is no change.
 ## Calibration
 
 When the owner and the panel rank builds differently, the disagreement is missing taste or an
-unclear rubric row. Ask the owner what made the difference, write it into the taste file or the
-rubric, and rescore three or four builds the owner has ranked until the panel reproduces the
-order. The skill stays the same; the files change.
+unclear rubric row. Ask the owner what made the difference, write it into their own taste file
+or rubric (starting one from the default when they have none), and rescore three or four builds
+the owner has ranked until the panel reproduces the order. The skill and its defaults stay the
+same; the owner's files change.

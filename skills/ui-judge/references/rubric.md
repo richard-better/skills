@@ -1,5 +1,7 @@
-# UI rubric
+# Default UI rubric
 
+The rubric `ui-judge` uses when the user supplies none. A rubric the user supplies replaces the
+scale and the general rows; the owner's cases and the veto row are added per screen either way.
 Score references only on what their shots show.
 
 **Scale**: 1 to 10 in half points. 5 is functional but generic, 7 a good shipping app, 9 best in
