@@ -57,7 +57,11 @@ without the user. Turn the user's request into standing orders and write them
 into the ledger:
 
 - **Goal.** One line per workstream.
-- **Models.** The models for workstreams, if the user names them.
+- **Models.** The models for workstreams, if the user names them, and a
+  fallback for each. When a model becomes unavailable, move its work to the
+  fallback and tell the user.
+- **Review rounds.** How many fix-and-review rounds a change gets before you
+  cut its scope or escalate. Three unless the user sets another number.
 - **Approvals.** What you may approve on the user's behalf when a workstream
   asks, with any limit the user sets.
 - **Landing.** How the user wants finished work to land, if they say.
@@ -100,6 +104,9 @@ minutes, unless the user picks another interval. A sweep:
 2. Unblocks any workstream that waits on a question, an approval or a
    choice, and answers from the standing orders. Between two good options,
    pick the simpler one, or have the workstream ask an advisor subagent.
+   When a change reaches its review-round limit, cut it to what reviewers
+   approved and log the rest as follow-ups. Escalate if the cut leaves the
+   goal unmet.
 3. Escalates to the user whatever the standing orders do not cover. See
    "Asking the user".
 4. Relays results. When a workstream finishes something another one depends
