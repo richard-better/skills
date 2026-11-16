@@ -127,8 +127,22 @@ schedule, and resume it when new work arrives.
 A workstream is `done` when it reports its work with **evidence**. Evidence
 is output the workstream observed itself, such as a reproduction that now
 passes, checks it ran, or a screenshot. If a report has no evidence, ask the
-workstream for it. Then follow the Landing order if there is one. Otherwise,
-tell the user the work is ready.
+workstream for it.
+
+Audit the evidence before you accept it:
+
+- A review counts when a separate agent ran it. A workstream reviewing its
+  own work is a self-review; send it to an independent reviewer.
+- Green checks count when the diff keeps every test and timeout as it was. A
+  raised timeout, a skipped or deleted test, or a flag that skips the
+  affected tests needs its cause fixed, or the user's word.
+- A gate on output quality, such as "is this good memory" or "does this
+  screen look right", passes against the plan's intent and its reference,
+  beyond "nothing is wrong". Show the user the real output at the first such
+  gate, and relay their reaction in their own words.
+
+Then follow the Landing order if there is one. Otherwise, tell the user the
+work is ready.
 
 ## Asking the user
 
