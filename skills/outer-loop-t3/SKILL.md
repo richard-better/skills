@@ -80,7 +80,8 @@ Every workstream gets this **reporting line**, with this thread's link:
 > I'm coordinating this work from `<link>`. If you get stuck or need a
 > decision, message me there with `t3_thread_send`, and keep going on
 > whatever you can meanwhile. When you finish, send me what you did, where it
-> is (branch and commit), and the evidence that it works.
+> is (branch and commit), and the evidence that it works. Remove each
+> worktree you or your subagents created once its work has landed.
 
 - **Adopt** a thread the user names. Read it with `t3_thread_read`, record
   its state, and send it the reporting line.
@@ -127,7 +128,11 @@ minutes, unless the user picks another interval. A sweep:
    on, sends that one the commits and what changed.
 5. Checks the machine's load, stray processes such as dozens of type checkers
    or test runners, and free disk. When the machine is overloaded, pauses the
-   lower-priority workstreams and tells the user which ones.
+   lower-priority workstreams and tells the user which ones. When a thread
+   outside the loop causes the load, message that thread and tell the user.
+   Before deleting anything another thread created, tell that thread what
+   and why. While something is broken and its cause is unknown, freeze all
+   deletions so the evidence survives.
 6. Starts any work a Watch order covers.
 
 A sweep is complete when every unfinished workstream is `running`, `paused`
