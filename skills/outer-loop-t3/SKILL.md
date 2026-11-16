@@ -141,6 +141,10 @@ without a ledger entry. When
 every workstream is `done` or `stopped` and no Watch order stands, pause the
 schedule, and resume it when new work arrives.
 
+Settle each workstream with `t3_thread_organize` once it is `done` or
+`stopped` and nothing waits on it, so the user's thread list shows only live
+work.
+
 ## 4. Done
 
 A workstream is `done` when it reports its work with **evidence**. Evidence
@@ -204,7 +208,8 @@ that needs the user first.
 
 A **lesson** is an unblocking decision you have made twice, or a failure the
 next workstream would hit too. When a workstream finishes or stops after
-trouble, read its thread for the cause. Propose the fix in your next report
-to the user, and edit only after they approve. Prefer a fix the environment
+trouble, read its thread for the cause. Keep lesson candidates in Now, and
+propose them together in one question-tool ask, each with its fix, so the
+user can approve them as a batch. Edit only after they approve. Prefer a fix the environment
 enforces, such as a lint rule, a type, a tool default or a script, over prose
 in AGENTS.md or a skill.
