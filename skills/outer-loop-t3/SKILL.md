@@ -132,6 +132,14 @@ Gather every open question from the sweep into one ask. Each question names
 the workstream with its link, what blocks it, and the options with your
 recommendation first. The other workstreams keep running while you wait.
 
+Escalate only what needs the user: their judgement, their taste, or
+something only they can physically do. Anything you or a workstream can do
+with the access you hold, such as a sign-in, a restart or a lookup, you do.
+
+List each open question in Now until it is answered. A question tool call can
+end without an answer, for example when the server restarts. Ask it again
+with the question tool on the next sweep, folded into that sweep's ask.
+
 Decide everything else yourself with sensible defaults, and log each decision
 in the ledger.
 
