@@ -27,20 +27,28 @@ workstream's goal goes to that workstream. Separate work gets a new one.
 ## Ledger
 
 The **ledger** is `~/.t3/outer-loop/<this thread id>.md`. It is the loop's
-memory and outlasts compaction, so read it at the start of every turn. It
-holds:
+memory and outlasts compaction. It has three parts, in this order:
 
-- the standing orders from step 1, updated as soon as the user gives a new
-  one;
-- each workstream's thread link, worktree and branch;
-- a dated log per workstream with its state changes (`running`, `blocked`,
-  `paused`, `done`, `stopped`), the evidence it reported, and every decision
-  you make for it, with the reason.
+1. **Standing orders** from step 1. Rewrite this section in place whenever
+   the user gives a new order, so it always reads as the orders in force,
+   and log the change.
+2. **Now**, at most one screen: each workstream with its thread link,
+   worktree, branch and state (`running`, `blocked`, `paused`, `done`,
+   `stopped`); the open questions waiting on the user; what the next sweep
+   watches. Rewrite it in place at the end of every turn that changed
+   anything.
+3. **Log**, per workstream: state changes, the evidence it reported, and
+   every decision you make for it, with the reason.
 
-Write the log as **history**. Date every entry, and cite the commit at which
-a claim about code was true. When something changes, add a new entry that
-supersedes the old one instead of editing it. Read a workstream's present
-state from its thread and branch, and use the log for how it got there.
+Read the standing orders and Now at the start of every turn. Read the log
+only when you need how something got where it is.
+
+Write the log as **history**. Stamp every entry with the time from `date`,
+one clock for the whole file, and cite the commit at which a claim about code
+was true. When something changes, add a new entry that supersedes the old one
+instead of editing it. A turn where nothing changed writes nothing. Read a
+workstream's present state from its thread and branch, and use the log for
+how it got there.
 
 ## 1. Standing orders
 
@@ -102,7 +110,8 @@ minutes, unless the user picks another interval. A sweep:
 6. Starts any work a Watch order covers.
 
 A sweep is complete when every unfinished workstream is `running`, `paused`
-or escalated. A sweep with nothing to act on ends without a message. When
+or escalated. A sweep with nothing to act on ends without a message and
+without a ledger entry. When
 every workstream is `done` or `stopped` and no Watch order stands, pause the
 schedule, and resume it when new work arrives.
 

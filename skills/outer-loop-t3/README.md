@@ -20,8 +20,8 @@ loop. The outer loop circles around them:
 4. **Done** means the workstream reported evidence: a passing reproduction, checks it ran, a
    screenshot.
 
-The ledger at `~/.t3/outer-loop/<thread id>.md` keeps the orders and a dated history of every
-workstream, so the loop survives compaction.
+The ledger at `~/.t3/outer-loop/<thread id>.md` keeps the orders in force, a one-screen view of
+every workstream and open question, and a dated history, so the loop survives compaction.
 
 ## Use it
 
