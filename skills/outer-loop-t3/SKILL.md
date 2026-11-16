@@ -158,6 +158,17 @@ Audit the evidence before you accept it:
 Then follow the Landing order if there is one. Otherwise, tell the user the
 work is ready.
 
+### Land order
+
+When two or more workstreams land on the same branch, you own the **land
+order**. Keep it in Now: the order, and why (what depends on what, what
+guards against a known risk). Tell each workstream when its turn comes, and
+tell the next ones what changed when a land moves the branch.
+
+When several branches land in a batch, finish with one **stabilize** pass:
+a workstream that runs the full test suite once on the landed result and
+fixes what is red, on that branch.
+
 ## Asking the user
 
 The user does not see a question in a normal message, and the thread looks
