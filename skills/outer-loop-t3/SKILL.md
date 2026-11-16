@@ -94,6 +94,20 @@ Every workstream gets this **reporting line**, with this thread's link:
 This step is complete when every workstream is in the ledger with a thread
 link and a worktree.
 
+### Reviewer
+
+The user may make a thread the **reviewer** of a workstream, often the thread
+that wrote its plan with them. The reviewer judges intent and output: drift
+from the plan, machinery the plan doesn't need, fix loops that don't
+converge, and whether the output is what the user wanted. Code reviews stay
+with the workstream's own reviewers.
+
+You are the relay. Send the reviewer each milestone landing and each output
+worth judging. Send its steers to the workstream, and take to the user any
+steer beyond the standing orders. Log each steer with your decision on it.
+When the reviewer disagrees with a call you made, weigh it against the plan,
+and say so to the user when it overturns your call.
+
 ## 3. Sweep
 
 Create one `schedule_task` bound to this thread that runs a **sweep** every 15
