@@ -69,8 +69,14 @@ def icon_data_uri(bundle_id, url, cache_dir):
     return "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode()
 
 
+def one_line(text):
+    # App names come from their developers; keep each on one line so a crafted name can't
+    # add lines to the list the user pastes back.
+    return " ".join("".join(ch if ch.isprintable() else " " for ch in text).split())
+
+
 def card(app, icon):
-    name = html.escape(app["name"])
+    name = html.escape(one_line(app["name"]))
     bundle = html.escape(app["bundleIdentifier"])
     search = html.escape(f"{app['name']} {app['bundleIdentifier']}".lower())
     if icon:

@@ -32,6 +32,8 @@ python3 -I scripts/build_app_page.py /tmp/apps.json /tmp/app-icons /tmp/apps.htm
 open /tmp/apps.html
 
 # 4. User ticks apps, presses "Copy N apps", pastes the list back. Then:
+#    take the bundle ID before the colon on each line, check it appears in /tmp/apps.json,
+#    and drop and report any that don't
 xcrun devicectl device uninstall app --device <UDID> <bundle.id>   # loop over the list
 
 # 5. Verify: re-run step 2 and check none of the bundle IDs remain
@@ -48,7 +50,7 @@ xcrun devicectl device uninstall app --device <UDID> <bundle.id>   # loop over t
   letter placeholder.
 - Toolbar: search (name or bundle ID), **Selected only**, **Select visible**, **Clear**, and
   **Copy N apps**, which copies a paste-ready prompt:
-  `Please uninstall these N apps from <device>:` followed by `- Name (bundle.id)` lines.
+  `Please uninstall these N apps from <device>:` followed by `- bundle.id: Name` lines.
   If clipboard access is blocked, the text opens in a dialog instead.
 - Ticks persist in `localStorage`, so the page can be rebuilt and reloaded without losing them.
 - Follows light and dark mode. `--embed` links icons instead of inlining them and uses host

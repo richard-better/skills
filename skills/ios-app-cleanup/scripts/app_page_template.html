@@ -124,7 +124,7 @@
   copy.addEventListener('click', async () => {
     const sel = selected();
     const text = `Please uninstall these ${sel.length} apps from {{LABEL}}:\n` +
-      sel.map(b => `- ${b.dataset.name} (${b.dataset.bundle})`).join('\n');
+      sel.map(b => `- ${b.dataset.bundle}: ${b.dataset.name}`).join('\n');
     try {
       await navigator.clipboard.writeText(text);
       toast(`Copied ${sel.length} apps`);
